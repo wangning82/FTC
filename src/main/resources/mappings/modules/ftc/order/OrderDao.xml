@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.order.OrderDao">
+    
+	<sql id="orderColumns">
+		a.id AS "id",
+		a.order_number AS "orderNumber",
+		a.user_id AS "user",
+		a.pay_type AS "payType",
+		a.shipment_time AS "shipmentTime",
+		a.shipment_type AS "shipmentType",
+		a.shipment_amount AS "shipmentAmount",
+		a.invoice_type AS "invoiceType",
+		a.invoice_title AS "invoiceTitle",
+		a.order_status AS "orderStatus",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.order_amount AS "orderAmount",
+		a.order_score AS "orderScore",
+		a.pay_amount AS "payAmount",
+		a.buy_number AS "buyNumber"
+	</sql>
+	
+	<sql id="orderJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM os_order a
+		<include refid="orderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM os_order a
+		<include refid="orderJoins"/>
+		<where>
+			
+			<if test="orderNumber != null and orderNumber != ''">
+				AND a.order_number = #{orderNumber}
+			</if>
+			<if test="user != null and user != ''">
+				AND a.user_id = #{user}
+			</if>
+			<if test="payType != null and payType != ''">
+				AND a.pay_type = #{payType}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Order">
+		SELECT 
+			<include refid="orderColumns"/>
+		FROM os_order a
+		<include refid="orderJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_order(
+			id,
+			order_number,
+			user_id,
+			pay_type,
+			shipment_time,
+			shipment_type,
+			shipment_amount,
+			invoice_type,
+			invoice_title,
+			order_status,
+			create_date,
+			update_date,
+			order_amount,
+			order_score,
+			pay_amount,
+			buy_number
+		) VALUES (
+			#{id},
+			#{orderNumber},
+			#{user},
+			#{payType},
+			#{shipmentTime},
+			#{shipmentType},
+			#{shipmentAmount},
+			#{invoiceType},
+			#{invoiceTitle},
+			#{orderStatus},
+			#{createDate},
+			#{updateDate},
+			#{orderAmount},
+			#{orderScore},
+			#{payAmount},
+			#{buyNumber}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_order SET 	
+			order_number = #{orderNumber},
+			user_id = #{user},
+			pay_type = #{payType},
+			shipment_time = #{shipmentTime},
+			shipment_type = #{shipmentType},
+			shipment_amount = #{shipmentAmount},
+			invoice_type = #{invoiceType},
+			invoice_title = #{invoiceTitle},
+			order_status = #{orderStatus},
+			update_date = #{updateDate},
+			order_amount = #{orderAmount},
+			order_score = #{orderScore},
+			pay_amount = #{payAmount},
+			buy_number = #{buyNumber}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_order
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

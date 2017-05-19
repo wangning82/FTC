@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerDao">
+    
+	<sql id="customerColumns">
+		a.id AS "id",
+		a.user_code AS "userCode",
+		a.user_name AS "userName",
+		a.login_password AS "loginPassword",
+		a.salt AS "salt",
+		a.real_name AS "realName",
+		a.sex AS "sex",
+		a.age AS "age",
+		a.pic_img AS "picImg",
+		a.status AS "status",
+		a.email_is_active AS "emailIsActive",
+		a.email AS "email",
+		a.telephone AS "telephone",
+		a.last_login_time AS "lastLoginTime",
+		a.last_login_ip AS "lastLoginIp",
+		a.login_number AS "loginNumber",
+		a.regeist_time AS "regeistTime",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.amount AS "amount",
+		a.rank_id AS "rankId",
+		a.score AS "score",
+		a.qq AS "qq",
+		a.wechat AS "wechat"
+	</sql>
+	
+	<sql id="customerJoins">
+	</sql>
+    
+	<select id="get" resultType="Customer">
+		SELECT 
+			<include refid="customerColumns"/>
+		FROM os_customer a
+		<include refid="customerJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Customer">
+		SELECT 
+			<include refid="customerColumns"/>
+		FROM os_customer a
+		<include refid="customerJoins"/>
+		<where>
+			
+			<if test="userCode != null and userCode != ''">
+				AND a.user_code = #{userCode}
+			</if>
+			<if test="sex != null and sex != ''">
+				AND a.sex = #{sex}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="emailIsActive != null and emailIsActive != ''">
+				AND a.email_is_active = #{emailIsActive}
+			</if>
+			<if test="email != null and email != ''">
+				AND a.email = #{email}
+			</if>
+			<if test="telephone != null and telephone != ''">
+				AND a.telephone = #{telephone}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Customer">
+		SELECT 
+			<include refid="customerColumns"/>
+		FROM os_customer a
+		<include refid="customerJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_customer(
+			id,
+			user_code,
+			user_name,
+			login_password,
+			salt,
+			real_name,
+			sex,
+			age,
+			pic_img,
+			status,
+			email_is_active,
+			email,
+			telephone,
+			last_login_time,
+			last_login_ip,
+			login_number,
+			regeist_time,
+			create_by,
+			update_date,
+			update_by,
+			amount,
+			rank_id,
+			score,
+			qq,
+			wechat
+		) VALUES (
+			#{id},
+			#{userCode},
+			#{userName},
+			#{loginPassword},
+			#{salt},
+			#{realName},
+			#{sex},
+			#{age},
+			#{picImg},
+			#{status},
+			#{emailIsActive},
+			#{email},
+			#{telephone},
+			#{lastLoginTime},
+			#{lastLoginIp},
+			#{loginNumber},
+			#{regeistTime},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{amount},
+			#{rankId},
+			#{score},
+			#{qq},
+			#{wechat}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_customer SET 	
+			user_code = #{userCode},
+			user_name = #{userName},
+			login_password = #{loginPassword},
+			salt = #{salt},
+			real_name = #{realName},
+			sex = #{sex},
+			age = #{age},
+			pic_img = #{picImg},
+			status = #{status},
+			email_is_active = #{emailIsActive},
+			email = #{email},
+			telephone = #{telephone},
+			last_login_time = #{lastLoginTime},
+			last_login_ip = #{lastLoginIp},
+			login_number = #{loginNumber},
+			regeist_time = #{regeistTime},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			amount = #{amount},
+			rank_id = #{rankId},
+			score = #{score},
+			qq = #{qq},
+			wechat = #{wechat}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_customer
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

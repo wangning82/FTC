@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.FtcCategoryDao">
+    
+	<sql id="categoryColumns">
+		a.id AS "id",
+		a.parent_id AS "parent.id",
+		a.name AS "name",
+		a.sort AS "sort",
+		a.type AS "type",
+		a.status AS "status",
+		a.show_in_nav AS "showInNav",
+		a.show_in_top AS "showInTop",
+		a.show_in_hot AS "showInHot",
+		a.create_time AS "createTime",
+		a.create_by AS "createBy.id",
+		a.update_time AS "updateTime",
+		a.update_by AS "updateBy.id",
+		a.page_title AS "pageTitle",
+		a.page_description AS "pageDescription",
+		a.page_keyword AS "pageKeyword",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="categoryJoins">
+	</sql>
+    
+	<select id="get" resultType="Category">
+		SELECT 
+			<include refid="categoryColumns"/>
+		FROM os_category a
+		<include refid="categoryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Category">
+		SELECT 
+			<include refid="categoryColumns"/>
+		FROM os_category a
+		<include refid="categoryJoins"/>
+		<where>
+			
+			<if test="parent != null and parent.id != null and parent.id != ''">
+				AND a.parent_id = #{parent.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findAllList" resultType="Category">
+		SELECT 
+			<include refid="categoryColumns"/>
+		FROM os_category a
+		<include refid="categoryJoins"/>
+		<where>
+			
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<select id="findByParentIdsLike" resultType="Category">
+		SELECT
+			a.id,
+			a.parent_id AS "parent.id",
+			a.parent_ids
+		FROM os_category a
+		<include refid="categoryJoins"/>
+		<where>
+			
+			AND a.parent_ids LIKE #{parentIds}
+		</where>
+		ORDER BY a.sort ASC
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_category(
+			id,
+			parent_id,
+			name,
+			sort,
+			type,
+			status,
+			show_in_nav,
+			show_in_top,
+			show_in_hot,
+			create_time,
+			create_by,
+			update_time,
+			update_by,
+			page_title,
+			page_description,
+			page_keyword,
+			remarks
+		) VALUES (
+			#{id},
+			#{parent.id},
+			#{name},
+			#{sort},
+			#{type},
+			#{status},
+			#{showInNav},
+			#{showInTop},
+			#{showInHot},
+			#{createTime},
+			#{createBy.id},
+			#{updateTime},
+			#{updateBy.id},
+			#{pageTitle},
+			#{pageDescription},
+			#{pageKeyword},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_category SET 	
+			parent_id = #{parent.id},
+			name = #{name},
+			sort = #{sort},
+			type = #{type},
+			status = #{status},
+			show_in_nav = #{showInNav},
+			show_in_top = #{showInTop},
+			show_in_hot = #{showInHot},
+			create_time = #{createTime},
+			update_time = #{updateTime},
+			update_by = #{updateBy.id},
+			page_title = #{pageTitle},
+			page_description = #{pageDescription},
+			page_keyword = #{pageKeyword},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateParentIds">
+		UPDATE os_category SET 
+			parent_id = #{parent.id}, 
+			parent_ids = #{parentIds}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_category
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

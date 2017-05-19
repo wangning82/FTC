@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao">
+    
+	<sql id="productColumns">
+		a.id AS "id",
+		a.product_number AS "number",
+		a.label_id AS "labelId",
+		a.name AS "name",
+		a.show_score AS "showScore",
+		a.show_price AS "showPrice",
+		a.introduce AS "introduce",
+		a.pic_img AS "picImg",
+		a.show_in_top AS "showInTop",
+		a.show_in_nav AS "showInNav",
+		a.show_in_hot AS "showInHot",
+		a.show_in_shelve AS "showInShelve",
+		a.create_time AS "createTime",
+		a.create_by AS "createBy.id",
+		a.shelve_time AS "shelveTime",
+		a.shelve_by AS "shelveBy",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.search_key AS "searchKey",
+		a.page_title AS "pageTitle",
+		a.page_description AS "pageDescription",
+		a.page_keyword AS "pageKeyword",
+		a.remarks AS "remarks"
+	</sql>
+	
+	<sql id="productJoins">
+	</sql>
+    
+	<select id="get" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM os_product a
+		<include refid="productJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM os_product a
+		<include refid="productJoins"/>
+		<where>
+			
+			<if test="number != null and number != ''">
+				AND a.product_number = #{number}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="createBy != null and createBy.id != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="searchKey != null and searchKey != ''">
+				AND a.search_key = #{searchKey}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM os_product a
+		<include refid="productJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_product(
+			id,
+			product_number,
+			label_id,
+			name,
+			show_score,
+			show_price,
+			introduce,
+			pic_img,
+			show_in_top,
+			show_in_nav,
+			show_in_hot,
+			show_in_shelve,
+			create_time,
+			create_by,
+			shelve_time,
+			shelve_by,
+			update_date,
+			update_by,
+			search_key,
+			page_title,
+			page_description,
+			page_keyword,
+			remarks
+		) VALUES (
+			#{id},
+			#{number},
+			#{labelId},
+			#{name},
+			#{showScore},
+			#{showPrice},
+			#{introduce},
+			#{picImg},
+			#{showInTop},
+			#{showInNav},
+			#{showInHot},
+			#{showInShelve},
+			#{createTime},
+			#{createBy.id},
+			#{shelveTime},
+			#{shelveBy},
+			#{updateDate},
+			#{updateBy.id},
+			#{searchKey},
+			#{pageTitle},
+			#{pageDescription},
+			#{pageKeyword},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_product SET 	
+			product_number = #{number},
+			label_id = #{labelId},
+			name = #{name},
+			show_score = #{showScore},
+			show_price = #{showPrice},
+			introduce = #{introduce},
+			pic_img = #{picImg},
+			show_in_top = #{showInTop},
+			show_in_nav = #{showInNav},
+			show_in_hot = #{showInHot},
+			show_in_shelve = #{showInShelve},
+			create_time = #{createTime},
+			shelve_time = #{shelveTime},
+			shelve_by = #{shelveBy},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			search_key = #{searchKey},
+			page_title = #{pageTitle},
+			page_description = #{pageDescription},
+			page_keyword = #{pageKeyword},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_product
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
