@@ -105,8 +105,8 @@ public class FtcComment extends DataEntity<FtcComment> {
 	public void setGoodCount(String goodCount) {
 		this.goodCount = goodCount;
 	}
-	
-	@隐藏长度必须介于 0 和 2 之间")
+
+	@Length(min=0, max=2, message="@隐藏长度必须介于 0 和 2 之间")
 	public String getStatus() {
 		return status;
 	}

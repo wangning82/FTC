@@ -28,7 +28,7 @@ import com.thinkgem.jeesite.modules.ftc.service.commont.FtcCommentService;
  * @version 2017-05-19
  */
 @Controller
-@RequestMapping(value = "${adminPath}/ftc/commont/ftcComment")
+@RequestMapping(value = "${adminPath}/ftc/commont/")
 public class FtcCommentController extends BaseController {
 
 	@Autowired
