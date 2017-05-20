@@ -29,7 +29,7 @@
 				<form:input path="orderNumber" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>用户ID：</label>
-				<sys:treeselect id="user" name="user" value="${order.user}" labelName="" labelValue="${order.}"
+				<sys:treeselect id="user" name="user" value="${order.user}" labelName="" labelValue="${order.user}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li><label>支付方式 0=线下支付，1=在线支付：</label>

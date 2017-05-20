@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.commont.FtcCommentReplyDao">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.commont.ReplyDao">
     
-	<sql id="ftcCommentReplyColumns">
+	<sql id="replyColumns">
 		a.id AS "id",
 		a.comment_id AS "commentId",
 		a.user_id AS "user.id",
@@ -18,23 +18,23 @@
 		a.update_by AS "updateBy.id"
 	</sql>
 	
-	<sql id="ftcCommentReplyJoins">
+	<sql id="replyJoins">
 		LEFT JOIN sys_user u3 ON u3.id = a.user_id
 	</sql>
     
-	<select id="get" resultType="FtcCommentReply">
+	<select id="get" resultType="Reply">
 		SELECT 
-			<include refid="ftcCommentReplyColumns"/>
+			<include refid="replyColumns"/>
 		FROM os_comment_reply a
-		<include refid="ftcCommentReplyJoins"/>
+		<include refid="replyJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="FtcCommentReply">
+	<select id="findList" resultType="Reply">
 		SELECT 
-			<include refid="ftcCommentReplyColumns"/>
+			<include refid="replyColumns"/>
 		FROM os_comment_reply a
-		<include refid="ftcCommentReplyJoins"/>
+		<include refid="replyJoins"/>
 		<where>
 			
 			<if test="content != null and content != ''">
@@ -60,11 +60,11 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="FtcCommentReply">
+	<select id="findAllList" resultType="Reply">
 		SELECT 
-			<include refid="ftcCommentReplyColumns"/>
+			<include refid="replyColumns"/>
 		FROM os_comment_reply a
-		<include refid="ftcCommentReplyJoins"/>
+		<include refid="replyJoins"/>
 		<where>
 			
 		</where>		

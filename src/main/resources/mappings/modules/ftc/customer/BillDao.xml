@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.customer.BillDao">
+    
+	<sql id="billColumns">
+		a.id AS "id",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.money AS "money",
+		a.type AS "type",
+		a.remark AS "remark",
+		a.order_id AS "orderId",
+		a.customer_id AS "customerId",
+		a.del_flag AS "delFlag",
+		a.status AS "status"
+	</sql>
+	
+	<sql id="billJoins">
+	</sql>
+    
+	<select id="get" resultType="Bill">
+		SELECT 
+			<include refid="billColumns"/>
+		FROM os_customer_bill a
+		<include refid="billJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Bill">
+		SELECT 
+			<include refid="billColumns"/>
+		FROM os_customer_bill a
+		<include refid="billJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Bill">
+		SELECT 
+			<include refid="billColumns"/>
+		FROM os_customer_bill a
+		<include refid="billJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_customer_bill(
+			id,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			money,
+			type,
+			remark,
+			order_id,
+			customer_id,
+			del_flag,
+			status
+		) VALUES (
+			#{id},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{money},
+			#{type},
+			#{remark},
+			#{orderId},
+			#{customerId},
+			#{delFlag},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_customer_bill SET 	
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			money = #{money},
+			type = #{type},
+			remark = #{remark},
+			order_id = #{orderId},
+			customer_id = #{customerId},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE os_customer_bill SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

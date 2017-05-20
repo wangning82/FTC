@@ -1,18 +1,18 @@
 /**
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
-package com.thinkgem.jeesite.modules.ftc.dao.commont;
+package com.thinkgem.jeesite.modules.ftc.dao.customer;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.ftc.entity.commont.FtcCommentReply;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Bill;
 
 /**
- * 回复DAO接口
+ * 账单DAO接口
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-05-20
  */
 @MyBatisDao
-public interface FtcCommentReplyDao extends CrudDao<FtcCommentReply> {
+public interface BillDao extends CrudDao<Bill> {
 	
 }
