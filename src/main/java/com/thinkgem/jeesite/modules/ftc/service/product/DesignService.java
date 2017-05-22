@@ -16,7 +16,7 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
 /**
  * 设计Service
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-05-21
  */
 @Service
 @Transactional(readOnly = true)

@@ -28,7 +28,7 @@ import com.thinkgem.jeesite.modules.ftc.service.commont.ReplyService;
  * @version 2017-05-20
  */
 @Controller
-@RequestMapping(value = "${adminPath}/ftc/commont/reply")
+@RequestMapping(value = "${adminPath}/ftc/comment/reply")
 public class ReplyController extends BaseController {
 
 	@Autowired
@@ -46,7 +46,7 @@ public class ReplyController extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("ftc:commont:reply:view")
+	@RequiresPermissions("ftc:comment:reply:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Reply reply, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<Reply> page = replyService.findPage(new Page<Reply>(request, response), reply); 
@@ -54,14 +54,14 @@ public class ReplyController extends BaseController {
 		return "modules/ftc/commont/replyList";
 	}
 
-	@RequiresPermissions("ftc:commont:reply:view")
+	@RequiresPermissions("ftc:comment:reply:view")
 	@RequestMapping(value = "form")
 	public String form(Reply reply, Model model) {
 		model.addAttribute("reply", reply);
-		return "modules/ftc/commont/replyForm";
+		return "modules/ftc/comment/replyForm";
 	}
 
-	@RequiresPermissions("ftc:commont:reply:edit")
+	@RequiresPermissions("ftc:comment:reply:edit")
 	@RequestMapping(value = "save")
 	public String save(Reply reply, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, reply)){

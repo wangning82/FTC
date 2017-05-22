@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 /**
  * 设计Entity
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-05-21
  */
 public class Design extends DataEntity<Design> {
 	

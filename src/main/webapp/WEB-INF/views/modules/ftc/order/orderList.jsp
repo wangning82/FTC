@@ -68,7 +68,7 @@
 					${order.orderNumber}
 				</a></td>
 				<td>
-					${order.}
+					${order.user}
 				</td>
 				<td>
 					${order.payType}

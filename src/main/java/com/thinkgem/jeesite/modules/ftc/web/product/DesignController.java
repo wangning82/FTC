@@ -25,7 +25,7 @@ import com.thinkgem.jeesite.modules.ftc.service.product.DesignService;
 /**
  * 设计Controller
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-05-21
  */
 @Controller
 @RequestMapping(value = "${adminPath}/ftc/product/design")
