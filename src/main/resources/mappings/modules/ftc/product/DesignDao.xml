@@ -97,7 +97,7 @@
 			#{price},
 			#{createBy.id},
 			#{createDate},
-			#{updateBy},
+			#{updateBy.id},
 			#{updateDate},
 			#{delFlag},
 			#{designStatus}
@@ -110,7 +110,7 @@
 			code = #{code},
 			product_id = #{productId},
 			price = #{price},
-			update_by = #{updateBy},
+			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			design_status = #{designStatus}
 		WHERE id = #{id}

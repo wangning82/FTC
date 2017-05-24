@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.Specification;
 /**
  * 规格DAO接口
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-05-24
  */
 @MyBatisDao
 public interface SpecificationDao extends CrudDao<Specification> {

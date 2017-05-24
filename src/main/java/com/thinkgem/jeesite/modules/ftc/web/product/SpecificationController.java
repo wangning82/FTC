@@ -25,7 +25,7 @@ import com.thinkgem.jeesite.modules.ftc.service.product.SpecificationService;
 /**
  * 规格Controller
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-05-24
  */
 @Controller
 @RequestMapping(value = "${adminPath}/ftc/product/specification")

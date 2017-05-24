@@ -36,24 +36,26 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th>分类</th>
 				<th>规格名称</th>
-				<th>状态：1.显示；0.隐藏</th>
+				<th>状态</th>
 				<th>排序</th>
 				<th>创建时间</th>
 				<th>创建者</th>
-				<th>更新时间</th>
-				<th>更新者</th>
 				<shiro:hasPermission name="ftc:product:specification:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="specification">
 			<tr>
+				<td>
+						${specification.category.name}
+				</td>
 				<td><a href="${ctx}/ftc/product/specification/form?id=${specification.id}">
 					${specification.name}
 				</a></td>
 				<td>
-					${specification.status}
+					${fns:getDictLabel(specification.status, 'ftc_product_spec_status', '')}
 				</td>
 				<td>
 					${specification.sort}
@@ -63,12 +65,6 @@
 				</td>
 				<td>
 					${specification.createBy.id}
-				</td>
-				<td>
-					<fmt:formatDate value="${specification.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					${specification.updateBy.id}
 				</td>
 				<shiro:hasPermission name="ftc:product:specification:edit"><td>
     				<a href="${ctx}/ftc/product/specification/form?id=${specification.id}">修改</a>

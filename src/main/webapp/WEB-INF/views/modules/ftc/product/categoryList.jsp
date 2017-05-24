@@ -31,6 +31,8 @@
 				if ((${fns:jsGetVal('row.parentId')}) == pid){
 					$(list).append(Mustache.render(tpl, {
 						dict: {
+							type: getDictLabel(${fns:toJson(fns:getDictList('ftc_product_category_type'))}, row.type),
+							status: getDictLabel(${fns:toJson(fns:getDictList('ftc_product_category_status'))}, row.status),
 						blank123:0}, pid: (root?0:pid), row: row
 					}));
 					addRow(list, tpl, data, row.id);
@@ -58,7 +60,12 @@
 		<thead>
 			<tr>
 				<th>分类名称</th>
+				<th>目录类型</th>
+				<th>状态</th>
+				<th>排序</th>
+				<th>创建时间</th>
 				<th>备注信息</th>
+				<th>创建者</th>
 				<shiro:hasPermission name="ftc:product:category:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -66,11 +73,26 @@
 	</table>
 	<script type="text/template" id="treeTableTpl">
 		<tr id="{{row.id}}" pId="{{pid}}">
-			<td><a href="${ctx}/ftc/product/category/form?id={{row.id}}">
+			<td><a href="${ctx}/ftc.product/category/form?id={{row.id}}">
 				{{row.name}}
 			</a></td>
 			<td>
+				{{dict.type}}
+			</td>
+			<td>
+				{{dict.status}}
+			</td>
+			<td>
+				{{row.sort}}
+			</td>
+			<td>
+				{{row.createTime}}
+			</td>
+			<td>
 				{{row.remarks}}
+			</td>
+			<td>
+				{{row.createBy.id}}
 			</td>
 			<shiro:hasPermission name="ftc:product:category:edit"><td>
    				<a href="${ctx}/ftc/product/category/form?id={{row.id}}">修改</a>
