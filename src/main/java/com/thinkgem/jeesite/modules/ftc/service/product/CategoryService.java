@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.thinkgem.jeesite.common.service.TreeService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
-import com.thinkgem.jeesite.modules.ftc.dao.product.FtcCategoryDao;
+import com.thinkgem.jeesite.modules.ftc.dao.product.CategoryDao;
 
 /**
  * 分类Service
@@ -20,7 +20,7 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.FtcCategoryDao;
  */
 @Service
 @Transactional(readOnly = true)
-public class FtcCategoryService extends TreeService<FtcCategoryDao, Category> {
+public class CategoryService extends TreeService<CategoryDao, Category> {
 
 	public Category get(String id) {
 		return super.get(id);

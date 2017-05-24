@@ -25,7 +25,7 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
-import com.thinkgem.jeesite.modules.ftc.service.product.FtcCategoryService;
+import com.thinkgem.jeesite.modules.ftc.service.product.CategoryService;
 
 /**
  * 分类Controller
@@ -34,10 +34,10 @@ import com.thinkgem.jeesite.modules.ftc.service.product.FtcCategoryService;
  */
 @Controller
 @RequestMapping(value = "${adminPath}/ftc/product/category")
-public class FtcCategoryController extends BaseController {
+public class CategoryController extends BaseController {
 
 	@Autowired
-	private FtcCategoryService categoryService;
+	private CategoryService categoryService;
 	
 	@ModelAttribute
 	public Category get(@RequestParam(required=false) String id) {

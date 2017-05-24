@@ -13,6 +13,6 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
  * @version 2017-05-19
  */
 @MyBatisDao
-public interface FtcCategoryDao extends TreeDao<Category> {
+public interface CategoryDao extends TreeDao<Category> {
 	
 }
