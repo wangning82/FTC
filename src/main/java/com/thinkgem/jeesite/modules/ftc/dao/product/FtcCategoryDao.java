@@ -5,7 +5,7 @@ package com.thinkgem.jeesite.modules.ftc.dao.product;
 
 import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.ftc.entity.product.FtcCategory;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 
 /**
  * 分类DAO接口
@@ -13,6 +13,6 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.FtcCategory;
  * @version 2017-05-19
  */
 @MyBatisDao
-public interface FtcCategoryDao extends TreeDao<FtcCategory> {
+public interface FtcCategoryDao extends TreeDao<Category> {
 	
 }

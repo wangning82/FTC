@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.thinkgem.jeesite.common.service.TreeService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.ftc.entity.product.FtcCategory;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 import com.thinkgem.jeesite.modules.ftc.dao.product.FtcCategoryDao;
 
 /**
@@ -20,13 +20,13 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.FtcCategoryDao;
  */
 @Service
 @Transactional(readOnly = true)
-public class FtcCategoryService extends TreeService<FtcCategoryDao, FtcCategory> {
+public class FtcCategoryService extends TreeService<FtcCategoryDao, Category> {
 
-	public FtcCategory get(String id) {
+	public Category get(String id) {
 		return super.get(id);
 	}
 	
-	public List<FtcCategory> findList(FtcCategory category) {
+	public List<Category> findList(Category category) {
 		if (StringUtils.isNotBlank(category.getParentIds())){
 			category.setParentIds(","+category.getParentIds()+",");
 		}
@@ -34,12 +34,12 @@ public class FtcCategoryService extends TreeService<FtcCategoryDao, FtcCategory>
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(FtcCategory category) {
+	public void save(Category category) {
 		super.save(category);
 	}
 	
 	@Transactional(readOnly = false)
-	public void delete(FtcCategory category) {
+	public void delete(Category category) {
 		super.delete(category);
 	}
 	

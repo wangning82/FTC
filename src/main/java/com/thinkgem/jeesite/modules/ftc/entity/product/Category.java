@@ -15,10 +15,10 @@ import com.thinkgem.jeesite.common.persistence.TreeEntity;
  * @author wangqingxiang
  * @version 2017-05-19
  */
-public class FtcCategory extends TreeEntity<FtcCategory> {
+public class Category extends TreeEntity<Category> {
 	
 	private static final long serialVersionUID = 1L;
-	private FtcCategory parent;		// 父分类ID
+	private Category parent;		// 父分类ID
 	private String name;		// 分类名称
 
 	private String type;		// 目录类型 2=二级目录/1=一级目录/0=总目录
@@ -32,20 +32,20 @@ public class FtcCategory extends TreeEntity<FtcCategory> {
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
 	
-	public FtcCategory() {
+	public Category() {
 		super();
 	}
 
-	public FtcCategory(String id){
+	public Category(String id){
 		super(id);
 	}
 
 	@JsonBackReference
-	public FtcCategory getParent() {
+	public Category getParent() {
 		return parent;
 	}
 
-	public void setParent(FtcCategory parent) {
+	public void setParent(Category parent) {
 		this.parent = parent;
 	}
 	

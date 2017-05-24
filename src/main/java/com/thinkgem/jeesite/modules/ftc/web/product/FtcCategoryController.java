@@ -24,7 +24,7 @@ import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.ftc.entity.product.FtcCategory;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 import com.thinkgem.jeesite.modules.ftc.service.product.FtcCategoryService;
 
 /**
@@ -40,36 +40,36 @@ public class FtcCategoryController extends BaseController {
 	private FtcCategoryService categoryService;
 	
 	@ModelAttribute
-	public FtcCategory get(@RequestParam(required=false) String id) {
-		FtcCategory entity = null;
+	public Category get(@RequestParam(required=false) String id) {
+		Category entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = categoryService.get(id);
 		}
 		if (entity == null){
-			entity = new FtcCategory();
+			entity = new Category();
 		}
 		return entity;
 	}
 	
 	@RequiresPermissions("ftc:product:category:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(FtcCategory ftcCategory, HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<FtcCategory> list = categoryService.findList(ftcCategory);
+	public String list(Category category, HttpServletRequest request, HttpServletResponse response, Model model) {
+		List<Category> list = categoryService.findList(category);
 		model.addAttribute("list", list);
-		model.addAttribute("category",ftcCategory);
+		model.addAttribute("category", category);
 		return "modules/ftc/product/categoryList";
 	}
 
 	@RequiresPermissions("ftc:product:category:view")
 	@RequestMapping(value = "form")
-	public String form(FtcCategory category, Model model) {
+	public String form(Category category, Model model) {
 		if (category.getParent()!=null && StringUtils.isNotBlank(category.getParent().getId())){
 			category.setParent(categoryService.get(category.getParent().getId()));
 			// 获取排序号，最末节点排序号+30
 			if (StringUtils.isBlank(category.getId())){
-				FtcCategory categoryChild = new FtcCategory();
-				categoryChild.setParent(new FtcCategory(category.getParent().getId()));
-				List<FtcCategory> list = categoryService.findList(category);
+				Category categoryChild = new Category();
+				categoryChild.setParent(new Category(category.getParent().getId()));
+				List<Category> list = categoryService.findList(category);
 				if (list.size() > 0){
 					category.setSort(list.get(list.size()-1).getSort());
 					if (category.getSort() != null){
@@ -87,7 +87,7 @@ public class FtcCategoryController extends BaseController {
 
 	@RequiresPermissions("ftc:product:category:edit")
 	@RequestMapping(value = "save")
-	public String save(FtcCategory category, Model model, RedirectAttributes redirectAttributes) {
+	public String save(Category category, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, category)){
 			return form(category, model);
 		}
@@ -98,7 +98,7 @@ public class FtcCategoryController extends BaseController {
 	
 	@RequiresPermissions("ftc:product:category:edit")
 	@RequestMapping(value = "delete")
-	public String delete(FtcCategory category, RedirectAttributes redirectAttributes) {
+	public String delete(Category category, RedirectAttributes redirectAttributes) {
 		categoryService.delete(category);
 		addMessage(redirectAttributes, "删除分类成功");
 		return "redirect:"+Global.getAdminPath()+"/ftc/product/category/?repage";
@@ -109,9 +109,9 @@ public class FtcCategoryController extends BaseController {
 	@RequestMapping(value = "treeData")
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
-		List<FtcCategory> list = categoryService.findList(new FtcCategory());
+		List<Category> list = categoryService.findList(new Category());
 		for (int i=0; i<list.size(); i++){
-			FtcCategory e = list.get(i);
+			Category e = list.get(i);
 			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());

@@ -11,21 +11,21 @@
   <short-name>fnc</short-name>
   <uri>http://java.sun.com/jsp/jstl/functionsc</uri>
 
-  <function>
-    <description>获取当前管理站点编号</description>
-    <name>getCurrentSiteId</name>
-    <function-class>com.thinkgem.jeesite.modules.cms.entity.Site</function-class>
-    <function-signature>java.lang.String getCurrentSiteId()</function-signature>
-    <example>${fnc:getCurrentSiteId()}</example>  
-  </function>
+  <!--<function>-->
+    <!--<description>获取当前管理站点编号</description>-->
+    <!--<name>getCurrentSiteId</name>-->
+    <!--<function-class>com.thinkgem.jeesite.modules.cms.entity.Site</function-class>-->
+    <!--<function-signature>java.lang.String getCurrentSiteId()</function-signature>-->
+    <!--<example>${fnc:getCurrentSiteId()}</example>  -->
+  <!--</function>-->
   
-  <function>
-    <description>获取站点</description>
-    <name>getSite</name>
-    <function-class>com.thinkgem.jeesite.modules.cms.utils.CmsUtils</function-class>
-    <function-signature>com.thinkgem.jeesite.modules.cms.entity.Site getSite(java.lang.String)</function-signature>
-    <example>${fnc:getSite(siteId)}</example>  
-  </function>
+  <!--<function>-->
+    <!--<description>获取站点</description>-->
+    <!--<name>getSite</name>-->
+    <!--<function-class>com.thinkgem.jeesite.modules.cms.utils.CmsUtils</function-class>-->
+    <!--<function-signature>com.thinkgem.jeesite.modules.cms.entity.Site getSite(java.lang.String)</function-signature>-->
+    <!--<example>${fnc:getSite(siteId)}</example>  -->
+  <!--</function>-->
   
   <function>
     <description>获取站点列表</description>
