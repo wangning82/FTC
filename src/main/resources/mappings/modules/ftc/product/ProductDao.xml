@@ -25,10 +25,14 @@
 		a.page_title AS "pageTitle",
 		a.page_description AS "pageDescription",
 		a.page_keyword AS "pageKeyword",
-		a.remarks AS "remarks"
+		a.remarks AS "remarks",
+		b.id AS "category.id",
+		b.name AS "category.name"
+
 	</sql>
 	
 	<sql id="productJoins">
+		left join os_category b on a.category_id=b.id
 	</sql>
     
 	<select id="get" resultType="Product">
@@ -60,6 +64,9 @@
 			</if>
 			<if test="searchKey != null and searchKey != ''">
 				AND a.search_key = #{searchKey}
+			</if>
+			<if test="category != null and category != '' and category.id != null and category.id != ''">
+				AND a.category_id = #{category.id}
 			</if>
 		</where>
 		<choose>
@@ -114,7 +121,8 @@
 			page_title,
 			page_description,
 			page_keyword,
-			remarks
+			remarks,
+			category_id
 		) VALUES (
 			#{id},
 			#{number},
@@ -138,7 +146,8 @@
 			#{pageTitle},
 			#{pageDescription},
 			#{pageKeyword},
-			#{remarks}
+			#{remarks},
+			#{category.id}
 		)
 	</insert>
 	
@@ -164,7 +173,8 @@
 			page_title = #{pageTitle},
 			page_description = #{pageDescription},
 			page_keyword = #{pageKeyword},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			category_id=#{category.id}
 		WHERE id = #{id}
 	</update>
 	
@@ -172,5 +182,5 @@
 		DELETE FROM os_product
 		WHERE id = #{id}
 	</update>
-	
+
 </mapper>

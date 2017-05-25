@@ -32,7 +32,7 @@
 				<form:input path="code" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
 			<li><label>设计者：</label>
-				<sys:treeselect id="createBy" name="createBy.id" value="${design.createBy.id}" labelName="" labelValue="${design.}"
+				<sys:treeselect id="createBy" name="createBy.id" value="${design.createBy.id}" labelName="" labelValue="${design.createBy.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
