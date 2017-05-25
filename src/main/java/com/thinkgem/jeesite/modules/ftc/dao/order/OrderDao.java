@@ -9,8 +9,8 @@ import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 
 /**
  * 订单DAO接口
- * @author wangqingxiang
- * @version 2017-05-19
+ * @author houyi
+ * @version 2017-05-25
  */
 @MyBatisDao
 public interface OrderDao extends CrudDao<Order> {

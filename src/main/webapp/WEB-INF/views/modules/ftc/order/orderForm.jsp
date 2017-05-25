@@ -34,34 +34,43 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">订单编号,系统生成：</label>
+			<label class="control-label">订单编号：</label>
 			<div class="controls">
-				<form:input path="orderNumber" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="orderNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">用户ID：</label>
+			<label class="control-label">用户：</label>
 			<div class="controls">
 				<sys:treeselect id="user" name="user" value="${order.user}" labelName="" labelValue="${order.}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">支付方式 0=线下支付，1=在线支付：</label>
+			<label class="control-label">支付方式：</label>
 			<div class="controls">
-				<form:input path="payType" htmlEscape="false" maxlength="2" class="input-xlarge "/>
+				<form:select path="payType" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_pay_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">配送时间 1=不限送货时间，2=工作日送货，3=双休日、假日送货：</label>
+			<label class="control-label">配送时间：</label>
 			<div class="controls">
-				<form:input path="shipmentTime" htmlEscape="false" maxlength="2" class="input-xlarge "/>
+				<form:select path="shipmentTime" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_shipment_time')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">配送方式 0=快递配送（免运费），1=快递配送（运费）：</label>
+			<label class="control-label">配送方式：</label>
 			<div class="controls">
-				<form:input path="shipmentType" htmlEscape="false" maxlength="2" class="input-xlarge "/>
+				<form:select path="shipmentType" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_shipment_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -71,9 +80,12 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">支付方式 1=不开发票，2=电子发票，3=普通发票：</label>
+			<label class="control-label">发票类型：</label>
 			<div class="controls">
-				<form:input path="invoiceType" htmlEscape="false" maxlength="2" class="input-xlarge "/>
+				<form:select path="invoiceType" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_invoice_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -85,7 +97,10 @@
 		<div class="control-group">
 			<label class="control-label">订单状态：</label>
 			<div class="controls">
-				<form:input path="orderStatus" htmlEscape="false" maxlength="2" class="input-xlarge "/>
+				<form:select path="orderStatus" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
@@ -101,7 +116,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">支付金额 = 订单金额 + 快递费：</label>
+			<label class="control-label">支付金额：</label>
 			<div class="controls">
 				<form:input path="payAmount" htmlEscape="false" class="input-xlarge "/>
 			</div>
