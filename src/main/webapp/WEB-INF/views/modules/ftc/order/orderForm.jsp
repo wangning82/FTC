@@ -36,14 +36,13 @@
 		<div class="control-group">
 			<label class="control-label">订单编号：</label>
 			<div class="controls">
-				<form:input path="orderNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="orderNo" htmlEscape="false" maxlength="64" class="input-xlarge"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">用户：</label>
+			<label class="control-label">顾客：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user" value="${order.user}" labelName="" labelValue="${order.}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<form:input path="customer.userName" htmlEscape="false" maxlength="64" class="input-xlarge" disabled="true"/>
 			</div>
 		</div>
 		<div class="control-group">

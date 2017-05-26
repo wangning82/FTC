@@ -5,7 +5,7 @@
 	<sql id="orderColumns">
 		a.id AS "id",
 		a.order_number AS "orderNo",
-		a.user_id AS "user",
+		a.customer_id AS "customer.id",
 		a.pay_type AS "payType",
 		a.shipment_time AS "shipmentTime",
 		a.shipment_type AS "shipmentType",
@@ -22,12 +22,13 @@
 	</sql>
 	
 	<sql id="orderJoins">
-		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		LEFT JOIN os_customer u3 ON u3.id = a.customer_id
 	</sql>
     
 	<select id="get" resultType="Order">
 		SELECT 
-			<include refid="orderColumns"/>
+			<include refid="orderColumns"/>,
+			u3.user_name AS "customer.userName"
 		FROM os_order a
 		<include refid="orderJoins"/>
 		WHERE a.id = #{id}
@@ -35,11 +36,11 @@
 	
 	<select id="findList" resultType="Order">
 		SELECT 
-			<include refid="orderColumns"/>
+			<include refid="orderColumns"/>,
+			u3.user_name AS "customer.userName"
 		FROM os_order a
 		<include refid="orderJoins"/>
 		<where>
-			
 			<if test="orderNo != null and orderNo != ''">
 				AND a.order_number = #{orderNo}
 			</if>
@@ -82,7 +83,7 @@
 		INSERT INTO os_order(
 			id,
 			order_number,
-			user_id,
+			customer_id,
 			pay_type,
 			shipment_time,
 			shipment_type,
@@ -99,7 +100,7 @@
 		) VALUES (
 			#{id},
 			#{orderNo},
-			#{user},
+			#{customer.id},
 			#{payType},
 			#{shipmentTime},
 			#{shipmentType},
@@ -119,7 +120,7 @@
 	<update id="update">
 		UPDATE os_order SET 	
 			order_number = #{orderNo},
-			user_id = #{user},
+			customer_id = #{customer.id},
 			pay_type = #{payType},
 			shipment_time = #{shipmentTime},
 			shipment_type = #{shipmentType},

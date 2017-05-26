@@ -16,7 +16,7 @@ import com.thinkgem.jeesite.modules.ftc.dao.order.OrderDao;
 /**
  * 订单Service
  * @author houyi
- * @version 2017-05-25
+ * @version 2017-05-26
  */
 @Service
 @Transactional(readOnly = true)

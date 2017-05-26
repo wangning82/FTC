@@ -49,7 +49,7 @@
 		<thead>
 			<tr>
 				<th>订单编号</th>
-				<th>用户</th>
+				<th>顾客</th>
 				<th>支付方式</th>
 				<th>订单状态</th>
 				<th>下单时间</th>
@@ -64,7 +64,7 @@
 					${order.orderNo}
 				</a></td>
 				<td>
-					${order.}
+					${order.customer.userName}
 				</td>
 				<td>
 					${fns:getDictLabel(order.payType, 'ftc_order_pay_type', '')}

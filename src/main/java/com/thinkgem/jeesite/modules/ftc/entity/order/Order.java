@@ -4,7 +4,7 @@
 package com.thinkgem.jeesite.modules.ftc.entity.order;
 
 import org.hibernate.validator.constraints.Length;
-import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import java.math.BigDecimal;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -12,13 +12,13 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 /**
  * 订单Entity
  * @author houyi
- * @version 2017-05-25
+ * @version 2017-05-26
  */
 public class Order extends DataEntity<Order> {
 	
 	private static final long serialVersionUID = 1L;
 	private String orderNo;		// 订单编号
-	private User user;		// 用户
+	private Customer customer;		// 顾客
 	private String payType;		// 支付方式
 	private String shipmentTime;		// 配送时间
 	private String shipmentType;		// 配送方式
@@ -48,12 +48,12 @@ public class Order extends DataEntity<Order> {
 		this.orderNo = orderNo;
 	}
 	
-	public User getUser() {
-		return user;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 	
 	@Length(min=0, max=2, message="支付方式长度必须介于 0 和 2 之间")
