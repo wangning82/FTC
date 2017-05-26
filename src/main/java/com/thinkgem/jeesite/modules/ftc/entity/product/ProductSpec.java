@@ -3,7 +3,6 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.product;
 
-import com.sun.tools.javac.util.List;
 import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
