@@ -10,6 +10,7 @@
         }
     </style>
     <script type="text/javascript">
+		var specs=[];
         $(document).ready(function () {
             //$("#name").focus();
             $("#inputForm").validate({
@@ -27,9 +28,33 @@
                     }
                 }
 
+
             });
+
+			$(":checkbox").click(function(){
+				fixTable(this);
+//				alert("点击规格属性");
+			});
         });
+
         function addRow(list, idx, tpl, row) {
+
+			var  ids='';
+			var  names='';
+			$(":radio[checked]").each(function (index,element){
+				ids+=element.value;
+				names+=element.title;
+			})
+			alert(ids);
+			alert(names);
+
+
+
+
+
+
+
+
             $(list).append(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
@@ -61,7 +86,6 @@
             }
         }
         function categoryTreeselectCallBack(v, h, f) {
-            alert($("#categoryId").val());
 //            动态增加规格数据
             $.ajax({
                 type: "GET",
@@ -75,7 +99,7 @@
                         html+="<tr>";
                         html += "<td><label class='control-label'>" + spec.name + "：</label></td>";
                         $.each(spec.specAttributeList, function (index,attribute) {
-                            html += "<td><input type='checkbox' name='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>"+attribute.name+"</td>"
+                            html += "<td><input onclick='fixTable()' type='radio' name='"+spec.id+"'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>"+attribute.name+"</td>"
 
                         });
                         html += "</tr>";
@@ -84,6 +108,7 @@
                 }
             });
         }
+
 
     </script>
 </head>
