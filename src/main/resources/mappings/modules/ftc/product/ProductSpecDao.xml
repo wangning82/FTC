@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao">
+    
+	<sql id="productSpecColumns">
+		a.id AS "id",
+		a.product_spec_number AS "productSpecNumber",
+		a.product_id AS "productId",
+		a.spec_id AS "spec.id",
+		a.spec_name AS "spec.name",
+		a.stock AS "stock",
+		a.sales_volume AS "salesVolume",
+		a.price AS "price",
+		a.score AS "score",
+		a.default_status AS "defaultStatus",
+		a.status AS "status",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="productSpecJoins">
+	</sql>
+    
+	<select id="get" resultType="ProductSpec">
+		SELECT 
+			<include refid="productSpecColumns"/>
+		FROM os_product_specification a
+		<include refid="productSpecJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ProductSpec">
+		SELECT 
+			<include refid="productSpecColumns"/>
+		FROM os_product_specification a
+		<include refid="productSpecJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProductSpec">
+		SELECT 
+			<include refid="productSpecColumns"/>
+		FROM os_product_specification a
+		<include refid="productSpecJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_product_specification(
+			id,
+			product_spec_number,
+			product_id,
+			spec_id,
+			spec_name,
+			stock,
+			sales_volume,
+			price,
+			score,
+			default_status,
+			status,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{productSpecNumber},
+			#{productId},
+			#{spec.id},
+			#{spec.name},
+			#{stock},
+			#{salesVolume},
+			#{price},
+			#{score},
+			#{defaultStatus},
+			#{status},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_product_specification SET 	
+			product_spec_number = #{productSpecNumber},
+			product_id = #{productId},
+			spec_id = #{spec.id},
+			spec_name = #{spec.name},
+			stock = #{stock},
+			sales_volume = #{salesVolume},
+			price = #{price},
+			score = #{score},
+			default_status = #{defaultStatus},
+			status = #{status},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_product_specification
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

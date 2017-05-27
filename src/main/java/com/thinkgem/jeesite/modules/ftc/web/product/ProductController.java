@@ -58,6 +58,7 @@ public class ProductController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Product product, Model model) {
 		model.addAttribute("product", product);
+
 		return "modules/ftc/product/productForm";
 	}
 

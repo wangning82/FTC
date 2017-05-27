@@ -25,6 +25,9 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>商品分类：</label>
+				<form:input path="category.name" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
 			<li><label>商品编号：</label>
 				<form:input path="number" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
@@ -46,22 +49,27 @@
 		<thead>
 			<tr>
 				<th>商品编号</th>
-				<th>标签ID</th>
+				<th>商品分类</th>
 				<th>商品名称</th>
+				<th>标签</th>
+
 				<th>显示积分</th>
 				<th>显示价格</th>
-				<th>商品简介</th>
+
 				<th>展示图片</th>
-				<th>是否置顶 1=置顶/0=默认</th>
-				<th>是否导航栏 1=显示/0=隐藏</th>
-				<th>是否热门 1=热门/0=默认</th>
+				<%--<th>是否置顶 1=置顶/0=默认</th>--%>
+				<%--<th>是否导航栏 1=显示/0=隐藏</th>--%>
+				<%--<th>是否热门 1=热门/0=默认</th>--%>
+
 				<th>创建时间</th>
 				<th>创建者</th>
 				<th>上架时间</th>
 				<th>上架人</th>
-				<th>更新时间</th>
 				<th>搜索关键词</th>
-				<th>页面标题</th>
+				<th>商品简介</th>
+				<%--<th>更新时间</th>--%>
+
+				<%--<th>页面标题</th>--%>
 				<th>备注</th>
 				<shiro:hasPermission name="ftc:product:product:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -73,37 +81,41 @@
 					${product.number}
 				</a></td>
 				<td>
-					${product.labelId}
+				${product.category.name}
 				</td>
 				<td>
-					${product.name}
+						${product.name}
 				</td>
+				<td>
+					${product.labelId}
+				</td>
+
 				<td>
 					${product.showScore}
 				</td>
 				<td>
-					${product.showPrice}
+						${product.showPrice}
 				</td>
+
 				<td>
-					${product.introduce}
+					<img src="${product.picImg}" style="height: 50px;"/>
+
 				</td>
-				<td>
-					${product.picImg}
-				</td>
-				<td>
-					${product.showInTop}
-				</td>
-				<td>
-					${product.showInNav}
-				</td>
-				<td>
-					${product.showInHot}
-				</td>
+				<%--<td>--%>
+					<%--${product.showInTop}--%>
+				<%--</td>--%>
+				<%--<td>--%>
+					<%--${product.showInNav}--%>
+				<%--</td>--%>
+				<%--<td>--%>
+					<%--${product.showInHot}--%>
+				<%--</td>--%>
+
 				<td>
 					<fmt:formatDate value="${product.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${product.createBy.id}
+					${product.createBy.name}
 				</td>
 				<td>
 					<fmt:formatDate value="${product.shelveTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
@@ -112,14 +124,13 @@
 					${product.shelveBy}
 				</td>
 				<td>
-					<fmt:formatDate value="${product.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+						${product.searchKey}
 				</td>
 				<td>
-					${product.searchKey}
+						${product.introduce}
 				</td>
-				<td>
-					${product.pageTitle}
-				</td>
+
+
 				<td>
 					${product.remarks}
 				</td>

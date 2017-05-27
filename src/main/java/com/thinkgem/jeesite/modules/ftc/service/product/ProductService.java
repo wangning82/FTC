@@ -3,15 +3,14 @@
  */
 package com.thinkgem.jeesite.modules.ftc.service.product;
 
-import java.util.List;
-
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
-import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
+import java.util.List;
 
 /**
  * 商品Service
@@ -36,7 +35,15 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	
 	@Transactional(readOnly = false)
 	public void save(Product product) {
-		super.save(product);
+		if (product.getIsNewRecord()){
+			product.preInsert();
+			//保存
+			dao.insert(product);
+		}else{
+
+			product.preUpdate();
+			dao.update(product);
+		}
 	}
 	
 	@Transactional(readOnly = false)
