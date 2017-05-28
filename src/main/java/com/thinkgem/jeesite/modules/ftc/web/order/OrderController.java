@@ -25,7 +25,7 @@ import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
 /**
  * 订单Controller
  * @author houyi
- * @version 2017-05-26
+ * @version 2017-05-28
  */
 @Controller
 @RequestMapping(value = "${adminPath}/ftc/order/order")

@@ -18,7 +18,8 @@
 		a.order_amount AS "orderAmount",
 		a.order_score AS "orderScore",
 		a.pay_amount AS "payAmount",
-		a.buy_number AS "buyNumber"
+		a.buy_number AS "buyNumber",
+		u3.user_name AS "customer.userName"
 	</sql>
 	
 	<sql id="orderJoins">
@@ -27,8 +28,7 @@
     
 	<select id="get" resultType="Order">
 		SELECT 
-			<include refid="orderColumns"/>,
-			u3.user_name AS "customer.userName"
+			<include refid="orderColumns"/>
 		FROM os_order a
 		<include refid="orderJoins"/>
 		WHERE a.id = #{id}
@@ -36,11 +36,11 @@
 	
 	<select id="findList" resultType="Order">
 		SELECT 
-			<include refid="orderColumns"/>,
-			u3.user_name AS "customer.userName"
+			<include refid="orderColumns"/>
 		FROM os_order a
 		<include refid="orderJoins"/>
 		<where>
+			
 			<if test="orderNo != null and orderNo != ''">
 				AND a.order_number = #{orderNo}
 			</if>
