@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.order.OrderShipmentDao">
+    
+	<sql id="orderShipmentColumns">
+		a.id AS "id",
+		a.order_id AS "order.id",
+		a.user_name AS "userName",
+		a.user_phone AS "userPhone",
+		a.province_id AS "provinceId",
+		a.province_name AS "provinceName",
+		a.city_id AS "cityId",
+		a.city_name AS "cityName",
+		a.district_id AS "districtId",
+		a.district_name AS "districtName",
+		a.user_adress AS "userAdress",
+		a.user_zipcode AS "userZipcode",
+		a.update_date AS "updateDate",
+		b.order_number AS "order.orderNo"
+	</sql>
+	
+	<sql id="orderShipmentJoins">
+		LEFT JOIN os_order b ON b.id = a.order_id
+	</sql>
+    
+	<select id="get" resultType="OrderShipment">
+		SELECT 
+			<include refid="orderShipmentColumns"/>
+		FROM os_order_shipment a
+		<include refid="orderShipmentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="OrderShipment">
+		SELECT 
+			<include refid="orderShipmentColumns"/>
+		FROM os_order_shipment a
+		<include refid="orderShipmentJoins"/>
+		<where>
+			<if test="order != null and order.orderNo != null and order.orderNo != ''">
+				AND b.order_number = #{order.orderNo}
+			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
+			<if test="userPhone != null and userPhone != ''">
+				AND a.user_phone = #{userPhone}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OrderShipment">
+		SELECT 
+			<include refid="orderShipmentColumns"/>
+		FROM os_order_shipment a
+		<include refid="orderShipmentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_order_shipment(
+			id,
+			order_id,
+			user_name,
+			user_phone,
+			province_id,
+			province_name,
+			city_id,
+			city_name,
+			district_id,
+			district_name,
+			user_adress,
+			user_zipcode,
+			update_date
+		) VALUES (
+			#{id},
+			#{order.id},
+			#{userName},
+			#{userPhone},
+			#{provinceId},
+			#{provinceName},
+			#{cityId},
+			#{cityName},
+			#{districtId},
+			#{districtName},
+			#{userAdress},
+			#{userZipcode},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_order_shipment SET 	
+			order_id = #{order.id},
+			user_name = #{userName},
+			user_phone = #{userPhone},
+			province_id = #{provinceId},
+			province_name = #{provinceName},
+			city_id = #{cityId},
+			city_name = #{cityName},
+			district_id = #{districtId},
+			district_name = #{districtName},
+			user_adress = #{userAdress},
+			user_zipcode = #{userZipcode},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_order_shipment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
