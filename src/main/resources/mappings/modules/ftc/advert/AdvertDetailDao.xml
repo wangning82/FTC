@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.advert.AdvertDetailDao">
+    
+	<sql id="advertDetailColumns">
+		a.id AS "id",
+		a.advert_id AS "advertId",
+		a.title AS "title",
+		a.sort AS "sort",
+		a.href AS "href",
+		a.status AS "status",
+		a.pic_img AS "picImg",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.remarks AS "remarks",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
+		a.content AS "content"
+	</sql>
+	
+	<sql id="advertDetailJoins">
+	</sql>
+    
+	<select id="get" resultType="AdvertDetail">
+		SELECT 
+			<include refid="advertDetailColumns"/>
+		FROM os_advert_detail a
+		<include refid="advertDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="AdvertDetail">
+		SELECT 
+			<include refid="advertDetailColumns"/>
+		FROM os_advert_detail a
+		<include refid="advertDetailJoins"/>
+		<where>
+			
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="AdvertDetail">
+		SELECT 
+			<include refid="advertDetailColumns"/>
+		FROM os_advert_detail a
+		<include refid="advertDetailJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_advert_detail(
+			id,
+			advert_id,
+			title,
+			sort,
+			href,
+			status,
+			pic_img,
+			create_date,
+			create_by,
+			update_date,
+			update_by,
+			remarks,
+			begin_time,
+			end_time,
+			content
+		) VALUES (
+			#{id},
+			#{advertId},
+			#{title},
+			#{sort},
+			#{href},
+			#{status},
+			#{picImg},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id},
+			#{remarks},
+			#{beginTime},
+			#{endTime},
+			#{content}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_advert_detail SET 	
+			advert_id = #{advertId},
+			title = #{title},
+			sort = #{sort},
+			href = #{href},
+			status = #{status},
+			pic_img = #{picImg},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remarks = #{remarks},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
+			content = #{content}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_advert_detail
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -37,7 +37,9 @@
 		FROM os_product_specification a
 		<include refid="productSpecJoins"/>
 		<where>
-			
+			<if test="productId != null and productId != ''">
+				AND a.product_id = #{productId}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
