@@ -65,7 +65,7 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">分类ID：</label>
+			<label class="control-label">分类：</label>
 			<div class="controls">
 				<sys:treeselect id="category" name="category.id" value="${category.id}" labelName="" labelValue="${category.name}"
 								title="分类" url="/ftc/product/category/treeData" extId="${category.id}" cssClass="" allowClear="true"/>

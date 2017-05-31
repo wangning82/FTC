@@ -5,6 +5,8 @@ package com.thinkgem.jeesite.modules.ftc.entity.product;
 
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
@@ -35,7 +37,27 @@ public class Product extends DataEntity<Product> {
 	private String pageTitle;		// 页面标题
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
-	
+
+
+	private Category category;
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	private List<ProductSpec> specs;//商品规格
+
+	public List<ProductSpec> getSpecs() {
+		return specs;
+	}
+
+	public void setSpecs(List<ProductSpec> specs) {
+		this.specs = specs;
+	}
 	public Product() {
 		super();
 	}
