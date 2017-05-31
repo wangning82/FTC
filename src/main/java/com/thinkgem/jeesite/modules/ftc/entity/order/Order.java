@@ -4,30 +4,35 @@
 package com.thinkgem.jeesite.modules.ftc.entity.order;
 
 import org.hibernate.validator.constraints.Length;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import java.math.BigDecimal;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 订单Entity
- * @author wangqingxiang
- * @version 2017-05-19
+ * @author houyi
+ * @version 2017-05-28
  */
 public class Order extends DataEntity<Order> {
 	
 	private static final long serialVersionUID = 1L;
-	private String orderNumber;		// 订单编号,系统生成
-	private String user;		// 用户ID
-	private String payType;		// 支付方式 0=线下支付，1=在线支付
-	private String shipmentTime;		// 配送时间 1=不限送货时间，2=工作日送货，3=双休日、假日送货
-	private String shipmentType;		// 配送方式 0=快递配送（免运费），1=快递配送（运费）
-	private String shipmentAmount;		// 快递费
-	private String invoiceType;		// 支付方式 1=不开发票，2=电子发票，3=普通发票
+	private String orderNo;		// 订单编号
+	private Customer customer;		// 顾客
+	private String payType;		// 支付方式
+	private String shipmentTime;		// 配送时间
+	private String shipmentType;		// 配送方式
+	private BigDecimal shipmentAmount;		// 快递费
+	private String invoiceType;		// 发票类型
 	private String invoiceTitle;		// 发票抬头
 	private String orderStatus;		// 订单状态
-	private String orderAmount;		// 订单金额
-	private String orderScore;		// 订单积分
-	private String payAmount;		// 支付金额 = 订单金额 + 快递费
-	private String buyNumber;		// 商品总数量
+	private BigDecimal orderAmount;		// 订单金额
+	private BigDecimal orderScore;		// 订单积分
+	private BigDecimal payAmount;		// 支付金额
+	private BigDecimal buyNumber;		// 商品总数量
+	private List<OrderProduct> orderProductList = Lists.newArrayList();		// 子表列表
 	
 	public Order() {
 		super();
@@ -37,25 +42,24 @@ public class Order extends DataEntity<Order> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="订单编号,系统生成长度必须介于 0 和 64 之间")
-	public String getOrderNumber() {
-		return orderNumber;
+	@Length(min=0, max=64, message="订单编号长度必须介于 0 和 64 之间")
+	public String getOrderNo() {
+		return orderNo;
 	}
 
-	public void setOrderNumber(String orderNumber) {
-		this.orderNumber = orderNumber;
+	public void setOrderNo(String orderNo) {
+		this.orderNo = orderNo;
 	}
 	
-	@Length(min=0, max=64, message="用户ID长度必须介于 0 和 64 之间")
-	public String getUser() {
-		return user;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 	
-	@Length(min=0, max=2, message="支付方式 0=线下支付，1=在线支付长度必须介于 0 和 2 之间")
+	@Length(min=0, max=2, message="支付方式长度必须介于 0 和 2 之间")
 	public String getPayType() {
 		return payType;
 	}
@@ -64,7 +68,7 @@ public class Order extends DataEntity<Order> {
 		this.payType = payType;
 	}
 	
-	@Length(min=0, max=2, message="配送时间 1=不限送货时间，2=工作日送货，3=双休日、假日送货长度必须介于 0 和 2 之间")
+	@Length(min=0, max=2, message="配送时间长度必须介于 0 和 2 之间")
 	public String getShipmentTime() {
 		return shipmentTime;
 	}
@@ -73,7 +77,7 @@ public class Order extends DataEntity<Order> {
 		this.shipmentTime = shipmentTime;
 	}
 	
-	@Length(min=0, max=2, message="配送方式 0=快递配送（免运费），1=快递配送（运费）长度必须介于 0 和 2 之间")
+	@Length(min=0, max=2, message="配送方式长度必须介于 0 和 2 之间")
 	public String getShipmentType() {
 		return shipmentType;
 	}
@@ -82,15 +86,15 @@ public class Order extends DataEntity<Order> {
 		this.shipmentType = shipmentType;
 	}
 	
-	public String getShipmentAmount() {
+	public BigDecimal getShipmentAmount() {
 		return shipmentAmount;
 	}
 
-	public void setShipmentAmount(String shipmentAmount) {
+	public void setShipmentAmount(BigDecimal shipmentAmount) {
 		this.shipmentAmount = shipmentAmount;
 	}
 	
-	@Length(min=0, max=2, message="支付方式 1=不开发票，2=电子发票，3=普通发票长度必须介于 0 和 2 之间")
+	@Length(min=0, max=2, message="发票类型长度必须介于 0 和 2 之间")
 	public String getInvoiceType() {
 		return invoiceType;
 	}
@@ -117,38 +121,43 @@ public class Order extends DataEntity<Order> {
 		this.orderStatus = orderStatus;
 	}
 	
-	public String getOrderAmount() {
+	public BigDecimal getOrderAmount() {
 		return orderAmount;
 	}
 
-	public void setOrderAmount(String orderAmount) {
+	public void setOrderAmount(BigDecimal orderAmount) {
 		this.orderAmount = orderAmount;
 	}
 	
-	@Length(min=0, max=11, message="订单积分长度必须介于 0 和 11 之间")
-	public String getOrderScore() {
+	public BigDecimal getOrderScore() {
 		return orderScore;
 	}
 
-	public void setOrderScore(String orderScore) {
+	public void setOrderScore(BigDecimal orderScore) {
 		this.orderScore = orderScore;
 	}
 	
-	public String getPayAmount() {
+	public BigDecimal getPayAmount() {
 		return payAmount;
 	}
 
-	public void setPayAmount(String payAmount) {
+	public void setPayAmount(BigDecimal payAmount) {
 		this.payAmount = payAmount;
 	}
 	
-	@Length(min=0, max=11, message="商品总数量长度必须介于 0 和 11 之间")
-	public String getBuyNumber() {
+	public BigDecimal getBuyNumber() {
 		return buyNumber;
 	}
 
-	public void setBuyNumber(String buyNumber) {
+	public void setBuyNumber(BigDecimal buyNumber) {
 		this.buyNumber = buyNumber;
 	}
 	
+	public List<OrderProduct> getOrderProductList() {
+		return orderProductList;
+	}
+
+	public void setOrderProductList(List<OrderProduct> orderProductList) {
+		this.orderProductList = orderProductList;
+	}
 }

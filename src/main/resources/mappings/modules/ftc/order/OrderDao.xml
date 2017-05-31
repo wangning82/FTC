@@ -4,8 +4,8 @@
     
 	<sql id="orderColumns">
 		a.id AS "id",
-		a.order_number AS "orderNumber",
-		a.user_id AS "user",
+		a.order_number AS "orderNo",
+		a.customer_id AS "customer.id",
 		a.pay_type AS "payType",
 		a.shipment_time AS "shipmentTime",
 		a.shipment_type AS "shipmentType",
@@ -18,11 +18,12 @@
 		a.order_amount AS "orderAmount",
 		a.order_score AS "orderScore",
 		a.pay_amount AS "payAmount",
-		a.buy_number AS "buyNumber"
+		a.buy_number AS "buyNumber",
+		u3.user_name AS "customer.userName"
 	</sql>
 	
 	<sql id="orderJoins">
-		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		LEFT JOIN os_customer u3 ON u3.id = a.customer_id
 	</sql>
     
 	<select id="get" resultType="Order">
@@ -40,14 +41,14 @@
 		<include refid="orderJoins"/>
 		<where>
 			
-			<if test="orderNumber != null and orderNumber != ''">
-				AND a.order_number = #{orderNumber}
-			</if>
-			<if test="user != null and user != ''">
-				AND a.user_id = #{user}
+			<if test="orderNo != null and orderNo != ''">
+				AND a.order_number = #{orderNo}
 			</if>
 			<if test="payType != null and payType != ''">
 				AND a.pay_type = #{payType}
+			</if>
+			<if test="orderStatus != null and orderStatus != ''">
+				AND a.order_status = #{orderStatus}
 			</if>
 		</where>
 		<choose>
@@ -82,7 +83,7 @@
 		INSERT INTO os_order(
 			id,
 			order_number,
-			user_id,
+			customer_id,
 			pay_type,
 			shipment_time,
 			shipment_type,
@@ -98,8 +99,8 @@
 			buy_number
 		) VALUES (
 			#{id},
-			#{orderNumber},
-			#{user},
+			#{orderNo},
+			#{customer.id},
 			#{payType},
 			#{shipmentTime},
 			#{shipmentType},
@@ -118,8 +119,8 @@
 	
 	<update id="update">
 		UPDATE os_order SET 	
-			order_number = #{orderNumber},
-			user_id = #{user},
+			order_number = #{orderNo},
+			customer_id = #{customer.id},
 			pay_type = #{payType},
 			shipment_time = #{shipmentTime},
 			shipment_type = #{shipmentType},

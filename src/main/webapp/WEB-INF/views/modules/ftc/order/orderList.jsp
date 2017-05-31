@@ -25,15 +25,20 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>订单编号,系统生成：</label>
-				<form:input path="orderNumber" htmlEscape="false" maxlength="64" class="input-medium"/>
+			<li><label>订单编号：</label>
+				<form:input path="orderNo" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>用户ID：</label>
-				<sys:treeselect id="user" name="user" value="${order.user}" labelName="" labelValue="${order.user}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
+			<li><label>支付方式：</label>
+				<form:select path="payType" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_pay_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</li>
-			<li><label>支付方式 0=线下支付，1=在线支付：</label>
-				<form:input path="payType" htmlEscape="false" maxlength="2" class="input-medium"/>
+			<li><label>订单状态：</label>
+				<form:select path="orderStatus" class="input-medium">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_order_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
@@ -43,21 +48,12 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>订单编号,系统生成</th>
-				<th>用户ID</th>
-				<th>支付方式 0=线下支付，1=在线支付</th>
-				<th>配送时间 1=不限送货时间，2=工作日送货，3=双休日、假日送货</th>
-				<th>配送方式 0=快递配送（免运费），1=快递配送（运费）</th>
-				<th>快递费</th>
-				<th>支付方式 1=不开发票，2=电子发票，3=普通发票</th>
-				<th>发票抬头</th>
+				<th>订单编号</th>
+				<th>顾客</th>
+				<th>支付方式</th>
 				<th>订单状态</th>
-				<th>创建时间</th>
-				<th>更新时间</th>
+				<th>下单时间</th>
 				<th>订单金额</th>
-				<th>订单积分</th>
-				<th>支付金额 = 订单金额 + 快递费</th>
-				<th>商品总数量</th>
 				<shiro:hasPermission name="ftc:order:order:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -65,49 +61,22 @@
 		<c:forEach items="${page.list}" var="order">
 			<tr>
 				<td><a href="${ctx}/ftc/order/order/form?id=${order.id}">
-					${order.orderNumber}
+					${order.orderNo}
 				</a></td>
 				<td>
-					${order.user}
+					${order.customer.userName}
 				</td>
 				<td>
-					${order.payType}
+					${fns:getDictLabel(order.payType, 'ftc_order_pay_type', '')}
 				</td>
 				<td>
-					${order.shipmentTime}
-				</td>
-				<td>
-					${order.shipmentType}
-				</td>
-				<td>
-					${order.shipmentAmount}
-				</td>
-				<td>
-					${order.invoiceType}
-				</td>
-				<td>
-					${order.invoiceTitle}
-				</td>
-				<td>
-					${order.orderStatus}
+					${fns:getDictLabel(order.orderStatus, 'ftc_order_status', '')}
 				</td>
 				<td>
 					<fmt:formatDate value="${order.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${order.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
 					${order.orderAmount}
-				</td>
-				<td>
-					${order.orderScore}
-				</td>
-				<td>
-					${order.payAmount}
-				</td>
-				<td>
-					${order.buyNumber}
 				</td>
 				<shiro:hasPermission name="ftc:order:order:edit"><td>
     				<a href="${ctx}/ftc/order/order/form?id=${order.id}">修改</a>
