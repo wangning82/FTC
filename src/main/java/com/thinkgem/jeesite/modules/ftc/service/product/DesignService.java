@@ -5,6 +5,9 @@ package com.thinkgem.jeesite.modules.ftc.service.product;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +25,15 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
 @Transactional(readOnly = true)
 public class DesignService extends CrudService<DesignDao, Design> {
 
+	@Autowired
+	private ImageDao imageDao;
 	public Design get(String id) {
-		return super.get(id);
+		Design design=super.get(id);
+		Image image=new Image();
+		image.setDesign(design);
+		List<Image> images=imageDao.findList(image);
+		design.setImages(images);
+		return design;
 	}
 	
 	public List<Design> findList(Design design) {

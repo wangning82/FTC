@@ -31,6 +31,9 @@ public class Specification extends DataEntity<Specification> {
 	public Specification(String id){
 		super(id);
 	}
+	public Specification(Category category){
+		this.category=category;
+	}
 
 	public Category getCategory() {
 		return category;

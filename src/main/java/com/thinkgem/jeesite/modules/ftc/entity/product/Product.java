@@ -38,6 +38,15 @@ public class Product extends DataEntity<Product> {
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
 
+	private List<Image>images;
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
 
 	private Category category;
 

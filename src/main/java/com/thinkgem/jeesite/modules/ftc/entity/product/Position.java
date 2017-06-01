@@ -32,6 +32,9 @@ public class Position extends DataEntity<Position> {
 		super(id);
 	}
 
+	public Position(Category category){
+		this.category=category;
+	}
 	public Category getCategory() {
 		return category;
 	}

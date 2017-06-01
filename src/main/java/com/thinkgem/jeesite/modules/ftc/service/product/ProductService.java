@@ -8,6 +8,7 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.entity.product.SpecAttribute;
@@ -28,12 +29,18 @@ public class ProductService extends CrudService<ProductDao, Product> {
 
 	@Autowired
 	private ProductSpecDao productSpecDao;
+	@Autowired
+	private ImageService imageService;
 	public Product get(String id) {
 		Product product= super.get(id);
 		ProductSpec spec=new ProductSpec();
 		spec.setProductId(product.getId());
 		List<ProductSpec> specs=productSpecDao.findList(spec);
 		product.setSpecs(specs);
+		Image image=new Image();
+		image.setProduct(product);
+		List<Image> images=imageService.findList(image);
+		product.setImages(images);
 		return product;
 	}
 	
