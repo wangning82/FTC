@@ -32,10 +32,12 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="position" action="${ctx}/ftc/product/position/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">类目ID：</label>
+			<label class="control-label">分类：</label>
 			<div class="controls">
+				<sys:treeselect id="category" name="category.id" value="${position.category.id}" labelName="" labelValue="${position.category.name}"
+								title="分类" url="/ftc/product/category/treeData" extId="" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -50,20 +52,7 @@
 				<form:input path="sort" htmlEscape="false" maxlength="9" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">状态：</label>
-			<div class="controls">
-				<form:input path="status" htmlEscape="false" maxlength="2" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">创建时间：</label>
-			<div class="controls">
-				<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${position.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-			</div>
-		</div>
+
 		<div class="control-group">
 			<label class="control-label">备注信息：</label>
 			<div class="controls">

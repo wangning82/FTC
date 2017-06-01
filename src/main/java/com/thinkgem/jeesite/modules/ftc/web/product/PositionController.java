@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.thinkgem.jeesite.common.persistence.Page;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,8 +55,8 @@ public class PositionController extends BaseController {
 	@RequiresPermissions("ftc:product:position:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Position position, HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<Position> list = positionService.findList(position); 
-		model.addAttribute("list", list);
+		Page<Position> page = positionService.findPage(new Page<Position>(request, response), position);
+		model.addAttribute("page", page);
 		return "modules/ftc/product/positionList";
 	}
 

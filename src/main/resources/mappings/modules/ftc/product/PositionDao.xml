@@ -35,8 +35,8 @@
 		<include refid="positionJoins"/>
 		<where>
 
-			<if test="categoryId != null and categoryId != ''">
-				AND a.category_id = #{categoryId}
+			<if test="category != null and category != '' and category.id != null and category.id != ''">
+				AND a.category_id = #{category.id}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE
@@ -92,9 +92,9 @@
 		name = #{name},
 		sort = #{sort},
 		status = #{status},
-		create_time = #{createDate},
+		create_date = #{createDate},
 		remarks = #{remarks},
-		update_time = #{updateDate},
+		update_date = #{updateDate},
 		update_by = #{updateBy.id}
 		WHERE id = #{id}
 	</update>

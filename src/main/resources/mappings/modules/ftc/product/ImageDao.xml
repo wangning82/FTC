@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao">
+    
+	<sql id="imageColumns">
+		a.id AS "id",
+		a.product_id AS "product.id",
+		a.url AS "url",
+		a.sort AS "sort",
+		a.status AS "status",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.position_id AS "position.id",
+		a.position_name AS "position.name",
+		a.design_id AS "design.id",
+		a.info AS "info",
+		a.rotation AS "rotation",
+		a.scale AS "scale",
+		a.name AS "name"
+	</sql>
+	
+	<sql id="imageJoins">
+	</sql>
+    
+	<select id="get" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM os_product_image a
+		<include refid="imageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM os_product_image a
+		<include refid="imageJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM os_product_image a
+		<include refid="imageJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_product_image(
+			id,
+			product_id,
+			url,
+			sort,
+			status,
+			create_date,
+			create_by,
+			position_id,
+			position_name,
+			design_id,
+			info,
+			rotation,
+			scale,
+			name
+		) VALUES (
+			#{id},
+			#{product.id},
+			#{url},
+			#{sort},
+			#{status},
+			#{createDate},
+			#{createBy.id},
+			#{position.id},
+			#{position.name},
+			#{design.id},
+			#{info},
+			#{rotation},
+			#{scale},
+			#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_product_image SET 	
+			product_id = #{product.id},
+			url = #{url},
+			sort = #{sort},
+			status = #{status},
+			position_id = #{position.id},
+			position_name = #{position.name},
+			design_id = #{design.id},
+			info = #{info},
+			rotation = #{rotation},
+			scale = #{scale},
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_product_image
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
