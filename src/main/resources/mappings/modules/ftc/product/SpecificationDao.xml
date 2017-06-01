@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.SpecificationDao">
+    
+	<sql id="specificationColumns">
+		a.category_id AS "category.id",
+		b.name AS "category.name",
+		a.name AS "name",
+		a.status AS "status",
+		a.sort AS "sort",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.id AS "id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="specificationJoins">
+		left join os_category b on a.category_id=b.id
+	</sql>
+    
+	<select id="get" resultType="Specification">
+		SELECT 
+			<include refid="specificationColumns"/>
+		FROM os_specification a
+		<include refid="specificationJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Specification">
+		SELECT 
+			<include refid="specificationColumns"/>
+		FROM os_specification a
+		<include refid="specificationJoins"/>
+		<where>
+			<if test="category != null and category != ''">
+				AND a.category_id = #{category.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Specification">
+		SELECT 
+			<include refid="specificationColumns"/>
+		FROM os_specification a
+		<include refid="specificationJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_specification(
+			category_id,
+			name,
+			status,
+			sort,
+			create_date,
+			create_by,
+			id,
+			update_date,
+			update_by
+		) VALUES (
+			#{category.id},
+			#{name},
+			#{status},
+			#{sort},
+			#{createDate},
+			#{createBy.id},
+			#{id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_specification SET 	
+			category_id = #{category.id},
+			name = #{name},
+			status = #{status},
+			sort = #{sort},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_specification
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

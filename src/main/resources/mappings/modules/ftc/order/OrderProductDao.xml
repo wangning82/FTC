@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.order.OrderProductDao">
+    
+	<sql id="orderProductColumns">
+		a.id AS "id",
+		a.order_id AS "order.id",
+		a.product_number AS "productNumber",
+		a.name AS "name",
+		a.pic_img AS "picImg",
+		a.product_spec_number AS "productSpecNumber",
+		a.product_spec_name AS "productSpecName",
+		a.product_price AS "productPrice",
+		a.product_score AS "productScore",
+		a.product_amount AS "productAmount",
+		a.buy_number AS "buyNumber",
+		a.design_id AS "design.id",
+		a.design_price AS "designPrice",
+		a.design_amount AS "designAmount",
+		a.price AS "price",
+		a.score AS "score",
+		a.comment_status AS "commentStatus",
+		c.code AS "design.code"
+	</sql>
+	
+	<sql id="orderProductJoins">
+		LEFT JOIN os_order b ON b.id = a.order_id
+		LEFT JOIN os_product_design c ON c.id = a.design_id
+	</sql>
+    
+	<select id="get" resultType="OrderProduct">
+		SELECT 
+			<include refid="orderProductColumns"/>
+		FROM os_order_product a
+		<include refid="orderProductJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="OrderProduct">
+		SELECT 
+			<include refid="orderProductColumns"/>
+		FROM os_order_product a
+		<include refid="orderProductJoins"/>
+		<where>
+			
+			<if test="order != null and order.id != null and order.id != ''">
+				AND a.order_id = #{order.id}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="OrderProduct">
+		SELECT 
+			<include refid="orderProductColumns"/>
+		FROM os_order_product a
+		<include refid="orderProductJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_order_product(
+			id,
+			order_id,
+			product_number,
+			name,
+			pic_img,
+			product_spec_number,
+			product_spec_name,
+			product_price,
+			product_score,
+			product_amount,
+			buy_number,
+			design_id,
+			design_price,
+			design_amount,
+			price,
+			score,
+			comment_status
+		) VALUES (
+			#{id},
+			#{order.id},
+			#{productNumber},
+			#{name},
+			#{picImg},
+			#{productSpecNumber},
+			#{productSpecName},
+			#{productPrice},
+			#{productScore},
+			#{productAmount},
+			#{buyNumber},
+			#{design.id},
+			#{designPrice},
+			#{designAmount},
+			#{price},
+			#{score},
+			#{commentStatus}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_order_product SET 	
+			product_number = #{productNumber},
+			name = #{name},
+			pic_img = #{picImg},
+			product_spec_number = #{productSpecNumber},
+			product_spec_name = #{productSpecName},
+			product_price = #{productPrice},
+			product_score = #{productScore},
+			product_amount = #{productAmount},
+			buy_number = #{buyNumber},
+			design_price = #{designPrice},
+			design_amount = #{designAmount},
+			price = #{price},
+			score = #{score},
+			comment_status = #{commentStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_order_product
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE order_id = #{order.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+</mapper>

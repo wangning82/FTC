@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.advert.AdvertDao">
+    
+	<sql id="advertColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.width AS "width",
+		a.height AS "height",
+		a.description AS "description",
+		a.code AS "code",
+		a.template AS "template",
+		a.defult_number AS "defultNumber",
+		a.number AS "number",
+		a.status AS "status",
+		a.type AS "type",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="advertJoins">
+	</sql>
+    
+	<select id="get" resultType="Advert">
+		SELECT 
+			<include refid="advertColumns"/>
+		FROM os_advert a
+		<include refid="advertJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Advert">
+		SELECT 
+			<include refid="advertColumns"/>
+		FROM os_advert a
+		<include refid="advertJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Advert">
+		SELECT 
+			<include refid="advertColumns"/>
+		FROM os_advert a
+		<include refid="advertJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_advert(
+			id,
+			name,
+			width,
+			height,
+			description,
+			code,
+			template,
+			defult_number,
+			number,
+			status,
+			type,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{name},
+			#{width},
+			#{height},
+			#{description},
+			#{code},
+			#{template},
+			#{defultNumber},
+			#{number},
+			#{status},
+			#{type},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_advert SET 	
+			name = #{name},
+			width = #{width},
+			height = #{height},
+			description = #{description},
+			code = #{code},
+			template = #{template},
+			defult_number = #{defultNumber},
+			number = #{number},
+			status = #{status},
+			type = #{type},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_advert
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

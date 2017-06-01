@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.order.ShoppingCartDao">
+    
+	<sql id="shoppingCartColumns">
+		a.id AS "id",
+		a.product_spec_number AS "productSpecNumber",
+		a.customer_id AS "customer.id",
+		a.buy_number AS "buyNumber",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate",
+		a.check_status AS "checkStatus",
+		b.user_name AS "customer.userName"
+	</sql>
+	
+	<sql id="shoppingCartJoins">
+		LEFT JOIN os_customer b ON b.id = a.customer_id
+	</sql>
+    
+	<select id="get" resultType="ShoppingCart">
+		SELECT 
+			<include refid="shoppingCartColumns"/>
+		FROM os_shopping_cart a
+		<include refid="shoppingCartJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="ShoppingCart">
+		SELECT 
+			<include refid="shoppingCartColumns"/>
+		FROM os_shopping_cart a
+		<include refid="shoppingCartJoins"/>
+		<where>
+			
+			<if test="productSpecNumber != null and productSpecNumber != ''">
+				AND a.product_spec_number = #{productSpecNumber}
+			</if>
+			<if test="customer != null and customer.id != null and customer.id != ''">
+				AND a.customer_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{customer.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customer.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{customer.id},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ShoppingCart">
+		SELECT 
+			<include refid="shoppingCartColumns"/>
+		FROM os_shopping_cart a
+		<include refid="shoppingCartJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_shopping_cart(
+			id,
+			product_spec_number,
+			customer_id,
+			buy_number,
+			create_date,
+			update_date,
+			check_status
+		) VALUES (
+			#{id},
+			#{productSpecNumber},
+			#{customer.id},
+			#{buyNumber},
+			#{createDate},
+			#{updateDate},
+			#{checkStatus}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_shopping_cart SET 	
+			product_spec_number = #{productSpecNumber},
+			customer_id = #{customer.id},
+			buy_number = #{buyNumber},
+			update_date = #{updateDate},
+			check_status = #{checkStatus}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_shopping_cart
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

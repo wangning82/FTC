@@ -5,14 +5,14 @@ package com.thinkgem.jeesite.modules.ftc.dao.order;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
+import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
 
 /**
- * 订单DAO接口
+ * 购物车DAO接口
  * @author houyi
- * @version 2017-05-28
+ * @version 2017-05-29
  */
 @MyBatisDao
-public interface OrderDao extends CrudDao<Order> {
+public interface ShoppingCartDao extends CrudDao<ShoppingCart> {
 	
 }

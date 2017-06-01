@@ -6,13 +6,15 @@ package com.thinkgem.jeesite.modules.ftc.entity.order;
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import java.math.BigDecimal;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 订单Entity
  * @author houyi
- * @version 2017-05-26
+ * @version 2017-05-28
  */
 public class Order extends DataEntity<Order> {
 	
@@ -30,6 +32,7 @@ public class Order extends DataEntity<Order> {
 	private BigDecimal orderScore;		// 订单积分
 	private BigDecimal payAmount;		// 支付金额
 	private BigDecimal buyNumber;		// 商品总数量
+	private List<OrderProduct> orderProductList = Lists.newArrayList();		// 子表列表
 	
 	public Order() {
 		super();
@@ -150,4 +153,11 @@ public class Order extends DataEntity<Order> {
 		this.buyNumber = buyNumber;
 	}
 	
+	public List<OrderProduct> getOrderProductList() {
+		return orderProductList;
+	}
+
+	public void setOrderProductList(List<OrderProduct> orderProductList) {
+		this.orderProductList = orderProductList;
+	}
 }

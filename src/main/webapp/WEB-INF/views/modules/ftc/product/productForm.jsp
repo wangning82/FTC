@@ -10,7 +10,7 @@
         }
     </style>
     <script type="text/javascript">
-		var specs=[];
+
         $(document).ready(function () {
             //$("#name").focus();
             $("#inputForm").validate({
@@ -31,10 +31,9 @@
 
             });
 
-			$(":checkbox").click(function(){
-				fixTable(this);
-//				alert("点击规格属性");
-			});
+            if($("#categoryId").val()){
+                categoryTreeselectCallBack();
+            }
         });
 
         function addRow(list, idx, tpl, row) {
@@ -42,19 +41,20 @@
 			var  ids='';
 			var  names='';
 			$(":radio[checked]").each(function (index,element){
-				ids+=element.value;
-				names+=element.title;
+                if(ids.length==0){
+                    ids+=element.value;
+                    names+=element.title;
+                }else{
+                    ids+=","+element.value;
+                    names+=","+element.title;
+                }
+
+
 			})
-			alert(ids);
-			alert(names);
 
-
-
-
-
-
-
-
+            if(!row){
+                row={spec:{name:names,id:ids},productSpecNumber:'00000001'};
+            }
             $(list).append(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
@@ -127,9 +127,9 @@
 <div class="control-group">
     <label class="control-label">分类：</label>
     <div class="controls">
-        <sys:treeselect id="category" name="category.id" value="${category.id}" labelName=""
-                        labelValue="${category.name}"
-                        title="分类" url="/ftc/product/category/treeData" extId="${category.id}" cssClass=""
+        <sys:treeselect id="category" name="category.id" value="${product.category.id}" labelName=""
+                        labelValue="${product.category.name}"
+                        title="分类" url="/ftc/product/category/treeData" extId="" cssClass=""
                         allowClear="true"/>
     </div>
 </div>
@@ -224,10 +224,11 @@
             <thead>
             <tr>
                 <th class="hide"></th>
+                <th>编号</th>
                 <th>规格</th>
                 <th>库存</th>
                 <th>价格</th>
-                <th>积分</th>
+                <th >积分</th>
                 <shiro:hasPermission name="ftc:product:product:edit">
                     <th width="10">&nbsp;</th>
                 </shiro:hasPermission>
@@ -250,9 +251,13 @@
 							<td class="hide">
 								<input id="specs{{idx}}_id" name="specs[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 								<input id="specs{{idx}}_delFlag" name="specs[{{idx}}].delFlag" type="hidden" value="0"/>
+								<input id="specs{{idx}}_spec_id" name="specs[{{idx}}].spec.id" type="text" value="{{row.spec.id}}" maxlength="100" class="input-small "/>
 							</td>
 							<td>
-								<input id="specs{{idx}}_name" name="specs[{{idx}}].productSpecNumber" type="text" value="{{row.productSpecNumber}}" maxlength="100" class="input-small "/>
+								<input id="specs{{idx}}_name" name="specs[{{idx}}].productSpecNumber" type="text" value="{{row.productSpecNumber}}" maxlength="100" class="input-small " />
+							</td>
+							<td>
+								<input id="specs{{idx}}_spec_name" name="specs[{{idx}}].spec.name" type="text" value="{{row.spec.name}}" readonly="readonly" maxlength="100" class="input-small "/>
 							</td>
 							<td>
 								<input id="specs{{idx}}_stock" name="specs[{{idx}}].stock" type="text" value="{{row.stock}}" maxlength="255" class="input-small "/>
