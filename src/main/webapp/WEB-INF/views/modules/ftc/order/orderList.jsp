@@ -76,7 +76,7 @@
 					<fmt:formatDate value="${order.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${order.orderAmount}
+					<fmt:formatNumber value="${order.orderAmount}" type="currency"/>
 				</td>
 				<shiro:hasPermission name="ftc:order:order:edit"><td>
     				<a href="${ctx}/ftc/order/order/form?id=${order.id}">修改</a>
