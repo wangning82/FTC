@@ -34,7 +34,7 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">评论ID：</label>
+			<label class="control-label">评论：</label>
 			<div class="controls">
 				<form:input path="commentId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>

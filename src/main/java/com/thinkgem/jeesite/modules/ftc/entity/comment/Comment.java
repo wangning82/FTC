@@ -5,6 +5,8 @@ package com.thinkgem.jeesite.modules.ftc.entity.comment;
 
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.sys.entity.User;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
@@ -13,28 +15,38 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
  * @author wangqingxiang
  * @version 2017-06-04
  */
-public class Reply extends DataEntity<Reply> {
+public class Comment extends DataEntity<Comment> {
 	
 	private static final long serialVersionUID = 1L;
-	private Comment comment;		// 评论ID 父类
+	private String product;		// 商品ID
 	private User user;		// 用户ID
+	private String order;		// 订单ID
+	private String star;		// 评论星级
 	private String content;		// 评论内容
-	private String goodCount;		// 好评数
+	private Integer goodCount;		// 好评数
 	private String status;		// 状态
 	private String type;		// 评论类型
+	private List<Reply> replyList = Lists.newArrayList();		// 子表列表
 	
-	public Reply() {
+	public Comment() {
 		super();
 	}
 
-	public Reply(String id){
+	public Comment(String id){
 		super(id);
 	}
-	public Reply(Comment comment){
-		this.comment=comment;
+
+	@Length(min=0, max=64, message="商品ID长度必须介于 0 和 64 之间")
+	public String getProduct() {
+		return product;
 	}
 
+	public void setProduct(String product) {
+		this.product = product;
+	}
+	
 
+	
 	public User getUser() {
 		return user;
 	}
@@ -42,16 +54,25 @@ public class Reply extends DataEntity<Reply> {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
-
-	public Comment getComment() {
-		return comment;
+	
+	@Length(min=0, max=64, message="订单ID长度必须介于 0 和 64 之间")
+	public String getOrder() {
+		return order;
 	}
 
-	public void setComment(Comment comment) {
-		this.comment = comment;
+	public void setOrder(String order) {
+		this.order = order;
+	}
+	
+	@Length(min=0, max=4, message="评论星级长度必须介于 0 和 4 之间")
+	public String getStar() {
+		return star;
 	}
 
+	public void setStar(String star) {
+		this.star = star;
+	}
+	
 	@Length(min=0, max=255, message="评论内容长度必须介于 0 和 255 之间")
 	public String getContent() {
 		return content;
@@ -61,12 +82,11 @@ public class Reply extends DataEntity<Reply> {
 		this.content = content;
 	}
 	
-	@Length(min=0, max=11, message="好评数长度必须介于 0 和 11 之间")
-	public String getGoodCount() {
+	public Integer getGoodCount() {
 		return goodCount;
 	}
 
-	public void setGoodCount(String goodCount) {
+	public void setGoodCount(Integer goodCount) {
 		this.goodCount = goodCount;
 	}
 	
@@ -88,4 +108,11 @@ public class Reply extends DataEntity<Reply> {
 		this.type = type;
 	}
 	
+	public List<Reply> getReplyList() {
+		return replyList;
+	}
+
+	public void setReplyList(List<Reply> replyList) {
+		this.replyList = replyList;
+	}
 }

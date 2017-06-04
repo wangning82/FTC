@@ -58,10 +58,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/ftc/comment/ftcComment/">评论列表</a></li>
-		<li class="active"><a href="${ctx}/ftc/comment/ftcComment/form?id=${ftcComment.id}">评论<shiro:hasPermission name="ftc:comment:ftcComment:edit">${not empty ftcComment.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="ftc:comment:ftcComment:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/ftc/comment/comment/">评论列表</a></li>
+		<li class="active"><a href="${ctx}/ftc/comment/comment/form?id=${comment.id}">评论<shiro:hasPermission name="ftc:comment:comment:edit">${not empty comment.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="ftc:comment:comment:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="ftcComment" action="${ctx}/ftc/comment/ftcComment/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="comment" action="${ctx}/ftc/comment/comment/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
@@ -73,20 +73,20 @@
 		<div class="control-group">
 			<label class="control-label">用户ID：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user" value="${ftcComment.user}" labelName="" labelValue="${ftcComment.}"
+				<sys:treeselect id="user" name="user.id" value="${comment.user.id}" labelName="" labelValue="${comment.}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">昵称：</label>
 			<div class="controls">
-				<form:input path="userName" htmlEscape="false" maxlength="30" class="input-xlarge "/>
+				<form:input path="user.name" htmlEscape="false" maxlength="30" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">用户头像：</label>
 			<div class="controls">
-				<form:input path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="user.photo" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -96,7 +96,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">评论星级：1,2,3,4,5：</label>
+			<label class="control-label">评论星级：</label>
 			<div class="controls">
 				<form:input path="star" htmlEscape="false" maxlength="4" class="input-xlarge "/>
 			</div>
@@ -110,11 +110,11 @@
 		<div class="control-group">
 			<label class="control-label">好评数：</label>
 			<div class="controls">
-				<form:input path="goodCount" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+				<form:input path="goodCount" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">状态：1.显示；0.隐藏：</label>
+			<label class="control-label">状态：</label>
 			<div class="controls">
 				<form:select path="status" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -123,7 +123,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">评论类型：1,优质；0,普通：</label>
+			<label class="control-label">评论类型：</label>
 			<div class="controls">
 				<form:select path="type" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -143,14 +143,14 @@
 								<th>用户头像</th>
 								<th>评论内容</th>
 								<th>好评数</th>
-								<th>状态：1.显示；0.隐藏</th>
-								<th>评论类型：1,官方回复；0,用户回复</th>
-								<shiro:hasPermission name="ftc:comment:ftcComment:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
+								<th>状态</th>
+								<th>评论类型</th>
+								<shiro:hasPermission name="ftc:comment:comment:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 							</tr>
 						</thead>
 						<tbody id="replyList">
 						</tbody>
-						<shiro:hasPermission name="ftc:comment:ftcComment:edit"><tfoot>
+						<shiro:hasPermission name="ftc:comment:comment:edit"><tfoot>
 							<tr><td colspan="9"><a href="javascript:" onclick="addRow('#replyList', replyRowIdx, replyTpl);replyRowIdx = replyRowIdx + 1;" class="btn">新增</a></td></tr>
 						</tfoot></shiro:hasPermission>
 					</table>
@@ -192,7 +192,7 @@
 									</c:forEach>
 								</select>
 							</td>
-							<shiro:hasPermission name="ftc:comment:ftcComment:edit"><td class="text-center" width="10">
+							<shiro:hasPermission name="ftc:comment:comment:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#replyList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 							</td></shiro:hasPermission>
 						</tr>//-->
@@ -200,7 +200,7 @@
 					<script type="text/javascript">
 						var replyRowIdx = 0, replyTpl = $("#replyTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g,"");
 						$(document).ready(function() {
-							var data = ${fns:toJson(ftcComment.replyList)};
+							var data = ${fns:toJson(comment.replyList)};
 							for (var i=0; i<data.length; i++){
 								addRow('#replyList', replyRowIdx, replyTpl, data[i]);
 								replyRowIdx = replyRowIdx + 1;
@@ -210,7 +210,7 @@
 				</div>
 			</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="ftc:comment:ftcComment:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="ftc:comment:comment:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

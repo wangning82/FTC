@@ -4,7 +4,8 @@
     
 	<sql id="advertDetailColumns">
 		a.id AS "id",
-		a.advert_id AS "advertId",
+		a.advert_id AS "advert.id",
+		b.name AS "advert.name",
 		a.title AS "title",
 		a.sort AS "sort",
 		a.href AS "href",
@@ -21,6 +22,7 @@
 	</sql>
 	
 	<sql id="advertDetailJoins">
+		LEFT JOIN os_advert b ON b.id = a.advert_id
 	</sql>
     
 	<select id="get" resultType="AdvertDetail">
@@ -38,6 +40,12 @@
 		<include refid="advertDetailJoins"/>
 		<where>
 			
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="advert != null and advert.id != null and advert.id != ''">
+				AND a.advert_id = #{advert.id}
+			</if>
 			<if test="title != null and title != ''">
 				AND a.title LIKE 
 					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
@@ -47,13 +55,19 @@
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
 			</if>
+			<if test="beginTime != null and beginTime != ''">
+				AND a.begin_time = #{beginTime}
+			</if>
+			<if test="endTime != null and endTime != ''">
+				AND a.end_time = #{endTime}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -71,7 +85,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -95,7 +109,7 @@
 			content
 		) VALUES (
 			#{id},
-			#{advertId},
+			#{advert.id},
 			#{title},
 			#{sort},
 			#{href},
@@ -114,7 +128,7 @@
 	
 	<update id="update">
 		UPDATE os_advert_detail SET 	
-			advert_id = #{advertId},
+			advert_id = #{advert.id},
 			title = #{title},
 			sort = #{sort},
 			href = #{href},
@@ -131,7 +145,14 @@
 	
 	<update id="delete">
 		DELETE FROM os_advert_detail
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE advert_id = #{advert.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 </mapper>

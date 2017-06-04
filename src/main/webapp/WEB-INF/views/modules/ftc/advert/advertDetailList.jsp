@@ -18,10 +18,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/ftc/advert/advertDetail/">广告列表</a></li>
-		<shiro:hasPermission name="ftc:advert:advertDetail:edit"><li><a href="${ctx}/ftc/advert/advertDetail/form">广告添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/ftc/advert/detail/">广告列表</a></li>
+		<shiro:hasPermission name="ftc:advert:detail:edit"><li><a href="${ctx}/ftc/advert/detail/form">广告添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="advertDetail" action="${ctx}/ftc/advert/advertDetail/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="advertDetail" action="${ctx}/ftc/advert/detail/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -46,19 +46,19 @@
 				<th>排序</th>
 				<th>链接地址</th>
 				<th>状态</th>
-				<th>创建时间</th>
-				<th>更新时间</th>
-				<th>备注信息</th>
+
+
 				<th>广告起始时间</th>
 				<th>广告结束时间</th>
 				<th>广告内容</th>
-				<shiro:hasPermission name="ftc:advert:advertDetail:edit"><th>操作</th></shiro:hasPermission>
+				<th>备注信息</th>
+				<shiro:hasPermission name="ftc:advert:detail:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
 		<tbody>
 		<c:forEach items="${page.list}" var="advertDetail">
 			<tr>
-				<td><a href="${ctx}/ftc/advert/advertDetail/form?id=${advertDetail.id}">
+				<td><a href="${ctx}/ftc/advert/detail/form?id=${advertDetail.id}">
 					${advertDetail.title}
 				</a></td>
 				<td>
@@ -70,15 +70,9 @@
 				<td>
 					${fns:getDictLabel(advertDetail.status, 'ftc_advert_advert_status', '')}
 				</td>
-				<td>
-					<fmt:formatDate value="${advertDetail.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					<fmt:formatDate value="${advertDetail.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					${advertDetail.remarks}
-				</td>
+
+
+
 				<td>
 					<fmt:formatDate value="${advertDetail.beginTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
@@ -86,11 +80,14 @@
 					<fmt:formatDate value="${advertDetail.endTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${advertDetail.content}
+						${advertDetail.content}
 				</td>
-				<shiro:hasPermission name="ftc:advert:advertDetail:edit"><td>
-    				<a href="${ctx}/ftc/advert/advertDetail/form?id=${advertDetail.id}">修改</a>
-					<a href="${ctx}/ftc/advert/advertDetail/delete?id=${advertDetail.id}" onclick="return confirmx('确认要删除该广告吗？', this.href)">删除</a>
+				<td>
+						${advertDetail.remarks}
+				</td>
+				<shiro:hasPermission name="ftc:advert:detail:edit"><td>
+    				<a href="${ctx}/ftc/advert/detail/form?id=${advertDetail.id}">修改</a>
+					<a href="${ctx}/ftc/advert/detail/delete?id=${advertDetail.id}" onclick="return confirmx('确认要删除该广告吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

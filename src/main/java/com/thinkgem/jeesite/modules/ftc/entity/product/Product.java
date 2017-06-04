@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.product;
 
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import java.util.List;
@@ -32,11 +33,21 @@ public class Product extends DataEntity<Product> {
 	private String showInShelve;		// 是否上架：1=上架/0=下架
 	private Date createTime;		// 创建时间
 	private Date shelveTime;		// 上架时间
-	private String shelveBy;		// 上架人
+	private User shelveBy;		// 上架人
 	private String searchKey;		// 搜索关键词
 	private String pageTitle;		// 页面标题
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
+
+	private Design design;
+
+	public Design getDesign() {
+		return design;
+	}
+
+	public void setDesign(Design design) {
+		this.design = design;
+	}
 
 	private List<Image>images;
 
@@ -190,16 +201,15 @@ public class Product extends DataEntity<Product> {
 	public void setShelveTime(Date shelveTime) {
 		this.shelveTime = shelveTime;
 	}
-	
-	@Length(min=0, max=64, message="上架人长度必须介于 0 和 64 之间")
-	public String getShelveBy() {
+
+	public User getShelveBy() {
 		return shelveBy;
 	}
 
-	public void setShelveBy(String shelveBy) {
+	public void setShelveBy(User shelveBy) {
 		this.shelveBy = shelveBy;
 	}
-	
+
 	@Length(min=0, max=255, message="搜索关键词长度必须介于 0 和 255 之间")
 	public String getSearchKey() {
 		return searchKey;

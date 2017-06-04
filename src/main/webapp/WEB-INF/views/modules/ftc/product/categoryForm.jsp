@@ -34,7 +34,7 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">上级父分类ID:</label>
+			<label class="control-label">上级父分类:</label>
 			<div class="controls">
 				<sys:treeselect id="parent" name="parent.id" value="${category.parent.id}" labelName="" labelValue="${category.parent.name}"
 								title="父分类ID" url="/ftc/product/category/treeData" extId="${category.id}" cssClass="" allowClear="true"/>

@@ -5,7 +5,7 @@ package com.thinkgem.jeesite.modules.ftc.dao.comment;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.ftc.entity.comment.Reply;
+import com.thinkgem.jeesite.modules.ftc.entity.comment.Comment;
 
 /**
  * 评论DAO接口
@@ -13,6 +13,6 @@ import com.thinkgem.jeesite.modules.ftc.entity.comment.Reply;
  * @version 2017-06-04
  */
 @MyBatisDao
-public interface ReplyDao extends CrudDao<Reply> {
+public interface CommentDao extends CrudDao<Comment> {
 	
 }

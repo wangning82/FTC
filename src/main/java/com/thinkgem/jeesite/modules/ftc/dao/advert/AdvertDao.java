@@ -8,9 +8,9 @@ import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.Advert;
 
 /**
- * 广告位DAO接口
+ * 广告DAO接口
  * @author wangqingxiang
- * @version 2017-05-21
+ * @version 2017-06-03
  */
 @MyBatisDao
 public interface AdvertDao extends CrudDao<Advert> {

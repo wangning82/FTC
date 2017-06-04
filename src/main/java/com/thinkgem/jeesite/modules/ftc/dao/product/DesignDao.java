@@ -14,5 +14,5 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.Design;
  */
 @MyBatisDao
 public interface DesignDao extends CrudDao<Design> {
-	
+	public Design findByProductId(String productId);
 }

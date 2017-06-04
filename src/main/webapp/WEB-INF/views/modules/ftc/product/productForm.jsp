@@ -35,23 +35,9 @@
 
         function addRow(list, idx, tpl, row) {
 
-            var ids = '';
-            var names = '';
-            $(":radio[checked]").each(function (index, element) {
-                if (ids.length == 0) {
-                    ids += element.value;
-                    names += element.title;
-                } else {
-                    ids += "," + element.value;
-                    names += "," + element.title;
-                }
 
 
-            })
 
-            if (!row) {
-                row = {spec: {name: names, id: ids}, productSpecNumber: '00000001'};
-            }
             $(list).append(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
@@ -96,7 +82,7 @@
                         html += "<tr>";
                         html += "<td><label class='control-label'>" + spec.name + "：</label></td>";
                         $.each(spec.specAttributeList, function (index, attribute) {
-                            html += "<td><input onclick='fixTable()' type='radio' name='" + spec.id + "'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>" + attribute.name + "</td>"
+                            html += "<td><input type='radio' name='" + spec.id + "'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>" + attribute.name + "</td>"
 
                         });
                         html += "</tr>";
@@ -107,6 +93,24 @@
         }
 
 
+        function addSpecRow(){
+            var ids = '';
+            var names = '';
+            $(":radio[checked]").each(function (index, element) {
+                if (ids.length == 0) {
+                    ids += element.value;
+                    names += element.title;
+                } else {
+                    ids += "," + element.value;
+                    names += "," + element.title;
+                }
+
+
+            })
+            var row = {spec: {name: names, id: ids}, productSpecNumber: '00000001'};
+            addRow('#specList', specRowIdx, specTpl,row);
+            specRowIdx = specRowIdx + 1;
+        }
     </script>
 </head>
 <body>
@@ -167,6 +171,12 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">搜索关键词：</label>
+        <div class="controls">
+            <form:input path="searchKey" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">展示图片：</label>
         <div class="controls">
 
@@ -177,6 +187,7 @@
                           maxHeight="100"/>
         </div>
     </div>
+
     <div class="control-group">
         <label class="control-label">商品规格：</label>
 
@@ -237,7 +248,7 @@
                     <tfoot>
                     <tr>
                         <td colspan="4"><a href="javascript:"
-                                           onclick="addRow('#specList', specRowIdx, specTpl);specRowIdx = specRowIdx + 1;"
+                                           onclick="addSpecRow()"
                                            class="btn">新增</a></td>
                     </tr>
                     </tfoot>
@@ -291,69 +302,74 @@
                 <tr>
                     <th class="hide"></th>
                     <th>位置</th>
-                    <th>操作</th>
+                    <th>图片</th>
+                    <th>旋转</th>
+                    <th>缩放</th>
 
+                    <shiro:hasPermission name="ftc:product:product:edit">
+                        <th width="10">&nbsp;</th>
+                    </shiro:hasPermission>
                 </tr>
+
                 </thead>
                 <tbody id="imageList">
-                <c:if test="${positionList!=null}">
-                    <c:forEach items="${positionList}" var="position">
-                        <tr>
-                            <td> ${position.name}</td>
-                            <td id="${position.id}" >
-                                <a href="javascript:" onclick="addImage('${position.id}');" class="btn">添加图片</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                </c:if>
+
                 </tbody>
+                <shiro:hasPermission name="ftc:product:product:edit">
+                    <tfoot>
+                    <tr>
+                        <td colspan="4"><a href="javascript:"
+                                           onclick="addRow('#imageList', imageRowIdx, imageTpl);imageRowIdx = imageRowIdx + 1;"
+                                           class="btn">新增</a></td>
+                    </tr>
+                    </tfoot>
+                </shiro:hasPermission>
                 </table>
         </div>
         <script type="text/template" id="imageTpl">//<!--
-        <table>
-        <tr>
-        <th>图片</th>
-        <th>位置</th>
-        <th>旋转</th>
-        <th>缩放</th>
-        </tr>
-						<tr id="images{{idx}}">
+<tr>
 							<td class="hide">
-								<input id="images{{idx}}_id" name="specs[{{idx}}].id" type="hidden" value="{{row.id}}"/>
-								<input id="images{{idx}}_delFlag" name="specs[{{idx}}].delFlag" type="hidden" value="0"/>
-								<input id="images{{idx}}_spec_id" name="specs[{{idx}}].image.id" type="hidden" value="{{row.image.id}}" maxlength="100" class="input-small "/>
-							</td>
-							<td>
+								<input id="images{{idx}}_id" name="images[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+								<input id="images{{idx}}_delFlag" name="images[{{idx}}].delFlag" type="hidden" value="0"/>
+								<input id="images{{idx}}_spec_id" name="images[{{idx}}].image.id" type="hidden" value="{{row.image.id}}" maxlength="100" class="input-small "/>
+							<%--<form:hidden id="images{{idx}}_url" path="images[{{idx}}].url" htmlEscape="false" maxlength="255" class="input-xlarge"/>--%>
+    <input id="images{{idx}}_url" name="images[{{idx}}].url" type="hidden" value="{{row.url}}" maxlength="100" class="input-small "/>
 
-								<input id="images{{idx}}_url" name="specs[{{idx}}].url" type="hidden" value="{{row.url}}" maxlength="100" class="input-small " />
 							</td>
 							<td>
-								<input id="images{{idx}}_rotation" name="specs[{{idx}}].rotation" type="text" value="{{row.rotation}}"  maxlength="100" class="input-small "/>
+							  <sys:treeselect id="images{{idx}}_position" name="images[{{idx}}].position.id" value="${row.position.id}" labelName=""
+                            labelValue="${row.position.name}"
+                            title="位置" url="/ftc/product/position/treeData" extId="" cssClass="input-medium"
+                            allowClear="true"/>
+</td>
+							<td>
+        <sys:ckfinder input="images{{idx}}_url" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"
+                          maxHeight="100" />
+
+								</td>
+							<td>
+								<input id="images{{idx}}_rotation" name="images[{{idx}}].rotation" type="text" value="{{row.rotation}}"  maxlength="100" class="input-medium "/>
 							</td>
 							<td>
-								<input id="images{{idx}}_scale" name="specs[{{idx}}].scale" type="text" value="{{row.scale}}" maxlength="255" class="input-small "/>
+								<input id="images{{idx}}_scale" name="images[{{idx}}].scale" type="text" value="{{row.scale}}" maxlength="255" class="input-medium "/>
 							</td>
 
 							<shiro:hasPermission name="ftc:product:product:edit"><td class="text-center" width="10">
-								{{#delBtn}}<span class="close" onclick="delRow(this, '#specs{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-							</td></shiro:hasPermission>
-						</tr></table>//-->
+								{{#delBtn}}<span class="close" onclick="delRow(this, '#images{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+							</td></shiro:hasPermission></tr>
+						//-->
         </script>
         <script type="text/javascript">
-            var imgeTpl = $("#imageTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g, "");
+            var imageRowIdx = 0,  imageTpl = $("#imageTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g, "");
             $(document).ready(function () {
                 var data = ${fns:toJson(product.images)};
-//                for (var i = 0; i < data.length; i++) {
-//                    addRow('#imageList', specRowIdx, imageTpl, data[i]);
-//                    specRowIdx = specRowIdx + 1;
-//                };
+                for (var i = 0; i < data.length; i++) {
+                    addRow('#imageList', imageRowIdx, imageTpl, data[i]);
+                    imageRowIdx = imageRowIdx + 1;
+                };
 
             });
-            function addImage(id){
-                $("#"+id).append(Mustache.render(imgeTpl, {
-                    idx: 0, delBtn: true, row: null
-                }));
-            }
+
         </script>
     </div>
     <div class="control-group">
@@ -366,6 +382,7 @@
             </form:select>
         </div>
     </div>
+
     <%--<div class="control-group">--%>
     <%--<label class="control-label">是否导航栏 1=显示/0=隐藏：</label>--%>
     <%--<div class="controls">--%>
@@ -383,7 +400,7 @@
         <div class="controls">
                 <%--<form:input path="showInShelve" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
 
-            <form:select path="showInShelve" class="input-xlarge ">
+            <form:select path="showInShelve" class="input-xlarge " readonly="readonly">
                 <form:option value="" label=""/>
                 <form:options items="${fns:getDictList('ftc_product_product_showInShelve')}" itemLabel="label"
                               itemValue="value" htmlEscape="false"/>
@@ -392,6 +409,15 @@
 
         </div>
 
+    </div>
+
+
+
+    <div class="control-group">
+        <label class="control-label">创建人：</label>
+        <div class="controls">
+            <form:input path="createBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>
+        </div>
     </div>
     <div class="control-group">
         <label class="control-label">创建时间：</label>
@@ -402,6 +428,12 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">上架人：</label>
+        <div class="controls">
+            <form:input path="shelveBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">上架时间：</label>
         <div class="controls">
             <input name="shelveTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
@@ -409,18 +441,7 @@
                    onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label">上架人：</label>
-        <div class="controls">
-            <form:input path="shelveBy" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">搜索关键词：</label>
-        <div class="controls">
-            <form:input path="searchKey" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-        </div>
-    </div>
+
     <%----%>
     <%--<div class="control-group">--%>
     <%--<label class="control-label">页面标题：</label>--%>

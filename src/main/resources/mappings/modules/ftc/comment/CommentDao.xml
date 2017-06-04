@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.comment.ReplyDao">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.comment.CommentDao">
     
-	<sql id="replyColumns">
+	<sql id="commentColumns">
 		a.id AS "id",
-		a.comment_id AS "comment.id",
+		a.product_id AS "product",
 		a.user_id AS "user.id",
 		a.user_name AS "user.name",
 		a.pic_img AS "user.photo",
+		a.order_id AS "order",
+		a.star AS "star",
 		a.content AS "content",
 		a.good_count AS "goodCount",
 		a.status AS "status",
@@ -18,34 +20,36 @@
 		a.update_by AS "updateBy.id"
 	</sql>
 	
-	<sql id="replyJoins">
-		LEFT JOIN os_comment b ON b.id = a.comment_id
+	<sql id="commentJoins">
 		LEFT JOIN sys_user u3 ON u3.id = a.user_id
 	</sql>
     
-	<select id="get" resultType="Reply">
+	<select id="get" resultType="Comment">
 		SELECT 
-			<include refid="replyColumns"/>
-		FROM os_comment_reply a
-		<include refid="replyJoins"/>
+			<include refid="commentColumns"/>
+		FROM os_comment a
+		<include refid="commentJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="Reply">
+	<select id="findList" resultType="Comment">
 		SELECT 
-			<include refid="replyColumns"/>
-		FROM os_comment_reply a
-		<include refid="replyJoins"/>
+			<include refid="commentColumns"/>
+		FROM os_comment a
+		<include refid="commentJoins"/>
 		<where>
 			
-			<if test="comment != null and comment.id != null and comment.id != ''">
-				AND a.comment_id = #{comment.id}
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
 			</if>
-			<if test="content != null and content != ''">
-				AND a.content LIKE 
-					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{content}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{content},'%')</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+			<if test="user != null and user.name != null and user.name != ''">
+				AND a.user_name = #{user.name}
+			</if>
+			<if test="order != null and order.id != null and order.id != ''">
+				AND a.order_id = #{order.id}
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
@@ -59,16 +63,16 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date ASC
+				ORDER BY a.update_date DESC
 			</otherwise>
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="Reply">
+	<select id="findAllList" resultType="Comment">
 		SELECT 
-			<include refid="replyColumns"/>
-		FROM os_comment_reply a
-		<include refid="replyJoins"/>
+			<include refid="commentColumns"/>
+		FROM os_comment a
+		<include refid="commentJoins"/>
 		<where>
 			
 		</where>		
@@ -77,18 +81,20 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.create_date ASC
+				ORDER BY a.update_date DESC
 			</otherwise>
 		</choose>
 	</select>
 	
 	<insert id="insert">
-		INSERT INTO os_comment_reply(
+		INSERT INTO os_comment(
 			id,
-			comment_id,
+			product_id,
 			user_id,
 			user_name,
 			pic_img,
+			order_id,
+			star,
 			content,
 			good_count,
 			status,
@@ -99,10 +105,12 @@
 			update_by
 		) VALUES (
 			#{id},
-			#{comment.id},
+			#{product.id},
 			#{user.id},
 			#{user.name},
 			#{user.photo},
+			#{order.id},
+			#{star},
 			#{content},
 			#{goodCount},
 			#{status},
@@ -115,11 +123,13 @@
 	</insert>
 	
 	<update id="update">
-		UPDATE os_comment_reply SET 	
-			comment_id = #{comment.id},
+		UPDATE os_comment SET 	
+			product_id = #{product.id},
 			user_id = #{user.id},
 			user_name = #{user.name},
 			pic_img = #{user.photo},
+			order_id = #{order.id},
+			star = #{star},
 			content = #{content},
 			good_count = #{goodCount},
 			status = #{status},
@@ -130,15 +140,8 @@
 	</update>
 	
 	<update id="delete">
-		DELETE FROM os_comment_reply
-		<choose>
-			<when test="id !=null and id != ''">
-				WHERE id = #{id}
-			</when>
-			<otherwise>
-				WHERE comment_id = #{comment.id}
-			</otherwise>
-		</choose>
+		DELETE FROM os_comment
+		WHERE id = #{id}
 	</update>
 	
 </mapper>

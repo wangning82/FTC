@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
 <html>
 <head>
-	<title>广告位管理</title>
+	<title>广告管理</title>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
@@ -18,10 +18,10 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/ftc/advert/advert/">广告位列表</a></li>
-		<shiro:hasPermission name="ftc:advert:advert:edit"><li><a href="${ctx}/ftc/advert/advert/form">广告位添加</a></li></shiro:hasPermission>
+		<li class="active"><a href="${ctx}/ftc/advert/">广告列表</a></li>
+		<shiro:hasPermission name="ftc:advert:advert:edit"><li><a href="${ctx}/ftc/advert/form">广告添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="advert" action="${ctx}/ftc/advert/advert/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="advert" action="${ctx}/ftc/advert/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -30,6 +30,10 @@
 			</li>
 			<li><label>代码简称：</label>
 				<form:input path="code" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
+
+			<li><label>广告数量：</label>
+				<form:input path="number" htmlEscape="false" maxlength="11" class="input-medium"/>
 			</li>
 			<li><label>状态：</label>
 				<form:select path="status" class="input-medium">
@@ -56,7 +60,6 @@
 				<th>高度</th>
 				<th>描述</th>
 				<th>代码简称</th>
-				<th>模版内容</th>
 				<th>默认显示个数</th>
 				<th>广告数量</th>
 				<th>状态</th>
@@ -70,7 +73,7 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="advert">
 			<tr>
-				<td><a href="${ctx}/ftc/advert/advert/form?id=${advert.id}">
+				<td><a href="${ctx}/ftc/advert/form?id=${advert.id}">
 					${advert.name}
 				</a></td>
 				<td>
@@ -84,9 +87,6 @@
 				</td>
 				<td>
 					${advert.code}
-				</td>
-				<td>
-					${advert.template}
 				</td>
 				<td>
 					${advert.defultNumber}
@@ -110,8 +110,8 @@
 					<fmt:formatDate value="${advert.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<shiro:hasPermission name="ftc:advert:advert:edit"><td>
-    				<a href="${ctx}/ftc/advert/advert/form?id=${advert.id}">修改</a>
-					<a href="${ctx}/ftc/advert/advert/delete?id=${advert.id}" onclick="return confirmx('确认要删除该广告位吗？', this.href)">删除</a>
+    				<a href="${ctx}/ftc/advert/form?id=${advert.id}">修改</a>
+					<a href="${ctx}/ftc/advert/delete?id=${advert.id}" onclick="return confirmx('确认要删除该广告吗？', this.href)">删除</a>
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

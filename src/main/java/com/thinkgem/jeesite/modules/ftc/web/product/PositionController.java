@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -85,6 +87,24 @@ public class PositionController extends BaseController {
 		addMessage(redirectAttributes, "删除位置成功");
 		return "redirect:"+Global.getAdminPath()+"/ftc/product/position/?repage";
 	}
-
+	@ResponseBody
+	@RequestMapping(value = "treeData")
+	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
+		List<Map<String, Object>> mapList = Lists.newArrayList();
+		Position position=new Position();
+		position.setCategory(new Category(extId));
+		List<Position> list = positionService.findList(position);
+		for (int i=0; i<list.size(); i++){
+			Position e = list.get(i);
+			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) )){
+				Map<String, Object> map = Maps.newHashMap();
+				map.put("id", e.getId());
+				map.put("pId", e.getCategory().getId());
+				map.put("name", e.getName());
+				mapList.add(map);
+			}
+		}
+		return mapList;
+	}
 
 }

@@ -10,7 +10,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.advert.AdvertDetail;
 /**
  * 广告DAO接口
  * @author wangqingxiang
- * @version 2017-05-21
+ * @version 2017-06-03
  */
 @MyBatisDao
 public interface AdvertDetailDao extends CrudDao<AdvertDetail> {

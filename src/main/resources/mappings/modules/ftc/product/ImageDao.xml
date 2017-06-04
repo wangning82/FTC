@@ -11,7 +11,7 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.position_id AS "position.id",
-		a.position_name AS "position.name",
+		b.name AS "position.name",
 		a.design_id AS "design.id",
 		a.info AS "info",
 		a.rotation AS "rotation",
@@ -20,6 +20,7 @@
 	</sql>
 	
 	<sql id="imageJoins">
+		left join os_position b on a.position_id=b.id
 	</sql>
     
 	<select id="get" resultType="Image">
@@ -42,6 +43,9 @@
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="product != null and product != '' and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
 			</if>
 		</where>
 		<choose>
