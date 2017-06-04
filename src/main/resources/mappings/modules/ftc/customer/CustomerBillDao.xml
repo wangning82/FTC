@@ -1,40 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.customer.BillDao">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerBillDao">
     
-	<sql id="billColumns">
+	<sql id="customerBillColumns">
 		a.id AS "id",
+		a.customer_id AS "customer.id",
+		a.order_id AS "order.id",
+		a.money AS "money",
+		a.type AS "type",
+		a.status AS "status",
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
 		a.update_by AS "updateBy.id",
-		a.money AS "money",
-		a.type AS "type",
 		a.remark AS "remark",
-		a.order_id AS "orderId",
-		a.customer_id AS "customerId",
-		a.del_flag AS "delFlag",
-		a.status AS "status"
+		b.user_name AS "customer.userName",
+		c.order_number AS "order.orderNo"
 	</sql>
 	
-	<sql id="billJoins">
+	<sql id="customerBillJoins">
+		LEFT JOIN os_customer b ON b.id = a.customer_id
+		LEFT JOIN os_order c ON c.id = a.order_id
 	</sql>
     
-	<select id="get" resultType="Bill">
+	<select id="get" resultType="CustomerBill">
 		SELECT 
-			<include refid="billColumns"/>
+			<include refid="customerBillColumns"/>
 		FROM os_customer_bill a
-		<include refid="billJoins"/>
+		<include refid="customerBillJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="Bill">
+	<select id="findList" resultType="CustomerBill">
 		SELECT 
-			<include refid="billColumns"/>
+			<include refid="customerBillColumns"/>
 		FROM os_customer_bill a
-		<include refid="billJoins"/>
+		<include refid="customerBillJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<if test="customer != null and customer.userName != null and customer.userName != ''">
+				AND b.user_name = #{customer.userName}
+			</if>
+			<if test="order != null and order.orderNo != null and order.orderNo != ''">
+				AND c.order_number = #{order.orderNo}
+			</if>
 			<if test="type != null and type != ''">
 				AND a.type = #{type}
 			</if>
@@ -52,13 +61,13 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="Bill">
+	<select id="findAllList" resultType="CustomerBill">
 		SELECT 
-			<include refid="billColumns"/>
+			<include refid="customerBillColumns"/>
 		FROM os_customer_bill a
-		<include refid="billJoins"/>
+		<include refid="customerBillJoins"/>
 		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
+			
 		</where>		
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -73,49 +82,46 @@
 	<insert id="insert">
 		INSERT INTO os_customer_bill(
 			id,
+			customer_id,
+			order_id,
+			money,
+			type,
+			status,
 			create_date,
 			create_by,
 			update_date,
 			update_by,
-			money,
-			type,
-			remark,
-			order_id,
-			customer_id,
-			del_flag,
-			status
+			remark
 		) VALUES (
 			#{id},
+			#{customer.id},
+			#{order.id},
+			#{money},
+			#{type},
+			#{status},
 			#{createDate},
 			#{createBy.id},
 			#{updateDate},
 			#{updateBy.id},
-			#{money},
-			#{type},
-			#{remark},
-			#{orderId},
-			#{customerId},
-			#{delFlag},
-			#{status}
+			#{remark}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE os_customer_bill SET 	
-			update_date = #{updateDate},
-			update_by = #{updateBy.id},
+			customer_id = #{customer.id},
+			order_id = #{order.id},
 			money = #{money},
 			type = #{type},
-			remark = #{remark},
-			order_id = #{orderId},
-			customer_id = #{customerId},
-			status = #{status}
+			status = #{status},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			remark = #{remark}
 		WHERE id = #{id}
 	</update>
 	
 	<update id="delete">
-		UPDATE os_customer_bill SET 
-			del_flag = #{DEL_FLAG_DELETE}
+		DELETE FROM os_customer_bill
 		WHERE id = #{id}
 	</update>
 	

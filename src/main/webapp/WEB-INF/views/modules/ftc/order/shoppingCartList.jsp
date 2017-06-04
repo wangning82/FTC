@@ -19,14 +19,16 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/ftc/order/shoppingCart/">购物车列表</a></li>
+		<!--
 		<shiro:hasPermission name="ftc:order:shoppingCart:edit"><li><a href="${ctx}/ftc/order/shoppingCart/form">购物车添加</a></li></shiro:hasPermission>
+		-->
 	</ul>
 	<form:form id="searchForm" modelAttribute="shoppingCart" action="${ctx}/ftc/order/shoppingCart/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
 			<li><label>商品规格：</label>
-				<form:input path="productSpecNumber" htmlEscape="false" maxlength="64" class="input-medium"/>
+				<form:input path="productSpec.productSpecNumber" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>顾客：</label>
 				<form:input path="customer.id" htmlEscape="false" maxlength="64" class="input-medium"/>
@@ -51,7 +53,7 @@
 		<c:forEach items="${page.list}" var="shoppingCart">
 			<tr>
 				<td><a href="${ctx}/ftc/order/shoppingCart/form?id=${shoppingCart.id}">
-					${shoppingCart.productSpecNumber}
+					${shoppingCart.productSpec.productSpecNumber}
 				</a></td>
 				<td>
 					${shoppingCart.customer.userName}

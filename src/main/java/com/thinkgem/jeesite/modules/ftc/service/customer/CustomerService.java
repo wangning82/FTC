@@ -15,8 +15,8 @@ import com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerDao;
 
 /**
  * 会员Service
- * @author wangqingxiang
- * @version 2017-05-19
+ * @author houyi
+ * @version 2017-06-04
  */
 @Service
 @Transactional(readOnly = true)

@@ -36,7 +36,7 @@
 		<div class="control-group">
 			<label class="control-label">商品规格编号：</label>
 			<div class="controls">
-				<form:input path="productSpecNumber" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="productSpec.productSpecNumber" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">

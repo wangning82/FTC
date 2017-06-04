@@ -9,8 +9,8 @@ import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 
 /**
  * 会员DAO接口
- * @author wangqingxiang
- * @version 2017-05-19
+ * @author houyi
+ * @version 2017-06-04
  */
 @MyBatisDao
 public interface CustomerDao extends CrudDao<Customer> {

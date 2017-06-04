@@ -28,23 +28,20 @@
 			<li><label>用户编号：</label>
 				<form:input path="userCode" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>性别 0=保密/1=男/2=女：</label>
+			<li><label>昵称：</label>
+				<form:input path="userName" htmlEscape="false" maxlength="30" class="input-medium"/>
+			</li>
+			<li><label>性别：</label>
 				<form:select path="sex" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>状态 0=冻结/1=正常：</label>
+			<li><label>状态：</label>
 				<form:select path="status" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('ftc_customer_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
-			</li>
-			<li><label>邮箱激活 0=未激活/1=已激活：</label>
-				<form:input path="emailIsActive" htmlEscape="false" maxlength="1" class="input-medium"/>
-			</li>
-			<li><label>电子邮箱：</label>
-				<form:input path="email" htmlEscape="false" maxlength="50" class="input-medium"/>
 			</li>
 			<li><label>手机号码：</label>
 				<form:input path="telephone" htmlEscape="false" maxlength="11" class="input-medium"/>
@@ -60,19 +57,15 @@
 				<th>用户编号</th>
 				<th>昵称</th>
 				<th>真实姓名</th>
-				<th>性别 0=保密/1=男/2=女</th>
+				<th>性别</th>
 				<th>年龄</th>
-				<th>状态 0=冻结/1=正常</th>
-				<th>邮箱激活 0=未激活/1=已激活</th>
-				<th>电子邮箱</th>
+				<th>状态</th>
 				<th>手机号码</th>
 				<th>最后登录时间</th>
 				<th>最后登录IP</th>
 				<th>登录次数</th>
 				<th>注册时间</th>
 				<th>消费额</th>
-				<th>会员等级ID</th>
-				<th>会员积分</th>
 				<shiro:hasPermission name="ftc:customer:customer:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -98,12 +91,6 @@
 					${fns:getDictLabel(customer.status, 'ftc_customer_status', '')}
 				</td>
 				<td>
-					${customer.emailIsActive}
-				</td>
-				<td>
-					${customer.email}
-				</td>
-				<td>
 					${customer.telephone}
 				</td>
 				<td>
@@ -120,12 +107,6 @@
 				</td>
 				<td>
 					${customer.amount}
-				</td>
-				<td>
-					${customer.rankId}
-				</td>
-				<td>
-					${customer.score}
 				</td>
 				<shiro:hasPermission name="ftc:customer:customer:edit"><td>
     				<a href="${ctx}/ftc/customer/customer/form?id=${customer.id}">修改</a>

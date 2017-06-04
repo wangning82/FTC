@@ -35,8 +35,8 @@
 		FROM os_shopping_cart a
 		<include refid="shoppingCartJoins"/>
 		<where>
-			<if test="productSpecNumber != null and productSpecNumber != ''">
-				AND a.product_spec_number = #{productSpecNumber}
+			<if test="productSpec != null and productSpec.productSpecNumber != null and productSpec.productSpecNumber != ''">
+				AND a.product_spec_number = #{productSpec.productSpecNumber}
 			</if>
 			<if test="customer != null and customer.id != null and customer.id != ''">
 				AND a.customer_id LIKE 
