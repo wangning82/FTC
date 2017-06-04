@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.comment;
 
+import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import java.util.List;
@@ -20,7 +21,7 @@ public class Comment extends DataEntity<Comment> {
 	private static final long serialVersionUID = 1L;
 	private String product;		// 商品ID
 	private User user;		// 用户ID
-	private String order;		// 订单ID
+	private Order order;		// 订单ID
 	private String star;		// 评论星级
 	private String content;		// 评论内容
 	private Integer goodCount;		// 好评数
@@ -54,16 +55,15 @@ public class Comment extends DataEntity<Comment> {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
-	@Length(min=0, max=64, message="订单ID长度必须介于 0 和 64 之间")
-	public String getOrder() {
+
+	public Order getOrder() {
 		return order;
 	}
 
-	public void setOrder(String order) {
+	public void setOrder(Order order) {
 		this.order = order;
 	}
-	
+
 	@Length(min=0, max=4, message="评论星级长度必须介于 0 和 4 之间")
 	public String getStar() {
 		return star;

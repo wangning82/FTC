@@ -65,7 +65,7 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">商品ID：</label>
+			<label class="control-label">商品：</label>
 			<div class="controls">
 				<form:input path="product" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
@@ -73,7 +73,7 @@
 		<div class="control-group">
 			<label class="control-label">用户ID：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${comment.user.id}" labelName="" labelValue="${comment.}"
+				<sys:treeselect id="user" name="user.id" value="${comment.user.id}" labelName="" labelValue="${comment.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 			</div>
 		</div>
@@ -90,9 +90,9 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">订单ID：</label>
+			<label class="control-label">订单编号：</label>
 			<div class="controls">
-				<form:input path="order" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="order.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -161,7 +161,7 @@
 								<input id="replyList{{idx}}_delFlag" name="replyList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<sys:treeselect id="replyList{{idx}}_user" name="replyList[{{idx}}].user.id" value="{{row.user.id}}" labelName="replyList{{idx}}." labelValue="{{row.}}"
+								<sys:treeselect id="replyList{{idx}}_user" name="replyList[{{idx}}].user.id" value="{{row.user.id}}" labelName="replyList{{idx}}.user.name" labelValue="{{row.user.id}}"
 									title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
 							</td>
 							<td>

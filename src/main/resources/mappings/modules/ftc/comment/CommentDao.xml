@@ -4,11 +4,13 @@
     
 	<sql id="commentColumns">
 		a.id AS "id",
-		a.product_id AS "product",
+		a.product_id AS "product.id",
+		c.product_number AS "product.number",
 		a.user_id AS "user.id",
 		a.user_name AS "user.name",
 		a.pic_img AS "user.photo",
-		a.order_id AS "order",
+		a.order_id AS "order.id",
+		d.order_number AS "order.orderNo",
 		a.star AS "star",
 		a.content AS "content",
 		a.good_count AS "goodCount",
@@ -22,6 +24,8 @@
 	
 	<sql id="commentJoins">
 		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		left join os_product c on a.product_id=c.ID
+		left join os_order d on a.order_id=d.id
 	</sql>
     
 	<select id="get" resultType="Comment">
