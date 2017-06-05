@@ -6,9 +6,8 @@
 		a.id AS "id",
 		a.product_id AS "product.id",
 		c.product_number AS "product.number",
-		a.user_id AS "user.id",
-		a.user_name AS "user.name",
-		a.pic_img AS "user.photo",
+		c.name AS "product.name",
+
 		a.order_id AS "order.id",
 		d.order_number AS "order.orderNo",
 		a.star AS "star",
@@ -19,11 +18,16 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
-		a.update_by AS "updateBy.id"
+		a.update_by AS "updateBy.id",
+
+		a.customer_id AS "customer.id",
+	    b.user_name AS "customer.userName",
+	    b.pic_img AS "customer.picImg",
+	    b.sex AS "customer.sex"
 	</sql>
 	
 	<sql id="commentJoins">
-		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		LEFT JOIN os_customer b ON b.id = a.customer_id
 		left join os_product c on a.product_id=c.ID
 		left join os_order d on a.order_id=d.id
 	</sql>
@@ -46,12 +50,10 @@
 			<if test="product != null and product.id != null and product.id != ''">
 				AND a.product_id = #{product.id}
 			</if>
-			<if test="user != null and user.id != null and user.id != ''">
-				AND a.user_id = #{user.id}
+			<if test="customer != null and customer.id != null and customer.id != ''">
+				AND a.customer_id = #{customer.id}
 			</if>
-			<if test="user != null and user.name != null and user.name != ''">
-				AND a.user_name = #{user.name}
-			</if>
+
 			<if test="order != null and order.id != null and order.id != ''">
 				AND a.order_id = #{order.id}
 			</if>
@@ -94,9 +96,7 @@
 		INSERT INTO os_comment(
 			id,
 			product_id,
-			user_id,
-			user_name,
-			pic_img,
+			customer_id,
 			order_id,
 			star,
 			content,
@@ -110,9 +110,7 @@
 		) VALUES (
 			#{id},
 			#{product.id},
-			#{user.id},
-			#{user.name},
-			#{user.photo},
+			#{customer.id},
 			#{order.id},
 			#{star},
 			#{content},
@@ -129,9 +127,7 @@
 	<update id="update">
 		UPDATE os_comment SET 	
 			product_id = #{product.id},
-			user_id = #{user.id},
-			user_name = #{user.name},
-			pic_img = #{user.photo},
+			customer_id = #{customer.id},
 			order_id = #{order.id},
 			star = #{star},
 			content = #{content},

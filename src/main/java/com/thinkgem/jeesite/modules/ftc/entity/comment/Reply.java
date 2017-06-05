@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.comment;
 
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 
@@ -17,7 +18,7 @@ public class Reply extends DataEntity<Reply> {
 	
 	private static final long serialVersionUID = 1L;
 	private Comment comment;		// 评论ID 父类
-	private User user;		// 用户ID
+	private Customer customer;		// 用户ID
 	private String content;		// 评论内容
 	private String goodCount;		// 好评数
 	private String status;		// 状态
@@ -35,14 +36,13 @@ public class Reply extends DataEntity<Reply> {
 	}
 
 
-	public User getUser() {
-		return user;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
-
 
 	public Comment getComment() {
 		return comment;

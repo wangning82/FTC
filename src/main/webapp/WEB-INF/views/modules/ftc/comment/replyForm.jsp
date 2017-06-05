@@ -39,23 +39,26 @@
 				<form:input path="commentId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
+
 		<div class="control-group">
-			<label class="control-label">用户ID：</label>
+			<label class="control-label">用户：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${reply.user.id}" labelName="" labelValue="${reply.}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<form:input path="customer.userName" htmlEscape="false" maxlength="30" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">昵称：</label>
+			<label class="control-label">性别：</label>
 			<div class="controls">
-				<form:input path="userName" htmlEscape="false" maxlength="30" class="input-xlarge "/>
+				<form:select path="customer.sex" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">用户头像：</label>
 			<div class="controls">
-				<form:input path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="customer.picImg" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -71,7 +74,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">状态：1.显示；0.隐藏：</label>
+			<label class="control-label">状态：</label>
 			<div class="controls">
 				<form:select path="status" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -80,7 +83,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">评论类型：1,官方回复；0,用户回复：</label>
+			<label class="control-label">评论类型：</label>
 			<div class="controls">
 				<form:select path="type" class="input-xlarge ">
 					<form:option value="" label=""/>

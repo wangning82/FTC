@@ -28,13 +28,13 @@
 			<li><label>评论内容：</label>
 				<form:input path="content" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
-			<li><label>状态：1.显示；0.隐藏：</label>
+			<li><label>状态：</label>
 				<form:select path="status" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('ftc_commont_reply_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>评论类型：1,官方回复；0,用户回复：</label>
+			<li><label>评论类型：</label>
 				<form:select path="type" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('ftc_commont_reply_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -48,11 +48,11 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>昵称</th>
 				<th>评论内容</th>
+				<th>评论类型</th>
+				<th>是否显示</th>
+				<th>客户昵称</th>
 				<th>好评数</th>
-				<th>状态：1.显示；0.隐藏</th>
-				<th>评论类型：1,官方回复；0,用户回复</th>
 				<th>创建时间</th>
 				<shiro:hasPermission name="ftc:comment:reply:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -61,19 +61,19 @@
 		<c:forEach items="${page.list}" var="reply">
 			<tr>
 				<td><a href="${ctx}/ftc/comment/reply/form?id=${reply.id}">
-					${reply.userName}
+					${reply.content}
 				</a></td>
 				<td>
-					${reply.content}
+						${fns:getDictLabel(reply.type, 'ftc_commont_reply_type', '')}
+				</td>
+				<td>
+						${fns:getDictLabel(reply.status, 'ftc_commont_reply_status', '')}
+				</td>
+				<td>
+					${reply.customer.userName}
 				</td>
 				<td>
 					${reply.goodCount}
-				</td>
-				<td>
-					${fns:getDictLabel(reply.status, 'ftc_commont_reply_status', '')}
-				</td>
-				<td>
-					${fns:getDictLabel(reply.type, 'ftc_commont_reply_type', '')}
 				</td>
 				<td>
 					<fmt:formatDate value="${reply.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

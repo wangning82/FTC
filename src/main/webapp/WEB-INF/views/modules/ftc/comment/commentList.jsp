@@ -29,7 +29,7 @@
 				<form:input path="product" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>用户：</label>
-				<sys:treeselect id="user" name="user.id" value="${comment.user.name}" labelName="" labelValue="${comment.user.name}"
+				<sys:treeselect id="customer" name="customer.id" value="${comment.customer.userName}" labelName="" labelValue="${comment.customer.userName}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
 
@@ -59,6 +59,7 @@
 				<th>商品</th>
 				<th>用户</th>
 				<th>订单</th>
+
 				<th>评论星级</th>
 				<th>评论内容</th>
 				<th>好评数</th>
@@ -72,16 +73,18 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="comment">
 			<tr>
+				<td><a href="${ctx}/ftc/product/product/form?id=${commont.product.id}">
+						${comment.product.name}
+				</a></td>
+				<td>
+						${comment.customer.userName}
+				</td>
 				<td><a href="${ctx}/ftc/order/order/form?id=${comment.order.id}">
 						${comment.order.orderNo}
 				</a>
 				</td>
-				<td><a href="${ctx}/ftc/product/product/form?id=${commont.product.id}">
-					${comment.product.number}
-				</a></td>
-				<td>
-					${comment.user.name}
-				</td>
+
+
 
 				<td>
 					${comment.star}
