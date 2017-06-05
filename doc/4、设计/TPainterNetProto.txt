@@ -1,0 +1,418 @@
+syntax = "proto3";
+option csharp_namespace = "";
+
+//keyword:
+//  user(用户)                    eg:uid
+//  platform(第三方接入平台)       eg:pUid
+//  good(产品)                    eg:gId
+//  design(设计)                  eg:dId
+//  model(模型)                   eg:mId
+//  texture(贴图)                 eg:tId
+//  address(收货地址)             eg:aId
+//  order(订单)                   eg:oId
+//  shop(商店)
+//  banner(图片展示)
+//  income(收益)
+//  withdraw(提现)
+//  following(关注)
+//  follower(粉丝)
+
+//TODO:
+//message IndexMessage{}
+//message IndexBag{}
+//message DesignNewTexture{}
+//message DesignDelete{}
+//message Withdraw{}
+//message CenterOrderList {}
+//message GoodDelete{}
+
+//0.common
+message UserInfo {
+    string id = 1;
+    string name = 2;
+    string signature = 3;
+    string photoUrl = 4;
+    string backgroundUrl = 5;
+    repeated string followingCount = 6;
+    repeated string followerCount = 7;
+}
+message AddressInfo {
+    string id = 1;
+    string name = 2;
+    string phone = 3;
+    string province = 4;
+    string city = 5;
+    string district = 6;
+    string detail = 7;
+    bool default = 8;
+}
+message WithdrawInfo {
+    int32 time = 1;
+    int64 money = 2;
+    WithdrawStatus status = 3;
+}
+message ModelInfo {
+    string id = 1;
+    ModelType type = 2;
+    string meshUrl = 3;
+}
+message TextureInfo {
+    string id = 1;
+    string imgUrl = 2;
+    string smallImgUrl = 3;
+}
+message DesignInfo {
+    message Texture {
+        TextureInfo info = 1;
+        float position = 2;
+        float rotation = 3;
+        float scale = 4;
+    }
+
+    string id = 1;
+    ModelInfo model = 2;
+    repeated Texture textures = 3;
+}
+message GoodInfo {
+    string id = 1;
+    DesignInfo design = 2;
+    string name = 3;
+    string desc = 4;
+    bool open = 5;
+    int32 price = 6;
+}
+message BagInfo {
+    string id = 1;
+    GoodInfo good = 2;
+    int32 count = 3;
+}
+message OrderInfo {
+    string id = 1;
+    repeated BagInfo bags = 2;
+}
+
+enum PlatformType {
+    Phone = 0;
+    WeChat = 1;
+    QQ = 2;
+}
+enum ModelType {
+    Tshirt = 0;
+    Unmbrella = 1;
+}
+enum WithdrawStatus {
+    Doing = 0;
+    Done = 1;
+}
+enum PayType {
+    Alipay = 0;
+}
+
+//LoginMenu
+message Login {
+    message Client {
+        string token = 1;
+    }
+    message PlatformUid {
+        PlatformType type = 1;
+        int32 pUid = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        string uid = 3;
+        repeated PlatformUid pUids = 4;
+    }
+}
+message Bind {
+    message Client {
+        string uid = 1;
+        PlatformType pType = 2;
+        string pUid = 3;
+        string pCode = 4;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        string token = 3;
+    }
+}
+message UnBind {
+    message Client {
+        string uid = 1;
+        PlatformType pType = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+
+//IndexMenu
+message IndexBannerList {
+    message Client {
+        int32 start = 1;
+        int32 count = 2;
+    }
+    message Banner {
+        string imgUrl = 1;
+        string linkUrl = 2;
+        string gid = 3;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated Banner banners = 3;
+    }
+}
+message IndexShopList {
+    message Client {
+        int32 start = 1;
+        int32 count = 2;
+    }
+    message Shop {
+        string id = 1;
+        string name = 2;
+        string imgUrl = 3;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated Shop shops = 3;
+    }
+}
+message IndexGoodList {
+    message Client {
+        ModelType mType = 1;
+        int32 start = 2;
+        int32 count = 3;
+    }
+    message Good {
+        int32 id = 1;
+        string imgUrl = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated Good goods = 3;
+    }
+}
+
+//CenterMenu
+message ChangeUserInfo {
+    message Client {
+        string uid = 1;
+        string name = 2;
+        string signature = 3;
+        string photoFile = 4;
+        string backgroundFile = 5;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message AddressNew {
+    message Client {
+        string uid = 1;
+        AddressInfo address = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message AddressChange {
+    message Client {
+        string uid = 1;
+        AddressInfo address = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message AddressDelete {
+    message Client {
+        string uid = 1;
+        string aId = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message AddressList {
+    message Client {
+        string uid = 1;
+        int32 start = 2;
+        int32 count = 3;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated AddressInfo addresses = 3;
+    }
+}
+message AddressDefault {
+    message Client {
+        string uid = 1;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        AddressInfo address = 3;
+    }
+}
+message DesignList {
+    message Client {
+        string uid = 1;
+        int32 start = 2;
+        int32 count = 3;
+    }
+    message Design {
+        string id = 1;
+        string imgUrl = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated Design designs = 3;
+    }
+}
+message Income {
+    message Client {
+        string uid = 1;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        int64 total = 3;
+        int64 balance = 4;
+        int64 withdraw = 5;
+    }
+}
+message WithdrawRecord {
+    message Client {
+        string uid = 1;
+        WithdrawStatus status = 2;
+        int32 start = 3;
+        int32 count = 4;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated WithdrawStatus status = 3;
+    }
+}
+
+//DesignMenu
+message ModelList {
+    message Client {
+        int32 start = 1;
+        int32 count = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated ModelInfo models = 3;
+    }
+}
+message TextureList {
+    message Client {
+        int32 start = 1;
+        int32 count = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated TextureInfo textures = 3;
+    }
+}
+message DesignNew {
+    message Client {
+        string uid = 1;
+        DesignInfo design = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        string dId = 3;
+    }
+}
+message GoodNew {
+    message Client {
+        string uid = 1;
+        GoodInfo info = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message Praise {
+    message Client {
+        string uid = 1;
+        string dId = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+
+//OrderMenu
+message BagAdd {
+    message Client {
+        string uid = 1;
+        BagInfo info = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message BagList {
+    message Client {
+        string uid = 1;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated BagInfo bags = 3;
+    }
+}
+message BagSend {
+    message Client {
+        string uid = 1;
+        repeated BagInfo bags = 2;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        OrderInfo order = 3;
+    }
+}
+message OrderSend {
+    message Client {
+        string uid = 1;
+        string oId = 2;
+        PayType oPayType = 3;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+    }
+}
+message OrderList {
+    message Client {
+        string uid = 1;
+        int32 start = 2;
+        int32 count = 3;
+    }
+    message Server {
+        int32 code = 1;
+        string msg = 2;
+        repeated OrderInfo orders = 3;
+    }
+}
