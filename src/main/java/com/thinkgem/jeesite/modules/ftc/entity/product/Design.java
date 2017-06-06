@@ -3,9 +3,10 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.product;
 
+import com.thinkgem.jeesite.common.persistence.DataEntity;
 import org.hibernate.validator.constraints.Length;
 
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import java.util.List;
 
 /**
  * 设计Entity
@@ -17,16 +18,25 @@ public class Design extends DataEntity<Design> {
 	private static final long serialVersionUID = 1L;
 	private String name;		// 名称
 	private String code;		// 编号
-	private String productId;		// 商品id
+	private Product product;		// 商品id
 	private String price;		// 设计费
 	private String designStatus;		// 状态
-	
+	private List<Image> images;
+
 	public Design() {
 		super();
 	}
 
 	public Design(String id){
 		super(id);
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
 	}
 
 	@Length(min=0, max=64, message="名称长度必须介于 0 和 64 之间")
@@ -46,16 +56,15 @@ public class Design extends DataEntity<Design> {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
-	@Length(min=0, max=64, message="商品id长度必须介于 0 和 64 之间")
-	public String getProductId() {
-		return productId;
+
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
-	
+
 	public String getPrice() {
 		return price;
 	}

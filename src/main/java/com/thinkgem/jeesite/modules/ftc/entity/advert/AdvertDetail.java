@@ -12,12 +12,12 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 /**
  * 广告Entity
  * @author wangqingxiang
- * @version 2017-05-21
+ * @version 2017-06-03
  */
 public class AdvertDetail extends DataEntity<AdvertDetail> {
 	
 	private static final long serialVersionUID = 1L;
-	private String advertId;		// 广告位ID
+	private Advert advert;		// 广告位ID 父类
 	private String title;		// 标题
 	private String sort;		// 排序
 	private String href;		// 链接地址
@@ -35,13 +35,17 @@ public class AdvertDetail extends DataEntity<AdvertDetail> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="广告位ID长度必须介于 0 和 64 之间")
-	public String getAdvertId() {
-		return advertId;
+	public AdvertDetail(Advert advert){
+		this.advert = advert;
 	}
 
-	public void setAdvertId(String advertId) {
-		this.advertId = advertId;
+
+	public Advert getAdvert() {
+		return advert;
+	}
+
+	public void setAdvert(Advert advert) {
+		this.advert = advert;
 	}
 	
 	@Length(min=0, max=64, message="标题长度必须介于 0 和 64 之间")

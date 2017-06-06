@@ -19,11 +19,11 @@
 		a.order_score AS "orderScore",
 		a.pay_amount AS "payAmount",
 		a.buy_number AS "buyNumber",
-		u3.user_name AS "customer.userName"
+		b.user_name AS "customer.userName"
 	</sql>
 	
 	<sql id="orderJoins">
-		LEFT JOIN os_customer u3 ON u3.id = a.customer_id
+		LEFT JOIN os_customer b ON b.id = a.customer_id
 	</sql>
     
 	<select id="get" resultType="Order">

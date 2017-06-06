@@ -19,7 +19,9 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/ftc/order/orderShipment/">订单配送列表</a></li>
+		<!--
 		<shiro:hasPermission name="ftc:order:orderShipment:edit"><li><a href="${ctx}/ftc/order/orderShipment/form">订单配送添加</a></li></shiro:hasPermission>
+		-->
 	</ul>
 	<form:form id="searchForm" modelAttribute="orderShipment" action="${ctx}/ftc/order/orderShipment/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>

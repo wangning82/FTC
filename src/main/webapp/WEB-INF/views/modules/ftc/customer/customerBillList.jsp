@@ -19,19 +19,27 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/ftc/customer/customerBill/">账单列表</a></li>
+		<!--
 		<shiro:hasPermission name="ftc:customer:customerBill:edit"><li><a href="${ctx}/ftc/customer/customerBill/form">账单添加</a></li></shiro:hasPermission>
+		-->
 	</ul>
 	<form:form id="searchForm" modelAttribute="customerBill" action="${ctx}/ftc/customer/customerBill/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>类型 1-入账 2-提现：</label>
+			<li><label>客户名称：</label>
+				<form:input path="customer.userName" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
+			<li><label>订单编号：</label>
+				<form:input path="order.orderNo" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
+			<li><label>类型：</label>
 				<form:select path="type" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('ftc_customer_bill_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>状态 1-申请 2-到账 3-未通过 4-退款：</label>
+			<li><label>状态：</label>
 				<form:select path="status" class="input-medium">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('ftc_customer_bill_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
@@ -45,16 +53,11 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>create_date</th>
-				<th>create_by</th>
-				<th>update_date</th>
-				<th>update_by</th>
+				<th>客户名称</th>
+				<th>订单编号</th>
 				<th>金额</th>
-				<th>类型 1-入账 2-提现</th>
-				<th>备注</th>
-				<th>订单id</th>
-				<th>客户id</th>
-				<th>状态 1-申请 2-到账 3-未通过 4-退款</th>
+				<th>类型</th>
+				<th>状态</th>
 				<shiro:hasPermission name="ftc:customer:customerBill:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -62,31 +65,16 @@
 		<c:forEach items="${page.list}" var="customerBill">
 			<tr>
 				<td><a href="${ctx}/ftc/customer/customerBill/form?id=${customerBill.id}">
-					<fmt:formatDate value="${customerBill.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					${customerBill.customer.userName}
 				</a></td>
 				<td>
-					${customerBill.createBy.id}
-				</td>
-				<td>
-					<fmt:formatDate value="${customerBill.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					${customerBill.updateBy.id}
+					${customerBill.order.orderNo}
 				</td>
 				<td>
 					${customerBill.money}
 				</td>
 				<td>
 					${fns:getDictLabel(customerBill.type, 'ftc_customer_bill_type', '')}
-				</td>
-				<td>
-					${customerBill.remark}
-				</td>
-				<td>
-					${customerBill.orderId}
-				</td>
-				<td>
-					${customerBill.customerId}
 				</td>
 				<td>
 					${fns:getDictLabel(customerBill.status, 'ftc_customer_bill_status', '')}

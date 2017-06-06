@@ -31,30 +31,13 @@
 
             });
 
-            if($("#categoryId").val()){
-                categoryTreeselectCallBack();
-            }
         });
 
         function addRow(list, idx, tpl, row) {
 
-			var  ids='';
-			var  names='';
-			$(":radio[checked]").each(function (index,element){
-                if(ids.length==0){
-                    ids+=element.value;
-                    names+=element.title;
-                }else{
-                    ids+=","+element.value;
-                    names+=","+element.title;
-                }
 
 
-			})
 
-            if(!row){
-                row={spec:{name:names,id:ids},productSpecNumber:'00000001'};
-            }
             $(list).append(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
@@ -95,11 +78,11 @@
                 success: function (data) {
                     $('#specTable').empty();   //清空resText里面的所有内容
                     var html = '';
-                    $.each(data, function (index,spec) {
-                        html+="<tr>";
+                    $.each(data, function (index, spec) {
+                        html += "<tr>";
                         html += "<td><label class='control-label'>" + spec.name + "：</label></td>";
-                        $.each(spec.specAttributeList, function (index,attribute) {
-                            html += "<td><input onclick='fixTable()' type='radio' name='"+spec.id+"'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>"+attribute.name+"</td>"
+                        $.each(spec.specAttributeList, function (index, attribute) {
+                            html += "<td><input type='radio' name='" + spec.id + "'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>" + attribute.name + "</td>"
 
                         });
                         html += "</tr>";
@@ -110,6 +93,24 @@
         }
 
 
+        function addSpecRow(){
+            var ids = '';
+            var names = '';
+            $(":radio[checked]").each(function (index, element) {
+                if (ids.length == 0) {
+                    ids += element.value;
+                    names += element.title;
+                } else {
+                    ids += "," + element.value;
+                    names += "," + element.title;
+                }
+
+
+            })
+            var row = {spec: {name: names, id: ids}, productSpecNumber: '00000001'};
+            addRow('#specList', specRowIdx, specTpl,row);
+            specRowIdx = specRowIdx + 1;
+        }
     </script>
 </head>
 <body>
@@ -122,88 +123,95 @@
 <br/>
 <form:form id="inputForm" modelAttribute="product" action="${ctx}/ftc/product/product/save" method="post"
            class="form-horizontal">
-<form:hidden path="id"/>
-<sys:message content="${message}"/>
-<div class="control-group">
-    <label class="control-label">分类：</label>
-    <div class="controls">
-        <sys:treeselect id="category" name="category.id" value="${product.category.id}" labelName=""
-                        labelValue="${product.category.name}"
-                        title="分类" url="/ftc/product/category/treeData" extId="" cssClass=""
-                        allowClear="true"/>
+    <form:hidden path="id"/>
+    <sys:message content="${message}"/>
+    <div class="control-group">
+        <label class="control-label">分类：</label>
+        <div class="controls">
+            <sys:treeselect id="category" name="category.id" value="${product.category.id}" labelName=""
+                            labelValue="${product.category.name}"
+                            title="分类" url="/ftc/product/category/treeData" extId="" cssClass=""
+                            allowClear="true"/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">商品编号：</label>
-    <div class="controls">
-        <form:input path="number" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+    <div class="control-group">
+        <label class="control-label">商品编号：</label>
+        <div class="controls">
+            <form:input path="number" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">标签ID：</label>
-    <div class="controls">
-        <form:input path="labelId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+    <div class="control-group">
+        <label class="control-label">标签ID：</label>
+        <div class="controls">
+            <form:input path="labelId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">商品名称：</label>
-    <div class="controls">
-        <form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+    <div class="control-group">
+        <label class="control-label">商品名称：</label>
+        <div class="controls">
+            <form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">显示积分：</label>
-    <div class="controls">
-        <form:input path="showScore" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+    <div class="control-group">
+        <label class="control-label">显示积分：</label>
+        <div class="controls">
+            <form:input path="showScore" htmlEscape="false" maxlength="11" class="input-xlarge "/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">显示价格：</label>
-    <div class="controls">
-        <form:input path="showPrice" htmlEscape="false" class="input-xlarge "/>
+    <div class="control-group">
+        <label class="control-label">显示价格：</label>
+        <div class="controls">
+            <form:input path="showPrice" htmlEscape="false" class="input-xlarge "/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">商品简介：</label>
-    <div class="controls">
-        <form:input path="introduce" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+    <div class="control-group">
+        <label class="control-label">商品简介：</label>
+        <div class="controls">
+            <form:input path="introduce" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">展示图片：</label>
-    <div class="controls">
+    <div class="control-group">
+        <label class="control-label">搜索关键词：</label>
+        <div class="controls">
+            <form:input path="searchKey" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">展示图片：</label>
+        <div class="controls">
 
+        </div>
+        <div class="controls">
+            <form:hidden id="picImg" path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+            <sys:ckfinder input="picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100"
+                          maxHeight="100"/>
+        </div>
     </div>
-    <div class="controls">
-        <form:hidden id="picImg" path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge"/>
-        <sys:ckfinder input="picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100"
-                      maxHeight="100"/>
+
+    <div class="control-group">
+        <label class="control-label">商品规格：</label>
+
+        <div class="controls">
+            <table id="specTable">
+                <tr>
+
+                    <td><label class="control-label">颜色：</label></td>
+                    <td><input type="checkbox" name="color" value="1" style="margin-left: 30px"/>red
+                    </td>
+                    <td><input type="checkbox" name="color" value="2" style="margin-left: 30px"/>yellow
+                    </td>
+                    <td><input type="checkbox" name="color" value="2" style="margin-left: 30px"/>yellow
+                    </td>
+
+                    <td><input type="checkbox" name="color" value="2" style="margin-left: 30px"/>yellow
+                    </td>
+
+                </tr>
+            </table>
+
+
+        </div>
     </div>
-</div>
-<div class="control-group">
-    <label class="control-label">商品规格：</label>
-
-    <div class="controls">
-        <table id="specTable">
-            <tr>
-
-            <td><label class="control-label">颜色：</label></td>
-            <td><input type="checkbox" name="color" value="1" style="margin-left: 30px"/>red
-            </td>
-            <td><input type="checkbox" name="color" value="2" style="margin-left: 30px"/>yellow
-            </td>
-            <td><input type="checkbox" name="color" value="2" style="margin-left: 30px"/>yellow
-            </td>
-
-            <td><input type="checkbox" name="color" value="2" style="margin-left: 30px"/>yellow
-            </td>
-
-        </tr>
-        </table>
-
-
-    </div>
-</div>
     <%--<script type="text/template" id="specTpl">//<!----%>
     <%--<div class="control-group">--%>
     <%--<label class="control-label" >规格：</label>--%>
@@ -217,36 +225,36 @@
     <%--</div>--%>
     <%--//-->--%>
     <%--</script>--%>
-<div class="control-group">
-    <label class="control-label">商品规格数据：</label>
-    <div class="controls">
-        <table id="contentTable" class="table table-striped table-bordered table-condensed">
-            <thead>
-            <tr>
-                <th class="hide"></th>
-                <th>编号</th>
-                <th>规格</th>
-                <th>库存</th>
-                <th>价格</th>
-                <th >积分</th>
-                <shiro:hasPermission name="ftc:product:product:edit">
-                    <th width="10">&nbsp;</th>
-                </shiro:hasPermission>
-            </tr>
-            </thead>
-            <tbody id="specList">
-            </tbody>
-            <shiro:hasPermission name="ftc:product:product:edit">
-                <tfoot>
+    <div class="control-group">
+        <label class="control-label">商品规格数据：</label>
+        <div class="controls">
+            <table id="contentTable" class="table table-striped table-bordered table-condensed">
+                <thead>
                 <tr>
-                    <td colspan="4"><a href="javascript:"
-                                       onclick="addRow('#specList', specRowIdx, specTpl);specRowIdx = specRowIdx + 1;"
-                                       class="btn">新增</a></td>
+                    <th class="hide"></th>
+                    <th>编号</th>
+                    <th>规格</th>
+                    <th>库存</th>
+                    <th>价格</th>
+                    <th>积分</th>
+                    <shiro:hasPermission name="ftc:product:product:edit">
+                        <th width="10">&nbsp;</th>
+                    </shiro:hasPermission>
                 </tr>
-                </tfoot>
-            </shiro:hasPermission>
-        </table>
-        <script type="text/template" id="specTpl">//<!--
+                </thead>
+                <tbody id="specList">
+                </tbody>
+                <shiro:hasPermission name="ftc:product:product:edit">
+                    <tfoot>
+                    <tr>
+                        <td colspan="4"><a href="javascript:"
+                                           onclick="addSpecRow()"
+                                           class="btn">新增</a></td>
+                    </tr>
+                    </tfoot>
+                </shiro:hasPermission>
+            </table>
+            <script type="text/template" id="specTpl">//<!--
 						<tr id="specs{{idx}}">
 							<td class="hide">
 								<input id="specs{{idx}}_id" name="specs[{{idx}}].id" type="hidden" value="{{row.id}}"/>
@@ -272,46 +280,127 @@
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#specs{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 							</td></shiro:hasPermission>
 						</tr>//-->
+            </script>
+            <script type="text/javascript">
+                var specRowIdx = 0, specTpl = $("#specTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g, "");
+                $(document).ready(function () {
+                    var data = ${fns:toJson(product.specs)};
+                    for (var i = 0; i < data.length; i++) {
+                        addRow('#specList', specRowIdx, specTpl, data[i]);
+                        specRowIdx = specRowIdx + 1;
+                    };
+
+                });
+            </script>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">商品图片：</label>
+        <div class="controls">
+            <table id="imageTable" class="table table-striped table-bordered table-condensed">
+                <thead>
+                <tr>
+                    <th class="hide"></th>
+                    <th>位置</th>
+                    <th>图片</th>
+                    <th>旋转</th>
+                    <th>缩放</th>
+
+                    <shiro:hasPermission name="ftc:product:product:edit">
+                        <th width="10">&nbsp;</th>
+                    </shiro:hasPermission>
+                </tr>
+
+                </thead>
+                <tbody id="imageList">
+
+                </tbody>
+                <shiro:hasPermission name="ftc:product:product:edit">
+                    <tfoot>
+                    <tr>
+                        <td colspan="4"><a href="javascript:"
+                                           onclick="addRow('#imageList', imageRowIdx, imageTpl);imageRowIdx = imageRowIdx + 1;"
+                                           class="btn">新增</a></td>
+                    </tr>
+                    </tfoot>
+                </shiro:hasPermission>
+                </table>
+        </div>
+        <script type="text/template" id="imageTpl">//<!--
+<tr>
+							<td class="hide">
+								<input id="images{{idx}}_id" name="images[{{idx}}].id" type="hidden" value="{{row.id}}"/>
+								<input id="images{{idx}}_delFlag" name="images[{{idx}}].delFlag" type="hidden" value="0"/>
+								<input id="images{{idx}}_spec_id" name="images[{{idx}}].image.id" type="hidden" value="{{row.image.id}}" maxlength="100" class="input-small "/>
+							<%--<form:hidden id="images{{idx}}_url" path="images[{{idx}}].url" htmlEscape="false" maxlength="255" class="input-xlarge"/>--%>
+    <input id="images{{idx}}_url" name="images[{{idx}}].url" type="hidden" value="{{row.url}}" maxlength="100" class="input-small "/>
+
+							</td>
+							<td>
+							  <sys:treeselect id="images{{idx}}_position" name="images[{{idx}}].position.id" value="${row.position.id}" labelName=""
+                            labelValue="${row.position.name}"
+                            title="位置" url="/ftc/product/position/treeData" extId="" cssClass="input-medium"
+                            allowClear="true"/>
+</td>
+							<td>
+        <sys:ckfinder input="images{{idx}}_url" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"
+                          maxHeight="100" />
+
+								</td>
+							<td>
+								<input id="images{{idx}}_rotation" name="images[{{idx}}].rotation" type="text" value="{{row.rotation}}"  maxlength="100" class="input-medium "/>
+							</td>
+							<td>
+								<input id="images{{idx}}_scale" name="images[{{idx}}].scale" type="text" value="{{row.scale}}" maxlength="255" class="input-medium "/>
+							</td>
+
+							<shiro:hasPermission name="ftc:product:product:edit"><td class="text-center" width="10">
+								{{#delBtn}}<span class="close" onclick="delRow(this, '#images{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+							</td></shiro:hasPermission></tr>
+						//-->
         </script>
         <script type="text/javascript">
-            var specRowIdx = 0, specTpl = $("#specTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g, "");
+            var imageRowIdx = 0,  imageTpl = $("#imageTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g, "");
             $(document).ready(function () {
-                var data = ${fns:toJson(product.specs)};
+                var data = ${fns:toJson(product.images)};
                 for (var i = 0; i < data.length; i++) {
-                    addRow('#specList', specRowIdx, specTpl, data[i]);
-                    specRowIdx = specRowIdx + 1;
-                }
+                    addRow('#imageList', imageRowIdx, imageTpl, data[i]);
+                    imageRowIdx = imageRowIdx + 1;
+                };
+
             });
+
         </script>
     </div>
-</div>
-<div class="control-group">
     <div class="control-group">
         <label class="control-label">是否置顶：</label>
-        <form:select path="showInTop" class="input-xlarge ">
-            <form:option value="" label=""/>
-            <form:options items="${fns:getDictList('ftc_product_product_showInTop')}" itemLabel="label"
-                          itemValue="value" htmlEscape="false"/>
-        </form:select>
+        <div class="controls">
+            <form:select path="showInTop" class="input-xlarge ">
+                <form:option value="" label=""/>
+                <form:options items="${fns:getDictList('ftc_product_product_showInTop')}" itemLabel="label"
+                              itemValue="value" htmlEscape="false"/>
+            </form:select>
+        </div>
     </div>
-        <%--<div class="control-group">--%>
-        <%--<label class="control-label">是否导航栏 1=显示/0=隐藏：</label>--%>
-        <%--<div class="controls">--%>
-        <%--<form:input path="showInNav" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="control-group">--%>
-        <%--<label class="control-label">是否热门 1=热门/0=默认：</label>--%>
-        <%--<div class="controls">--%>
-        <%--<form:input path="showInHot" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
-        <%--</div>--%>
-        <%--</div>--%>
+
+    <%--<div class="control-group">--%>
+    <%--<label class="control-label">是否导航栏 1=显示/0=隐藏：</label>--%>
+    <%--<div class="controls">--%>
+    <%--<form:input path="showInNav" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
+    <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+    <%--<label class="control-label">是否热门 1=热门/0=默认：</label>--%>
+    <%--<div class="controls">--%>
+    <%--<form:input path="showInHot" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
+    <%--</div>--%>
+    <%--</div>--%>
     <div class="control-group">
         <label class="control-label">是否上架：</label>
         <div class="controls">
                 <%--<form:input path="showInShelve" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
 
-            <form:select path="showInShelve" class="input-xlarge ">
+            <form:select path="showInShelve" class="input-xlarge " readonly="readonly">
                 <form:option value="" label=""/>
                 <form:options items="${fns:getDictList('ftc_product_product_showInShelve')}" itemLabel="label"
                               itemValue="value" htmlEscape="false"/>
@@ -320,6 +409,15 @@
 
         </div>
 
+    </div>
+
+
+
+    <div class="control-group">
+        <label class="control-label">创建人：</label>
+        <div class="controls">
+            <form:input path="createBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>
+        </div>
     </div>
     <div class="control-group">
         <label class="control-label">创建时间：</label>
@@ -330,6 +428,12 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">上架人：</label>
+        <div class="controls">
+            <form:input path="shelveBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">上架时间：</label>
         <div class="controls">
             <input name="shelveTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
@@ -337,37 +441,26 @@
                    onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label">上架人：</label>
-        <div class="controls">
-            <form:input path="shelveBy" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">搜索关键词：</label>
-        <div class="controls">
-            <form:input path="searchKey" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-        </div>
-    </div>
-        <%----%>
-        <%--<div class="control-group">--%>
-        <%--<label class="control-label">页面标题：</label>--%>
-        <%--<div class="controls">--%>
-        <%--<form:input path="pageTitle" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="control-group">--%>
-        <%--<label class="control-label">页面描述：</label>--%>
-        <%--<div class="controls">--%>
-        <%--<form:input path="pageDescription" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
-        <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="control-group">--%>
-        <%--<label class="control-label">页面关键词：</label>--%>
-        <%--<div class="controls">--%>
-        <%--<form:input path="pageKeyword" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
-        <%--</div>--%>
-        <%--</div>--%>
+
+    <%----%>
+    <%--<div class="control-group">--%>
+    <%--<label class="control-label">页面标题：</label>--%>
+    <%--<div class="controls">--%>
+    <%--<form:input path="pageTitle" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+    <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+    <%--<label class="control-label">页面描述：</label>--%>
+    <%--<div class="controls">--%>
+    <%--<form:input path="pageDescription" htmlEscape="false" maxlength="255" class="input-xlarge "/>--%>
+    <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+    <%--<label class="control-label">页面关键词：</label>--%>
+    <%--<div class="controls">--%>
+    <%--<form:input path="pageKeyword" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+    <%--</div>--%>
+    <%--</div>--%>
     <div class="control-group">
         <label class="control-label">备注：</label>
         <div class="controls">
@@ -379,6 +472,6 @@
                                                                     value="保 存"/>&nbsp;</shiro:hasPermission>
         <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
     </div>
-    </form:form>
+</form:form>
 </body>
 </html>

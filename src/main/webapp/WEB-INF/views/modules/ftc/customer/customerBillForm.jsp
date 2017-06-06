@@ -34,13 +34,25 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
+			<label class="control-label">客户名称：</label>
+			<div class="controls">
+				<form:input path="customer.userName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">订单编号：</label>
+			<div class="controls">
+				<form:input path="order.orderNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">金额：</label>
 			<div class="controls">
 				<form:input path="money" htmlEscape="false" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">类型 1-入账 2-提现：</label>
+			<label class="control-label">类型：</label>
 			<div class="controls">
 				<form:select path="type" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -49,25 +61,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">备注：</label>
-			<div class="controls">
-				<form:input path="remark" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">订单id：</label>
-			<div class="controls">
-				<form:input path="orderId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">客户id：</label>
-			<div class="controls">
-				<form:input path="customerId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">状态 1-申请 2-到账 3-未通过 4-退款：</label>
+			<label class="control-label">状态：</label>
 			<div class="controls">
 				<form:select path="status" class="input-xlarge ">
 					<form:option value="" label=""/>

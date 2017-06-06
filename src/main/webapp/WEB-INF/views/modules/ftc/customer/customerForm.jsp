@@ -46,25 +46,13 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">登录密码：</label>
-			<div class="controls">
-				<form:input path="loginPassword" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">加密密码的盐：</label>
-			<div class="controls">
-				<form:input path="salt" htmlEscape="false" maxlength="20" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">真实姓名：</label>
 			<div class="controls">
 				<form:input path="realName" htmlEscape="false" maxlength="20" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">性别 0=保密/1=男/2=女：</label>
+			<label class="control-label">性别：</label>
 			<div class="controls">
 				<form:select path="sex" class="input-xlarge ">
 					<form:option value="" label=""/>
@@ -81,22 +69,18 @@
 		<div class="control-group">
 			<label class="control-label">用户头像：</label>
 			<div class="controls">
-				<form:input path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:hidden id="picImg" path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100"
+							  maxHeight="100"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">状态 0=冻结/1=正常：</label>
+			<label class="control-label">状态：</label>
 			<div class="controls">
 				<form:select path="status" class="input-xlarge ">
 					<form:option value="" label=""/>
 					<form:options items="${fns:getDictList('ftc_customer_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">邮箱激活 0=未激活/1=已激活：</label>
-			<div class="controls">
-				<form:input path="emailIsActive" htmlEscape="false" maxlength="1" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -140,31 +124,25 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">账户余额：</label>
+			<div class="controls">
+				<form:input path="billBlance" htmlEscape="false" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">消费额：</label>
 			<div class="controls">
 				<form:input path="amount" htmlEscape="false" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">会员等级ID：</label>
-			<div class="controls">
-				<form:input path="rankId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">会员积分：</label>
-			<div class="controls">
-				<form:input path="score" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">qq：</label>
+			<label class="control-label">QQ：</label>
 			<div class="controls">
 				<form:input path="qq" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">wechat：</label>
+			<label class="control-label">微信号：</label>
 			<div class="controls">
 				<form:input path="wechat" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>

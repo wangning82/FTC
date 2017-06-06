@@ -6,11 +6,11 @@ package com.thinkgem.jeesite.modules.ftc.service.product;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
+import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
-import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
-import com.thinkgem.jeesite.modules.ftc.entity.product.SpecAttribute;
+import com.thinkgem.jeesite.modules.ftc.entity.product.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +28,23 @@ public class ProductService extends CrudService<ProductDao, Product> {
 
 	@Autowired
 	private ProductSpecDao productSpecDao;
+	@Autowired
+	private ImageDao imageDao;
+	@Autowired
+	private DesignDao designDao;
 	public Product get(String id) {
 		Product product= super.get(id);
 		ProductSpec spec=new ProductSpec();
 		spec.setProductId(product.getId());
 		List<ProductSpec> specs=productSpecDao.findList(spec);
 		product.setSpecs(specs);
+		Image image=new Image();
+		image.setProduct(product);
+		List<Image> images=imageDao.findList(image);
+		product.setImages(images);
+
+		Design design=designDao.findByProductId(id);
+		product.setDesign(design);
 		return product;
 	}
 	
@@ -47,7 +58,25 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	
 	@Transactional(readOnly = false)
 	public void save(Product product) {
-		super.save(product);
+		//保存商品时，检查设计，一个商品一个设计，如果商品是新增，要同时生成一个设计
+
+		if (product.getIsNewRecord()){
+			product.preInsert();
+			dao.insert(product);
+
+			Design design=new Design();
+			design.setCode("00001");
+			design.setName(product.getName());
+			design.setDesignStatus("0");;
+			design.setPrice("0");
+			design.setProduct(product);
+			design.preInsert();
+			designDao.insert(design);
+
+		}else{
+			product.preUpdate();
+			dao.update(product);
+		}
 		for (ProductSpec productSpec : product.getSpecs()){
 			if (productSpec.getId() == null){
 				continue;
@@ -65,11 +94,40 @@ public class ProductService extends CrudService<ProductDao, Product> {
 				productSpecDao.delete(productSpec);
 			}
 		}
+		//将设计保存到图片上
+		Design design=product.getDesign();
+		if(design==null){
+			design=designDao.findByProductId(product.getId());
+		}
+		for (Image  image : product.getImages()){
+			if (image.getId() == null){
+				continue;
+			}
+			if (SpecAttribute.DEL_FLAG_NORMAL.equals(image.getDelFlag())){
+				if (StringUtils.isBlank(image.getId())){
+					image.setProduct(product);
+					image.setDesign(design);
+					image.preInsert();
+					imageDao.insert(image);
+				}else{
+					image.preUpdate();
+					imageDao.update(image);
+				}
+			}else{
+				imageDao.delete(image);
+			}
+		}
 	}
 	
 	@Transactional(readOnly = false)
 	public void delete(Product product) {
 		super.delete(product);
+		//将设计保存到图片上
+		Design design=product.getDesign();
+		if(design==null){
+			design=designDao.findByProductId(product.getId());
+		}
+		designDao.delete(design);
 	}
 	
 }

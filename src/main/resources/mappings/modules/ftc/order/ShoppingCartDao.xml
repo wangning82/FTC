@@ -4,17 +4,21 @@
     
 	<sql id="shoppingCartColumns">
 		a.id AS "id",
-		a.product_spec_number AS "productSpecNumber",
+		a.product_spec_number AS "productSpec.productSpecNumber",
 		a.customer_id AS "customer.id",
 		a.buy_number AS "buyNumber",
 		a.create_date AS "createDate",
 		a.update_date AS "updateDate",
 		a.check_status AS "checkStatus",
-		b.user_name AS "customer.userName"
+		b.user_name AS "customer.userName",
+		c.spec_name AS "productSpec.spec.name",
+		d.name AS "product.name"
 	</sql>
 	
 	<sql id="shoppingCartJoins">
 		LEFT JOIN os_customer b ON b.id = a.customer_id
+		LEFT JOIN os_product_specification c ON c.product_spec_number = a.product_spec_number
+		LEFT JOIN os_product d ON d.id = c.product_id
 	</sql>
     
 	<select id="get" resultType="ShoppingCart">
@@ -31,9 +35,8 @@
 		FROM os_shopping_cart a
 		<include refid="shoppingCartJoins"/>
 		<where>
-			
-			<if test="productSpecNumber != null and productSpecNumber != ''">
-				AND a.product_spec_number = #{productSpecNumber}
+			<if test="productSpec != null and productSpec.productSpecNumber != null and productSpec.productSpecNumber != ''">
+				AND a.product_spec_number = #{productSpec.productSpecNumber}
 			</if>
 			<if test="customer != null and customer.id != null and customer.id != ''">
 				AND a.customer_id LIKE 

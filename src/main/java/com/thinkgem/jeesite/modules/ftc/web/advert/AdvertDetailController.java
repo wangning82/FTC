@@ -28,7 +28,7 @@ import com.thinkgem.jeesite.modules.ftc.service.advert.AdvertDetailService;
  * @version 2017-05-21
  */
 @Controller
-@RequestMapping(value = "${adminPath}/ftc/advert/advertDetail")
+@RequestMapping(value = "${adminPath}/ftc/advert/detail")
 public class AdvertDetailController extends BaseController {
 
 	@Autowired
@@ -46,7 +46,7 @@ public class AdvertDetailController extends BaseController {
 		return entity;
 	}
 	
-	@RequiresPermissions("ftc:advert:advertDetail:view")
+	@RequiresPermissions("ftc:advert:detail:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(AdvertDetail advertDetail, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<AdvertDetail> page = advertDetailService.findPage(new Page<AdvertDetail>(request, response), advertDetail); 
@@ -54,14 +54,14 @@ public class AdvertDetailController extends BaseController {
 		return "modules/ftc/advert/advertDetailList";
 	}
 
-	@RequiresPermissions("ftc:advert:advertDetail:view")
+	@RequiresPermissions("ftc:advert:detail:view")
 	@RequestMapping(value = "form")
 	public String form(AdvertDetail advertDetail, Model model) {
 		model.addAttribute("advertDetail", advertDetail);
 		return "modules/ftc/advert/advertDetailForm";
 	}
 
-	@RequiresPermissions("ftc:advert:advertDetail:edit")
+	@RequiresPermissions("ftc:advert:detail:edit")
 	@RequestMapping(value = "save")
 	public String save(AdvertDetail advertDetail, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, advertDetail)){
@@ -69,15 +69,15 @@ public class AdvertDetailController extends BaseController {
 		}
 		advertDetailService.save(advertDetail);
 		addMessage(redirectAttributes, "保存广告成功");
-		return "redirect:"+Global.getAdminPath()+"/ftc/advert/advertDetail/?repage";
+		return "redirect:"+Global.getAdminPath()+"/ftc/advert/detail/?repage";
 	}
 	
-	@RequiresPermissions("ftc:advert:advertDetail:edit")
+	@RequiresPermissions("ftc:advert:detail:edit")
 	@RequestMapping(value = "delete")
 	public String delete(AdvertDetail advertDetail, RedirectAttributes redirectAttributes) {
 		advertDetailService.delete(advertDetail);
 		addMessage(redirectAttributes, "删除广告成功");
-		return "redirect:"+Global.getAdminPath()+"/ftc/advert/advertDetail/?repage";
+		return "redirect:"+Global.getAdminPath()+"/ftc/advert/detail/?repage";
 	}
 
 }

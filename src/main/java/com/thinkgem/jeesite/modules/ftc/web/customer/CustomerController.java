@@ -24,8 +24,8 @@ import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 
 /**
  * 会员Controller
- * @author wangqingxiang
- * @version 2017-05-19
+ * @author houyi
+ * @version 2017-06-04
  */
 @Controller
 @RequestMapping(value = "${adminPath}/ftc/customer/customer")

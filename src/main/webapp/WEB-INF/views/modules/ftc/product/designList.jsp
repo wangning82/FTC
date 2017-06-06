@@ -45,10 +45,10 @@
 			<tr>
 				<th>名称</th>
 				<th>编号</th>
-				<th>商品id</th>
+				<th>商品</th>
 				<th>设计费</th>
 				<th>设计者</th>
-				<th>create_date</th>
+				<th>创建时间</th>
 				<th>状态</th>
 				<shiro:hasPermission name="ftc:product:design:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -63,13 +63,13 @@
 					${design.code}
 				</td>
 				<td>
-					${design.productId}
+					${design.product.name}
 				</td>
 				<td>
 					${design.price}
 				</td>
 				<td>
-					${design.}
+					${design.createBy.name}
 				</td>
 				<td>
 					<fmt:formatDate value="${design.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

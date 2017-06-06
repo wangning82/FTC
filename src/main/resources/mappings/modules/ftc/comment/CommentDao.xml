@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.comment.CommentDao">
+    
+	<sql id="commentColumns">
+		a.id AS "id",
+		a.product_id AS "product.id",
+		c.product_number AS "product.number",
+		c.name AS "product.name",
+
+		a.order_id AS "order.id",
+		d.order_number AS "order.orderNo",
+		a.star AS "star",
+		a.content AS "content",
+		a.good_count AS "goodCount",
+		a.status AS "status",
+		a.type AS "type",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+
+		a.customer_id AS "customer.id",
+	    b.user_name AS "customer.userName",
+	    b.pic_img AS "customer.picImg",
+	    b.sex AS "customer.sex"
+	</sql>
+	
+	<sql id="commentJoins">
+		LEFT JOIN os_customer b ON b.id = a.customer_id
+		left join os_product c on a.product_id=c.ID
+		left join os_order d on a.order_id=d.id
+	</sql>
+    
+	<select id="get" resultType="Comment">
+		SELECT 
+			<include refid="commentColumns"/>
+		FROM os_comment a
+		<include refid="commentJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Comment">
+		SELECT 
+			<include refid="commentColumns"/>
+		FROM os_comment a
+		<include refid="commentJoins"/>
+		<where>
+			
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
+			</if>
+			<if test="customer != null and customer.id != null and customer.id != ''">
+				AND a.customer_id = #{customer.id}
+			</if>
+
+			<if test="order != null and order.id != null and order.id != ''">
+				AND a.order_id = #{order.id}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Comment">
+		SELECT 
+			<include refid="commentColumns"/>
+		FROM os_comment a
+		<include refid="commentJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_comment(
+			id,
+			product_id,
+			customer_id,
+			order_id,
+			star,
+			content,
+			good_count,
+			status,
+			type,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{product.id},
+			#{customer.id},
+			#{order.id},
+			#{star},
+			#{content},
+			#{goodCount},
+			#{status},
+			#{type},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_comment SET 	
+			product_id = #{product.id},
+			customer_id = #{customer.id},
+			order_id = #{order.id},
+			star = #{star},
+			content = #{content},
+			good_count = #{goodCount},
+			status = #{status},
+			type = #{type},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_comment
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

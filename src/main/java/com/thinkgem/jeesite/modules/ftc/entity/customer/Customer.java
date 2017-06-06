@@ -6,13 +6,14 @@ package com.thinkgem.jeesite.modules.ftc.entity.customer;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.math.BigDecimal;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
  * 会员Entity
- * @author wangqingxiang
- * @version 2017-05-19
+ * @author houyi
+ * @version 2017-06-04
  */
 public class Customer extends DataEntity<Customer> {
 	
@@ -22,20 +23,21 @@ public class Customer extends DataEntity<Customer> {
 	private String loginPassword;		// 登录密码
 	private String salt;		// 加密密码的盐
 	private String realName;		// 真实姓名
-	private Integer sex;		// 性别 0=保密/1=男/2=女
+	private Integer sex;		// 性别
 	private Integer age;		// 年龄
 	private String picImg;		// 用户头像
-	private String status;		// 状态 0=冻结/1=正常
-	private String emailIsActive;		// 邮箱激活 0=未激活/1=已激活
+	private String status;		// 状态
+	private String emailIsActive;		// 邮箱激活
 	private String email;		// 电子邮箱
 	private String telephone;		// 手机号码
 	private Date lastLoginTime;		// 最后登录时间
 	private String lastLoginIp;		// 最后登录IP
 	private Long loginNumber;		// 登录次数
 	private Date regeistTime;		// 注册时间
-	private String amount;		// 消费额
+	private BigDecimal billBlance;		// 账户余额
+	private BigDecimal amount;		// 消费额
 	private String rankId;		// 会员等级ID
-	private String score;		// 会员积分
+	private BigDecimal score;		// 会员积分
 	private String qq;		// qq
 	private String wechat;		// wechat
 	
@@ -117,7 +119,7 @@ public class Customer extends DataEntity<Customer> {
 		this.picImg = picImg;
 	}
 	
-	@Length(min=0, max=1, message="状态 0=冻结/1=正常长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="状态长度必须介于 0 和 1 之间")
 	public String getStatus() {
 		return status;
 	}
@@ -126,7 +128,7 @@ public class Customer extends DataEntity<Customer> {
 		this.status = status;
 	}
 	
-	@Length(min=0, max=1, message="邮箱激活 0=未激活/1=已激活长度必须介于 0 和 1 之间")
+	@Length(min=0, max=1, message="邮箱激活长度必须介于 0 和 1 之间")
 	public String getEmailIsActive() {
 		return emailIsActive;
 	}
@@ -188,11 +190,19 @@ public class Customer extends DataEntity<Customer> {
 		this.regeistTime = regeistTime;
 	}
 	
-	public String getAmount() {
+	public BigDecimal getBillBlance() {
+		return billBlance;
+	}
+
+	public void setBillBlance(BigDecimal billBlance) {
+		this.billBlance = billBlance;
+	}
+	
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 	
@@ -205,12 +215,11 @@ public class Customer extends DataEntity<Customer> {
 		this.rankId = rankId;
 	}
 	
-	@Length(min=0, max=11, message="会员积分长度必须介于 0 和 11 之间")
-	public String getScore() {
+	public BigDecimal getScore() {
 		return score;
 	}
 
-	public void setScore(String score) {
+	public void setScore(BigDecimal score) {
 		this.score = score;
 	}
 	

@@ -19,7 +19,9 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/ftc/order/order/">订单列表</a></li>
+		<!--
 		<shiro:hasPermission name="ftc:order:order:edit"><li><a href="${ctx}/ftc/order/order/form">订单添加</a></li></shiro:hasPermission>
+		-->
 	</ul>
 	<form:form id="searchForm" modelAttribute="order" action="${ctx}/ftc/order/order/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -76,7 +78,7 @@
 					<fmt:formatDate value="${order.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${order.orderAmount}
+					<fmt:formatNumber value="${order.orderAmount}" type="currency"/>
 				</td>
 				<shiro:hasPermission name="ftc:order:order:edit"><td>
     				<a href="${ctx}/ftc/order/order/form?id=${order.id}">修改</a>

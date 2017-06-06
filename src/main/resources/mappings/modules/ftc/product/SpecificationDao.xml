@@ -33,7 +33,7 @@
 		FROM os_specification a
 		<include refid="specificationJoins"/>
 		<where>
-			<if test="category != null and category != ''">
+			<if test="category != null and category != '' and category.id != null and category.id != ''">
 				AND a.category_id = #{category.id}
 			</if>
 			<if test="name != null and name != ''">

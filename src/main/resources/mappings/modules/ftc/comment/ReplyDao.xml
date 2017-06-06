@@ -4,10 +4,7 @@
     
 	<sql id="replyColumns">
 		a.id AS "id",
-		a.comment_id AS "commentId",
-		a.user_id AS "user.id",
-		a.user_name AS "userName",
-		a.pic_img AS "picImg",
+		a.comment_id AS "comment.id",
 		a.content AS "content",
 		a.good_count AS "goodCount",
 		a.status AS "status",
@@ -15,11 +12,18 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
-		a.update_by AS "updateBy.id"
+		a.update_by AS "updateBy.id",
+
+
+		a.customer_id AS "customer.id",
+	    c.user_name AS "customer.userName",
+	    c.pic_img AS "customer.picImg",
+	    c.sex AS "customer.sex"
 	</sql>
 	
 	<sql id="replyJoins">
-		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		LEFT JOIN os_comment b ON b.id = a.comment_id
+		LEFT JOIN os_customer c ON c.id = a.customer_id
 	</sql>
     
 	<select id="get" resultType="Reply">
@@ -37,6 +41,9 @@
 		<include refid="replyJoins"/>
 		<where>
 			
+			<if test="comment != null and comment.id != null and comment.id != ''">
+				AND a.comment_id = #{comment.id}
+			</if>
 			<if test="content != null and content != ''">
 				AND a.content LIKE 
 					<if test="dbName == 'oracle'">'%'||#{content}||'%'</if>
@@ -55,7 +62,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -73,7 +80,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -82,9 +89,7 @@
 		INSERT INTO os_comment_reply(
 			id,
 			comment_id,
-			user_id,
-			user_name,
-			pic_img,
+			customer_id,
 			content,
 			good_count,
 			status,
@@ -95,10 +100,8 @@
 			update_by
 		) VALUES (
 			#{id},
-			#{commentId},
-			#{user.id},
-			#{userName},
-			#{picImg},
+			#{comment.id},
+			#{customer.id},
 			#{content},
 			#{goodCount},
 			#{status},
@@ -112,11 +115,9 @@
 	
 	<update id="update">
 		UPDATE os_comment_reply SET 	
-			comment_id = #{commentId},
-			user_id = #{user.id},
-			user_name = #{userName},
-			pic_img = #{picImg},
+			comment_id = #{comment.id},
 			content = #{content},
+			customer_id=#{customer.id},
 			good_count = #{goodCount},
 			status = #{status},
 			type = #{type},
@@ -127,7 +128,14 @@
 	
 	<update id="delete">
 		DELETE FROM os_comment_reply
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE comment_id = #{comment.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 </mapper>

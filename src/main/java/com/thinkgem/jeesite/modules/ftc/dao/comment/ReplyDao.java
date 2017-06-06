@@ -8,9 +8,9 @@ import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.ftc.entity.comment.Reply;
 
 /**
- * 回复DAO接口
+ * 评论DAO接口
  * @author wangqingxiang
- * @version 2017-05-21
+ * @version 2017-06-04
  */
 @MyBatisDao
 public interface ReplyDao extends CrudDao<Reply> {

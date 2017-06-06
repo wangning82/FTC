@@ -93,7 +93,7 @@ public class CategoryController extends BaseController {
 		}
 		categoryService.save(category);
 		addMessage(redirectAttributes, "保存分类成功");
-		return "redirect:"+Global.getAdminPath()+"/ftc.product/category/?repage";
+		return "redirect:"+Global.getAdminPath()+"/ftc/product/category/?repage";
 	}
 	
 	@RequiresPermissions("ftc:product:category:edit")

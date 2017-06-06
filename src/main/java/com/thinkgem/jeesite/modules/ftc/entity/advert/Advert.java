@@ -4,13 +4,15 @@
 package com.thinkgem.jeesite.modules.ftc.entity.advert;
 
 import org.hibernate.validator.constraints.Length;
+import java.util.List;
+import com.google.common.collect.Lists;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
 /**
- * 广告位Entity
+ * 广告Entity
  * @author wangqingxiang
- * @version 2017-05-21
+ * @version 2017-06-03
  */
 public class Advert extends DataEntity<Advert> {
 	
@@ -25,6 +27,7 @@ public class Advert extends DataEntity<Advert> {
 	private String number;		// 广告数量
 	private String status;		// 状态
 	private String type;		// 广告位类型
+	private List<AdvertDetail> advertDetailList = Lists.newArrayList();		// 子表列表
 	
 	public Advert() {
 		super();
@@ -123,4 +126,11 @@ public class Advert extends DataEntity<Advert> {
 		this.type = type;
 	}
 	
+	public List<AdvertDetail> getAdvertDetailList() {
+		return advertDetailList;
+	}
+
+	public void setAdvertDetailList(List<AdvertDetail> advertDetailList) {
+		this.advertDetailList = advertDetailList;
+	}
 }

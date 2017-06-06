@@ -22,6 +22,7 @@
 		a.regeist_time AS "regeistTime",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
+		a.bill_blance AS "billBlance",
 		a.update_by AS "updateBy.id",
 		a.amount AS "amount",
 		a.rank_id AS "rankId",
@@ -51,17 +52,17 @@
 			<if test="userCode != null and userCode != ''">
 				AND a.user_code = #{userCode}
 			</if>
+			<if test="userName != null and userName != ''">
+				AND a.user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
 			<if test="sex != null and sex != ''">
 				AND a.sex = #{sex}
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
-			</if>
-			<if test="emailIsActive != null and emailIsActive != ''">
-				AND a.email_is_active = #{emailIsActive}
-			</if>
-			<if test="email != null and email != ''">
-				AND a.email = #{email}
 			</if>
 			<if test="telephone != null and telephone != ''">
 				AND a.telephone = #{telephone}
@@ -116,6 +117,7 @@
 			regeist_time,
 			create_by,
 			update_date,
+			bill_blance,
 			update_by,
 			amount,
 			rank_id,
@@ -142,6 +144,7 @@
 			#{regeistTime},
 			#{createBy.id},
 			#{updateDate},
+			#{billBlance},
 			#{updateBy.id},
 			#{amount},
 			#{rankId},
@@ -170,6 +173,7 @@
 			login_number = #{loginNumber},
 			regeist_time = #{regeistTime},
 			update_date = #{updateDate},
+			bill_blance = #{billBlance},
 			update_by = #{updateBy.id},
 			amount = #{amount},
 			rank_id = #{rankId},

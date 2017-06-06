@@ -47,6 +47,12 @@
 			<if test="code != null and code != ''">
 				AND a.code = #{code}
 			</if>
+			<if test="defultNumber != null and defultNumber != ''">
+				AND a.defult_number = #{defultNumber}
+			</if>
+			<if test="number != null and number != ''">
+				AND a.number = #{number}
+			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
 			</if>

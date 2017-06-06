@@ -27,16 +27,18 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li><a href="${ctx}/ftc/advert/advertDetail/">广告列表</a></li>
-		<li class="active"><a href="${ctx}/ftc/advert/advertDetail/form?id=${advertDetail.id}">广告<shiro:hasPermission name="ftc:advert:advertDetail:edit">${not empty advertDetail.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="ftc:advert:advertDetail:edit">查看</shiro:lacksPermission></a></li>
+		<li><a href="${ctx}/ftc/advert/detail/">广告列表</a></li>
+		<li class="active"><a href="${ctx}/ftc/advert/detail/form?id=${advertDetail.id}">广告<shiro:hasPermission name="ftc:advert:advertDetail:edit">${not empty advertDetail.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="ftc:advert:advertDetail:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="advertDetail" action="${ctx}/ftc/advert/advertDetail/save" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="advertDetail" action="${ctx}/ftc/advert/detail/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">广告位ID：</label>
+			<label class="control-label">广告位：</label>
+
 			<div class="controls">
-				<form:input path="advertId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<sys:treeselect id="advert.id" name="advert.id" value="${advertDetail.advert.id}" labelName="" labelValue="${advertDetail.advert.name}"
+								title="广告位" url="/ftc/advert/treeData" extId="" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -58,26 +60,18 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">状态：</label>
-			<div class="controls">
-				<form:select path="status" class="input-xlarge ">
-					<form:option value="" label=""/>
-					<form:options items="${fns:getDictList('ftc_advert_advert_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</form:select>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">展示图片：</label>
 			<div class="controls">
-				<form:input path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+
 			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">备注信息：</label>
 			<div class="controls">
-				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+				<form:hidden id="picImg" path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100"
+							  maxHeight="100"/>
 			</div>
 		</div>
+
+
 		<div class="control-group">
 			<label class="control-label">广告起始时间：</label>
 			<div class="controls">
@@ -100,8 +94,23 @@
 				<form:textarea path="content" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">备注信息：</label>
+			<div class="controls">
+				<form:textarea path="remarks" htmlEscape="false" rows="4" maxlength="255" class="input-xxlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">状态：</label>
+			<div class="controls">
+				<form:select path="status" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('ftc_advert_advert_status')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
+			</div>
+		</div>
 		<div class="form-actions">
-			<shiro:hasPermission name="ftc:advert:advertDetail:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<shiro:hasPermission name="ftc:advert:detail:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
 		</div>
 	</form:form>

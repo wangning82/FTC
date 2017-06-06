@@ -6,18 +6,20 @@
 		a.id AS "id",
 		a.name AS "name",
 		a.code AS "code",
-		a.product_id AS "productId",
+		a.product_id AS "product.id",
 		a.price AS "price",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
-		a.design_status AS "designStatus"
+		a.design_status AS "designStatus",
+		b.name AS "product.name"
 	</sql>
 	
 	<sql id="designJoins">
 		LEFT JOIN sys_user u6 ON u6.id = a.create_by
+		left join os_product b on a.product_id =b.id
 	</sql>
     
 	<select id="get" resultType="Design">
@@ -26,6 +28,13 @@
 		FROM os_product_design a
 		<include refid="designJoins"/>
 		WHERE a.id = #{id}
+	</select>
+	<select id="findByProductId" resultType="Design">
+		SELECT
+		<include refid="designColumns"/>
+		FROM os_product_design a
+		<include refid="designJoins"/>
+		WHERE a.product_id = #{id}
 	</select>
 	
 	<select id="findList" resultType="Design">
@@ -57,7 +66,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
 	<select id="findAllList" resultType="Design">
 		SELECT 
 			<include refid="designColumns"/>
@@ -93,7 +102,7 @@
 			#{id},
 			#{name},
 			#{code},
-			#{productId},
+			#{product.id},
 			#{price},
 			#{createBy.id},
 			#{createDate},
@@ -108,7 +117,7 @@
 		UPDATE os_product_design SET 	
 			name = #{name},
 			code = #{code},
-			product_id = #{productId},
+			product_id = #{product.id},
 			price = #{price},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
