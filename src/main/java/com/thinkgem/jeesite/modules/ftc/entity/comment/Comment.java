@@ -3,7 +3,9 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.comment;
 
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import java.util.List;
@@ -19,8 +21,8 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class Comment extends DataEntity<Comment> {
 	
 	private static final long serialVersionUID = 1L;
-	private String product;		// 商品ID
-	private User user;		// 用户ID
+	private Product product;		// 商品ID
+	private Customer customer;		// 客户
 	private Order order;		// 订单ID
 	private String star;		// 评论星级
 	private String content;		// 评论内容
@@ -37,23 +39,20 @@ public class Comment extends DataEntity<Comment> {
 		super(id);
 	}
 
-	@Length(min=0, max=64, message="商品ID长度必须介于 0 和 64 之间")
-	public String getProduct() {
+	public Product getProduct() {
 		return product;
 	}
 
-	public void setProduct(String product) {
+	public void setProduct(Product product) {
 		this.product = product;
 	}
-	
 
-	
-	public User getUser() {
-		return user;
+	public Customer getCustomer() {
+		return customer;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 	public Order getOrder() {

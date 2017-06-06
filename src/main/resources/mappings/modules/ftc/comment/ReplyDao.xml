@@ -5,9 +5,6 @@
 	<sql id="replyColumns">
 		a.id AS "id",
 		a.comment_id AS "comment.id",
-		a.user_id AS "user.id",
-		a.user_name AS "user.name",
-		a.pic_img AS "user.photo",
 		a.content AS "content",
 		a.good_count AS "goodCount",
 		a.status AS "status",
@@ -15,12 +12,18 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
-		a.update_by AS "updateBy.id"
+		a.update_by AS "updateBy.id",
+
+
+		a.customer_id AS "customer.id",
+	    c.user_name AS "customer.userName",
+	    c.pic_img AS "customer.picImg",
+	    c.sex AS "customer.sex"
 	</sql>
 	
 	<sql id="replyJoins">
 		LEFT JOIN os_comment b ON b.id = a.comment_id
-		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		LEFT JOIN os_customer c ON c.id = a.customer_id
 	</sql>
     
 	<select id="get" resultType="Reply">
@@ -86,9 +89,7 @@
 		INSERT INTO os_comment_reply(
 			id,
 			comment_id,
-			user_id,
-			user_name,
-			pic_img,
+			customer_id,
 			content,
 			good_count,
 			status,
@@ -100,9 +101,7 @@
 		) VALUES (
 			#{id},
 			#{comment.id},
-			#{user.id},
-			#{user.name},
-			#{user.photo},
+			#{customer.id},
 			#{content},
 			#{goodCount},
 			#{status},
@@ -117,10 +116,8 @@
 	<update id="update">
 		UPDATE os_comment_reply SET 	
 			comment_id = #{comment.id},
-			user_id = #{user.id},
-			user_name = #{user.name},
-			pic_img = #{user.photo},
 			content = #{content},
+			customer_id=#{customer.id},
 			good_count = #{goodCount},
 			status = #{status},
 			type = #{type},

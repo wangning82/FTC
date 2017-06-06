@@ -63,36 +63,50 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="comment" action="${ctx}/ftc/comment/comment/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
+		<form:hidden path="product.id"/>
+		<form:hidden path="customer.id"/>
 		<sys:message content="${message}"/>		
 		<div class="control-group">
-			<label class="control-label">商品：</label>
+			<label class="control-label">商品编号：</label>
 			<div class="controls">
-				<form:input path="product" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="product.number" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">用户ID：</label>
+			<label class="control-label">商品名称：</label>
 			<div class="controls">
-				<sys:treeselect id="user" name="user.id" value="${comment.user.id}" labelName="" labelValue="${comment.user.name}"
-					title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
+				<form:input path="product.name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
+
 		<div class="control-group">
 			<label class="control-label">昵称：</label>
 			<div class="controls">
-				<form:input path="user.name" htmlEscape="false" maxlength="30" class="input-xlarge "/>
+				<form:input path="customer.userName" htmlEscape="false" maxlength="30" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">性别：</label>
+			<div class="controls">
+				<form:select path="customer.sex" class="input-xlarge ">
+					<form:option value="" label=""/>
+					<form:options items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				</form:select>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">用户头像：</label>
+
 			<div class="controls">
-				<form:input path="user.photo" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:hidden id="picImg" path="customer.picImg" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<sys:ckfinder input="picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100"
+							  maxHeight="100"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">订单编号：</label>
 			<div class="controls">
-				<form:input path="order.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="order.orderNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -138,13 +152,11 @@
 						<thead>
 							<tr>
 								<th class="hide"></th>
-								<th>用户ID</th>
-								<th>昵称</th>
-								<th>用户头像</th>
+								<th>评论类型</th>
+								<th>是否显示</th>
+								<th>用户</th>
 								<th>评论内容</th>
 								<th>好评数</th>
-								<th>状态</th>
-								<th>评论类型</th>
 								<shiro:hasPermission name="ftc:comment:comment:edit"><th width="10">&nbsp;</th></shiro:hasPermission>
 							</tr>
 						</thead>
@@ -161,20 +173,12 @@
 								<input id="replyList{{idx}}_delFlag" name="replyList[{{idx}}].delFlag" type="hidden" value="0"/>
 							</td>
 							<td>
-								<sys:treeselect id="replyList{{idx}}_user" name="replyList[{{idx}}].user.id" value="{{row.user.id}}" labelName="replyList{{idx}}.user.name" labelValue="{{row.user.id}}"
-									title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true" notAllowSelectParent="true"/>
-							</td>
-							<td>
-								<input id="replyList{{idx}}_userName" name="replyList[{{idx}}].userName" type="text" value="{{row.userName}}" maxlength="30" class="input-small "/>
-							</td>
-							<td>
-								<input id="replyList{{idx}}_picImg" name="replyList[{{idx}}].picImg" type="text" value="{{row.picImg}}" maxlength="255" class="input-small "/>
-							</td>
-							<td>
-								<textarea id="replyList{{idx}}_content" name="replyList[{{idx}}].content" rows="4" maxlength="255" class="input-small ">{{row.content}}</textarea>
-							</td>
-							<td>
-								<input id="replyList{{idx}}_goodCount" name="replyList[{{idx}}].goodCount" type="text" value="{{row.goodCount}}" maxlength="11" class="input-small "/>
+								<select id="replyList{{idx}}_type" name="replyList[{{idx}}].type" data-value="{{row.type}}" class="input-small ">
+									<option value=""></option>
+									<c:forEach items="${fns:getDictList('ftc_commont_reply_type')}" var="dict">
+										<option value="${dict.value}">${dict.label}</option>
+									</c:forEach>
+								</select>
 							</td>
 							<td>
 								<select id="replyList{{idx}}_status" name="replyList[{{idx}}].status" data-value="{{row.status}}" class="input-small ">
@@ -185,12 +189,14 @@
 								</select>
 							</td>
 							<td>
-								<select id="replyList{{idx}}_type" name="replyList[{{idx}}].type" data-value="{{row.type}}" class="input-small ">
-									<option value=""></option>
-									<c:forEach items="${fns:getDictList('ftc_commont_reply_type')}" var="dict">
-										<option value="${dict.value}">${dict.label}</option>
-									</c:forEach>
-								</select>
+								<input id="replyList{{idx}}_userName" name="replyList[{{idx}}].customer.userName" type="text" value="{{row.customer.userName}}" maxlength="30" class="input-small " readonly="readonly" />
+							</td>
+
+							<td>
+								<textarea id="replyList{{idx}}_content" name="replyList[{{idx}}].content" rows="4" maxlength="255" class="input-small ">{{row.content}}</textarea>
+							</td>
+							<td>
+								<input id="replyList{{idx}}_goodCount" name="replyList[{{idx}}].goodCount" type="text" value="{{row.goodCount}}" maxlength="11" class="input-small "  readonly="readonly"/>
 							</td>
 							<shiro:hasPermission name="ftc:comment:comment:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#replyList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
