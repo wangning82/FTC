@@ -127,7 +127,7 @@
 					${product.createBy.name}
 				</td>
 				<td>
-					<fmt:formatDate value="${product.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${product.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 
 				<td>

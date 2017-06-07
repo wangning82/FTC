@@ -17,7 +17,8 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
-		a.update_by AS "updateBy.id"
+		a.update_by AS "updateBy.id",
+		a.pic_img AS "picImg"
 	</sql>
 	
 	<sql id="productSpecJoins">
@@ -85,7 +86,8 @@
 			create_date,
 			create_by,
 			update_date,
-			update_by
+			update_by,
+			pic_img
 		) VALUES (
 			#{id},
 			#{productSpecNumber},
@@ -101,7 +103,8 @@
 			#{createDate},
 			#{createBy.id},
 			#{updateDate},
-			#{updateBy.id}
+			#{updateBy.id},
+			#{picImg}
 		)
 	</insert>
 	
@@ -118,7 +121,8 @@
 			default_status = #{defaultStatus},
 			status = #{status},
 			update_date = #{updateDate},
-			update_by = #{updateBy.id}
+			update_by = #{updateBy.id},
+			pic_img=#{picImg}
 		WHERE id = #{id}
 	</update>
 	

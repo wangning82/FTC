@@ -31,7 +31,6 @@ public class Product extends DataEntity<Product> {
 	private String showInNav;		// 是否导航栏 1=显示/0=隐藏
 	private String showInHot;		// 是否热门 1=热门/0=默认
 	private String showInShelve;		// 是否上架：1=上架/0=下架
-	private Date createTime;		// 创建时间
 	private Date shelveTime;		// 上架时间
 	private User shelveBy;		// 上架人
 	private String searchKey;		// 搜索关键词
@@ -183,16 +182,7 @@ public class Product extends DataEntity<Product> {
 	public void setShowInShelve(String showInShelve) {
 		this.showInShelve = showInShelve;
 	}
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getCreateTime() {
-		return createTime;
-	}
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getShelveTime() {
 		return shelveTime;

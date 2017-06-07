@@ -3,8 +3,11 @@
  */
 package com.thinkgem.jeesite.modules.ftc.service.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.ftc.dao.product.CategoryDao;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +31,8 @@ public class SpecificationService extends CrudService<SpecificationDao, Specific
 
 	@Autowired
 	private SpecAttributeDao specAttributeDao;
+	@Autowired
+	private CategoryDao categoryDao;
 	
 	public Specification get(String id) {
 		Specification specification = super.get(id);
@@ -70,5 +75,23 @@ public class SpecificationService extends CrudService<SpecificationDao, Specific
 		super.delete(specification);
 		specAttributeDao.delete(new SpecAttribute(specification));
 	}
-	
+
+	public List<Specification> findByCategory(Category category){
+		List<Specification> specificationList=new ArrayList<>();
+		String parentIds=category.getParentIds();
+		if(parentIds.length()==0){
+			category=categoryDao.get(category);
+		}
+		for(String parentId:parentIds.split(",")){
+			if(parentId==null||parentId.length()==0){
+				continue;
+			}
+			Specification s=new Specification();
+			s.setCategory(category);
+			List<Specification> specifications=findList(s);
+			specifications.addAll(specifications);
+		}
+		return  specificationList;
+
+	}
 }

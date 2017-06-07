@@ -24,6 +24,15 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	private String score;		// 积分
 	private String defaultStatus;		// 是否默认状态：0,不默认；1,默认
 	private String status;		// 商品状态
+	private String picImg;   //图片
+
+	public String getPicImg() {
+		return picImg;
+	}
+
+	public void setPicImg(String picImg) {
+		this.picImg = picImg;
+	}
 
 	public SpecAttribute getSpec() {
 		return spec;

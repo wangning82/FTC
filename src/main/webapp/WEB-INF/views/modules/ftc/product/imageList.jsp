@@ -48,7 +48,7 @@
 		<c:forEach items="${page.list}" var="image">
 			<tr>
 				<td>
-					<img src="${image.url}" height="40px"/>
+					<img src="${image.url}" style="height:60px"/>
 				</td>
 				<td>
 					${image.product.name}

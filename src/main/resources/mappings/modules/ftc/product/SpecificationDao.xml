@@ -52,6 +52,9 @@
 			</otherwise>
 		</choose>
 	</select>
+	<select id="findListByCategory" resultType="Speeification">
+		select
+	</select>
 	
 	<select id="findAllList" resultType="Specification">
 		SELECT 

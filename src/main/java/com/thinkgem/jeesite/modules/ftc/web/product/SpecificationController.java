@@ -95,9 +95,8 @@ public class SpecificationController extends BaseController {
 	@RequestMapping(value = "treeData")
 	public List<Specification> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
-		Specification specification=new Specification();
-		specification.setCategory(new Category(extId));
-		List<Specification> list = specificationService.findList(specification);
+
+		List<Specification> list = specificationService.findByCategory(new Category(extId));
 		for (int i=0; i<list.size(); i++){
 			Specification e = list.get(i);
 			SpecAttribute specAttribute=new SpecAttribute();
