@@ -52,7 +52,7 @@
 			</otherwise>
 		</choose>
 	</select>
-	<select id="findListByCategory" resultType="Speeification">
+	<select id="findListByCategory" resultType="Specification">
 		select
 	</select>
 	
