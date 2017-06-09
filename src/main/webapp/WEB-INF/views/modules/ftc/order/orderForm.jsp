@@ -77,10 +77,7 @@
     <div class="control-group">
         <label class="control-label">顾客：</label>
         <div class="controls">
-            <sys:treeselect id="customer" name="customer.id" value="${order.customer.id}" labelName="customer.userName"
-                            labelValue="${order.customer.userName}"
-                            title="用户" url="/sys/office/treeData?type=3" cssClass="" allowClear="true"
-                            notAllowSelectParent="true"/>
+            <form:input path="customer.userName" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="true"/>
         </div>
     </div>
     <div class="control-group">
