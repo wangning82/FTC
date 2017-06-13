@@ -40,7 +40,7 @@
 		FROM os_category a
 		<include refid="categoryJoins"/>
 		<where>
-			
+			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
@@ -60,7 +60,7 @@
 		FROM os_category a
 		<include refid="categoryJoins"/>
 		<where>
-			
+			a.del_flag = #{DEL_FLAG_NORMAL}
 		</where>
 		ORDER BY a.sort ASC
 	</select>
@@ -90,10 +90,11 @@
 			remarks,
 			id,
 			parent_id,
+			parent_ids,
 			show_in_hot,
 			show_in_top,
 			create_by,
-			update_time,
+			update_date,
 			update_by,
 			page_title,
 			page_description,
@@ -109,10 +110,11 @@
 			#{remarks},
 			#{id},
 			#{parent.id},
+			#{parentIds},
 			#{showInHot},
 			#{showInTop},
 			#{createBy.id},
-			#{updateTime},
+			#{updateDate},
 			#{updateBy.id},
 			#{pageTitle},
 			#{pageDescription},
@@ -131,9 +133,10 @@
 			create_Date = #{createDate},
 			remarks = #{remarks},
 			parent_id = #{parent.id},
+			parent_ids=#{parentIds},
 			show_in_hot = #{showInHot},
 			show_in_top = #{showInTop},
-			update_time = #{updateTime},
+			update_date = #{updateDate},
 			update_by = #{updateBy.id},
 			page_title = #{pageTitle},
 			page_description = #{pageDescription},
