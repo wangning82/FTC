@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.ftc.service.product;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
@@ -64,8 +65,11 @@ public class ProductService extends CrudService<ProductDao, Product> {
 			product.preInsert();
 			dao.insert(product);
 
+			if(product.getNumber()==null||product.getNumber().length()==0){
+				product.setNumber(ProductNoGenerator.INSTANCE.nextId());
+			}
 			Design design=new Design();
-			design.setCode("00001");
+			design.setCode(ProductNoGenerator.INSTANCE.nextId());
 			design.setName(product.getName());
 			design.setDesignStatus("0");;
 			design.setPrice("0");

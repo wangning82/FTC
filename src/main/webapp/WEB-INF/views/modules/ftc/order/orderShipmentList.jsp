@@ -30,7 +30,7 @@
 			<li><label>订单编号：</label>
 				<form:input path="order.orderNo" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>姓名：</label>
+			<li><label>收货人：</label>
 				<form:input path="userName" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>手机号码：</label>
@@ -45,7 +45,7 @@
 		<thead>
 			<tr>
 				<th>订单编号</th>
-				<th>姓名</th>
+				<th>收货人</th>
 				<th>手机号码</th>
 				<th>详细地址</th>
 				<th>更新时间</th>

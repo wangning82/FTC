@@ -38,11 +38,11 @@
 			<if test="productSpec != null and productSpec.productSpecNumber != null and productSpec.productSpecNumber != ''">
 				AND a.product_spec_number = #{productSpec.productSpecNumber}
 			</if>
-			<if test="customer != null and customer.id != null and customer.id != ''">
-				AND a.customer_id LIKE 
-					<if test="dbName == 'oracle'">'%'||#{customer.id}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{customer.id}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{customer.id},'%')</if>
+			<if test="customer != null and customer.userName != null and customer.userName != ''">
+				AND b.user_name LIKE
+					<if test="dbName == 'oracle'">'%'||#{customer.userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{customer.userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{customer.userName},'%')</if>
 			</if>
 		</where>
 		<choose>

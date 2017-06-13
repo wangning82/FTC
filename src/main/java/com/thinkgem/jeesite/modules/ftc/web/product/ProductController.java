@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
 import com.thinkgem.jeesite.modules.ftc.entity.product.*;
 import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
@@ -74,16 +75,12 @@ public class ProductController extends BaseController {
 	@RequiresPermissions("ftc:product:product:view")
 	@RequestMapping(value = "form")
 	public String form(Product product, Model model) {
-		model.addAttribute("product", product);
 
-		if(product.getCategory()!=null&&product.getCategory().getId()!=null&&product.getCategory().getId().length()>0){
-			List<Specification> specList=specificationService.findList(new Specification(product.getCategory()));
-			List<Position> positionList=positionService.findList(new Position(product.getCategory()));
 
-			model.addAttribute("specList",specList);
-			model.addAttribute("positionList",positionList);
+		if(StringUtils.isEmpty(product.getId())){
+			product.setNumber(ProductNoGenerator.INSTANCE.nextId());
 		}
-
+		model.addAttribute("product", product);
 		return "modules/ftc/product/productForm";
 	}
 

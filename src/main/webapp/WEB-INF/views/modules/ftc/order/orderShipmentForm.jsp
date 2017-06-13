@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">姓名：</label>
+			<label class="control-label">收货人：</label>
 			<div class="controls">
 				<form:input path="userName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>

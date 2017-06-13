@@ -32,17 +32,23 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="shoppingCart" action="${ctx}/ftc/order/shoppingCart/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">商品规格编号：</label>
+			<label class="control-label">商品名称：</label>
 			<div class="controls">
-				<form:input path="productSpec.productSpecNumber" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="product.name" htmlEscape="false" maxlength="64" class="input-xlarge" readonly="true"/>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">顾客ID：</label>
+			<label class="control-label">商品规格：</label>
 			<div class="controls">
-				<form:input path="customer.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="productSpec.spec.name" htmlEscape="false" maxlength="64" class="input-xlarge" readonly="true"/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">顾客：</label>
+			<div class="controls">
+				<form:input path="customer.userName" htmlEscape="false" maxlength="64" class="input-xlarge" readonly="true"/>
 			</div>
 		</div>
 		<div class="control-group">

@@ -27,11 +27,11 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
-			<li><label>商品规格：</label>
+			<li><label>商品规格编号：</label>
 				<form:input path="productSpec.productSpecNumber" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li><label>顾客：</label>
-				<form:input path="customer.id" htmlEscape="false" maxlength="64" class="input-medium"/>
+				<form:input path="customer.userName" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
