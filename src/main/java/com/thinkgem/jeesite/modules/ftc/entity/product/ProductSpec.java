@@ -49,6 +49,9 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	public ProductSpec(String id){
 		super(id);
 	}
+	public ProductSpec(Product product){
+		this.setProductId(product.getId());
+	}
 
 	@Length(min=0, max=64, message="商品规格编号长度必须介于 0 和 64 之间")
 	public String getProductSpecNumber() {

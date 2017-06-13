@@ -14,5 +14,5 @@ import com.thinkgem.jeesite.modules.ftc.entity.advert.Advert;
  */
 @MyBatisDao
 public interface AdvertDao extends CrudDao<Advert> {
-	
+	Advert getByCode(String code);
 }

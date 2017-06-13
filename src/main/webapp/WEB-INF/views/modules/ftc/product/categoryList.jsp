@@ -65,7 +65,7 @@
 				<th>排序</th>
 				<th>创建时间</th>
 				<th>备注信息</th>
-				<th>创建者</th>
+				<%--<th>创建者</th>--%>
 				<shiro:hasPermission name="ftc:product:category:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -86,14 +86,14 @@
 				{{row.sort}}
 			</td>
 			<td>
-				{{row.createTime}}
+				{{row.createDate}}
 			</td>
 			<td>
 				{{row.remarks}}
 			</td>
-			<td>
-				{{row.createBy.id}}
-			</td>
+			<%--<td>--%>
+				<%--{{row.createBy.name}}--%>
+			<%--</td>--%>
 			<shiro:hasPermission name="ftc:product:category:edit"><td>
    				<a href="${ctx}/ftc/product/category/form?id={{row.id}}">修改</a>
 				<a href="${ctx}/ftc/product/category/delete?id={{row.id}}" onclick="return confirmx('确认要删除该分类及所有子分类吗？', this.href)">删除</a>

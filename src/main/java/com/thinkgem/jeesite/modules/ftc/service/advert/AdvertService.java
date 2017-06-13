@@ -34,7 +34,11 @@ public class AdvertService extends CrudService<AdvertDao, Advert> {
 		advert.setAdvertDetailList(advertDetailDao.findList(new AdvertDetail(advert)));
 		return advert;
 	}
-	
+	public Advert getByCode(String code) {
+		Advert advert = dao.getByCode(code);
+		advert.setAdvertDetailList(advertDetailDao.findList(new AdvertDetail(advert)));
+		return advert;
+	}
 	public List<Advert> findList(Advert advert) {
 		return super.findList(advert);
 	}

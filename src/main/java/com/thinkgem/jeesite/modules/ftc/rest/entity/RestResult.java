@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.modules.ftc.entity;
+package com.thinkgem.jeesite.modules.ftc.rest.entity;
 
 import java.util.ArrayList;
 import java.util.List;

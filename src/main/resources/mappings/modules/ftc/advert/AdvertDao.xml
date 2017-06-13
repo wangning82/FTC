@@ -30,6 +30,14 @@
 		<include refid="advertJoins"/>
 		WHERE a.id = #{id}
 	</select>
+
+	<select id="getByCode" resultType="Advert">
+		SELECT
+		<include refid="advertColumns"/>
+		FROM os_advert a
+		<include refid="advertJoins"/>
+		WHERE a.code = #{code}
+	</select>
 	
 	<select id="findList" resultType="Advert">
 		SELECT 
