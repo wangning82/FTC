@@ -11,6 +11,7 @@
 		a.create_date AS "createDate",
 		a.remarks AS "remarks",
 		a.id AS "id",
+			a.del_flag AS "delFlag",
 		a.parent_id AS "parent.id",
 		a.show_in_hot AS "showInHot",
 		a.show_in_top AS "showInTop",
@@ -96,7 +97,8 @@
 			update_by,
 			page_title,
 			page_description,
-			page_keyword
+			page_keyword,
+			del_flag
 		) VALUES (
 			#{name},
 			#{type},
@@ -114,7 +116,8 @@
 			#{updateBy.id},
 			#{pageTitle},
 			#{pageDescription},
-			#{pageKeyword}
+			#{pageKeyword},
+			#{delFlag}
 		)
 	</insert>
 	
@@ -146,7 +149,7 @@
 	</update>
 	
 	<update id="delete">
-		DELETE FROM os_category
+		update os_category set del_flag=#{DEL_FLAG_DELETE}
 		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
 	</update>
 	
