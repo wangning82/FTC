@@ -1,24 +1,29 @@
 package com.thinkgem.jeesite.modules.ftc.rest.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by bingbing on 2017/6/6.
  */
 public class RestResult {
-    public static String SUCCESS="1";
     private String msg;
     private String code;
     private int count;
     private Object data;
 
-    public RestResult(String code,String msg,Object data,int count){
-      this.code=code;
-        this.msg=msg;
-        this.data=data;
-        this.count=count;
+    public RestResult(String code, String msg) {
+        this(code, msg, null, 0);
     }
+
+    public RestResult(String code, String msg, Object data) {
+        this(code, msg, data, 0);
+    }
+
+    public RestResult(String code, String msg, Object data, int count) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+        this.count = count;
+    }
+
     public String getMsg() {
         return msg;
     }
