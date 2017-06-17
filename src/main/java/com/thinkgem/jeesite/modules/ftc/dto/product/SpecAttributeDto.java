@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.ftc.dto.product;
 
+import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.SpecAttribute;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Specification;
 
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by wangqingxiang on 2017/6/17.
  */
-public class SpecAttributeDto {
+public class SpecAttributeDto extends BaseDto<SpecAttributeDto>{
     private String name;
     private String id;
 

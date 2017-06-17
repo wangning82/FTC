@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.modules.ftc.rest.entity;
+package com.thinkgem.jeesite.common.rest;
 
 /**
  * Created by bingbing on 2017/6/6.
