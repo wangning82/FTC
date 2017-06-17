@@ -1,8 +1,8 @@
 package com.thinkgem.jeesite.modules.ftc.rest.order;
 
-import com.thinkgem.jeesite.common.web.BaseRestController;
+import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
-import com.thinkgem.jeesite.modules.ftc.rest.entity.RestResult;
+import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderShipmentService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderWaybillService;

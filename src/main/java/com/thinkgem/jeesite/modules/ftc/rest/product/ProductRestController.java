@@ -1,11 +1,11 @@
 package com.thinkgem.jeesite.modules.ftc.rest.product;
 
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseRestController;
+import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.convert.ProductConvert;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
-import com.thinkgem.jeesite.modules.ftc.rest.entity.RestResult;
+import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,11 +36,12 @@ public class ProductRestController extends BaseRestController {
     /**
      * 获取商品列表，传入参数
      * 可以根据分类获取商品或模型
-     * @param product
      * @return
      */
     @RequestMapping(value = {"list", ""})
     public RestResult list(Product product, HttpServletRequest request, HttpServletResponse response) {
+
+
         Page<Product> page = productService.findPage(new Page<Product>(request, response), product);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,page);
     }

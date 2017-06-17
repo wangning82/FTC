@@ -1,8 +1,8 @@
 package com.thinkgem.jeesite.modules.ftc.rest.customer;
 
-import com.thinkgem.jeesite.common.web.BaseRestController;
+import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
-import com.thinkgem.jeesite.modules.ftc.rest.entity.RestResult;
+import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

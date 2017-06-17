@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.common.web;
+package com.thinkgem.jeesite.common.rest;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;

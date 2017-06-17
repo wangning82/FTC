@@ -93,23 +93,7 @@ public class ProductDto {
         this.clothing = clothing;
     }
     public void convert(Product product){
-        this.id=product.getId();
-        this.name=product.getName();
-        this.desc=product.getIntroduce();
-        this.price=product.getShowPrice();
-        List<ImageDto> images=new ArrayList<>();
-        for(Image image:product.getImages()){
-            ImageDto imageDto=new ImageDto();
-            imageDto.convert(image);
-        }
-        this.textures=images;
-        List<ProductSpecDto> specDtos=new ArrayList<>();
-        for(ProductSpec productSpec:product.getSpecs()){
-            ProductSpecDto dto=new ProductSpecDto();
-            dto.convert(productSpec);
-            specDtos.add(dto);
-        }
-        this.setClothing(specDtos);
+
 
 
     }

@@ -1,10 +1,10 @@
 package com.thinkgem.jeesite.modules.ftc.rest.advert;
 
-import com.thinkgem.jeesite.common.web.BaseRestController;
+import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.dto.advert.AdvertDetailDto;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.Advert;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.AdvertDetail;
-import com.thinkgem.jeesite.modules.ftc.rest.entity.RestResult;
+import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.service.advert.AdvertService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
