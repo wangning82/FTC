@@ -128,6 +128,7 @@
            class="form-horizontal">
     <form:hidden path="id"/>
     <sys:message content="${message}"/>
+    <form:hidden path="modelFlag"/>
     <div class="control-group">
         <label class="control-label">分类：</label>
         <div class="controls">

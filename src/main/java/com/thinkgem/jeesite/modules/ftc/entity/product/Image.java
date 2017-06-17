@@ -28,7 +28,25 @@ public class Image extends DataEntity<Image> {
 	private Double rotation;		// 旋转
 	private Double scale;		// 缩放
 	private String name;		// 名称
-	
+	private Double x;//横坐标
+	private Double y;//纵坐标
+
+	public Double getX() {
+		return x;
+	}
+
+	public void setX(Double x) {
+		this.x = x;
+	}
+
+	public Double getY() {
+		return y;
+	}
+
+	public void setY(Double y) {
+		this.y = y;
+	}
+
 	public Image() {
 		super();
 	}

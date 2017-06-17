@@ -16,7 +16,9 @@
 		a.info AS "info",
 		a.rotation AS "rotation",
 		a.scale AS "scale",
-		a.name AS "name"
+		a.name AS "name",
+		a.position_x AS "x",
+		a.position_y As "y"
 	</sql>
 	
 	<sql id="imageJoins">
@@ -89,7 +91,9 @@
 			info,
 			rotation,
 			scale,
-			name
+			name,
+			x,
+			y
 		) VALUES (
 			#{id},
 			#{product.id},
@@ -104,7 +108,9 @@
 			#{info},
 			#{rotation},
 			#{scale},
-			#{name}
+			#{name},
+			#{x},
+			#{y}
 		)
 	</insert>
 	

@@ -3,6 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.advert;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import org.hibernate.validator.constraints.Length;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,6 +19,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class AdvertDetail extends DataEntity<AdvertDetail> {
 	
 	private static final long serialVersionUID = 1L;
+
 	private Advert advert;		// 广告位ID 父类
 	private String title;		// 标题
 	private String sort;		// 排序
@@ -40,6 +43,7 @@ public class AdvertDetail extends DataEntity<AdvertDetail> {
 	}
 
 
+	@JsonIgnore
 	public Advert getAdvert() {
 		return advert;
 	}
@@ -74,7 +78,7 @@ public class AdvertDetail extends DataEntity<AdvertDetail> {
 	public void setHref(String href) {
 		this.href = href;
 	}
-	
+	@JsonIgnore
 	@Length(min=0, max=2, message="状态长度必须介于 0 和 2 之间")
 	public String getStatus() {
 		return status;
@@ -92,8 +96,8 @@ public class AdvertDetail extends DataEntity<AdvertDetail> {
 	public void setPicImg(String picImg) {
 		this.picImg = picImg;
 	}
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonIgnore
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getBeginTime() {
 		return beginTime;
 	}
@@ -101,8 +105,8 @@ public class AdvertDetail extends DataEntity<AdvertDetail> {
 	public void setBeginTime(Date beginTime) {
 		this.beginTime = beginTime;
 	}
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonIgnore
+//	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	public Date getEndTime() {
 		return endTime;
 	}
@@ -119,5 +123,32 @@ public class AdvertDetail extends DataEntity<AdvertDetail> {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
+	@JsonIgnore
+	@Override
+	public Date getUpdateDate() {
+		return super.getUpdateDate();
+	}
+
+	@JsonIgnore
+	@Override
+	public boolean getIsNewRecord() {
+		return super.getIsNewRecord();
+	}
+
+	@JsonIgnore
+	@Override
+	public Date getCreateDate() {
+		return super.getCreateDate();
+	}
+	@JsonIgnore
+	@Override
+	public User getCreateBy() {
+		return super.getCreateBy();
+	}
+	@JsonIgnore
+	@Override
+	public User getUpdateBy() {
+		return super.getUpdateBy();
+	}
 }

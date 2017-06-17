@@ -22,6 +22,6 @@ public class CategoryRestController extends BaseRestController {
     @RequestMapping(value = {"list", ""})
     public RestResult list(Category category, int page, int rows) {
         List<Category> categoryList = categoryService.findList(category);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,categoryList,categoryList.size());
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,categoryList);
     }
 }

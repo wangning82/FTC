@@ -23,8 +23,8 @@ public class Product extends DataEntity<Product> {
 	private String number;		// 商品编号
 	private String labelId;		// 标签ID
 	private String name;		// 商品名称
-	private String showScore;		// 显示积分
-	private String showPrice;		// 显示价格
+	private Double showScore;		// 显示积分
+	private Double showPrice;		// 显示价格
 	private String introduce;		// 商品简介
 	private String picImg;		// 展示图片
 	private String showInTop;		// 是否置顶 1=置顶/0=默认
@@ -37,8 +37,16 @@ public class Product extends DataEntity<Product> {
 	private String pageTitle;		// 页面标题
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
-
+	private String modelFlag;//是否为模型
 	private Design design;
+
+	public String getModelFlag() {
+		return modelFlag;
+	}
+
+	public void setModelFlag(String modelFlag) {
+		this.modelFlag = modelFlag;
+	}
 
 	public Design getDesign() {
 		return design;
@@ -113,19 +121,19 @@ public class Product extends DataEntity<Product> {
 	}
 	
 	@Length(min=0, max=11, message="显示积分长度必须介于 0 和 11 之间")
-	public String getShowScore() {
+	public Double getShowScore() {
 		return showScore;
 	}
 
-	public void setShowScore(String showScore) {
+	public void setShowScore(Double showScore) {
 		this.showScore = showScore;
 	}
 	
-	public String getShowPrice() {
+	public Double getShowPrice() {
 		return showPrice;
 	}
 
-	public void setShowPrice(String showPrice) {
+	public void setShowPrice(Double showPrice) {
 		this.showPrice = showPrice;
 	}
 	

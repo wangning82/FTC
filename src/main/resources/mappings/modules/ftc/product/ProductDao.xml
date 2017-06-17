@@ -28,7 +28,8 @@
 		a.remarks AS "remarks",
 		b.id AS "category.id",
 		b.name AS "category.name",
-		c.name AS "createBy.name"
+		c.name AS "createBy.name",
+		a.model_flag AS "modelFlag"
 
 	</sql>
 	
@@ -124,7 +125,8 @@
 			page_description,
 			page_keyword,
 			remarks,
-			category_id
+			category_id,
+			model_flag
 		) VALUES (
 			#{id},
 			#{number},
@@ -149,7 +151,8 @@
 			#{pageDescription},
 			#{pageKeyword},
 			#{remarks},
-			#{category.id}
+			#{category.id},
+			#{modelFlag}
 		)
 	</insert>
 	
@@ -176,7 +179,8 @@
 			page_description = #{pageDescription},
 			page_keyword = #{pageKeyword},
 			remarks = #{remarks},
-			category_id=#{category.id}
+			category_id=#{category.id},
+			model_flag=#{modelFlag}
 		WHERE id = #{id}
 	</update>
 	

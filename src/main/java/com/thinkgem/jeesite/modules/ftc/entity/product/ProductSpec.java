@@ -18,10 +18,10 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	private String productSpecNumber;		// 商品规格编号
 	private String productId;		// 商品ID
 	private SpecAttribute spec;		// 规格
-	private String stock;		// 库存
-	private String salesVolume;		// 销售量
-	private String price;		// 价格
-	private String score;		// 积分
+	private Double stock;		// 库存
+	private Double salesVolume;		// 销售量
+	private Double price;		// 价格
+	private Double score;		// 积分
 	private String defaultStatus;		// 是否默认状态：0,不默认；1,默认
 	private String status;		// 商品状态
 	private String picImg;   //图片
@@ -73,37 +73,37 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	
 
 	@Length(min=0, max=11, message="库存长度必须介于 0 和 11 之间")
-	public String getStock() {
+	public Double getStock() {
 		return stock;
 	}
 
-	public void setStock(String stock) {
+	public void setStock(Double stock) {
 		this.stock = stock;
 	}
 	
 	@Length(min=0, max=11, message="销售量长度必须介于 0 和 11 之间")
-	public String getSalesVolume() {
+	public Double getSalesVolume() {
 		return salesVolume;
 	}
 
-	public void setSalesVolume(String salesVolume) {
+	public void setSalesVolume(Double salesVolume) {
 		this.salesVolume = salesVolume;
 	}
 	
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	
 	@Length(min=0, max=11, message="积分长度必须介于 0 和 11 之间")
-	public String getScore() {
+	public Double getScore() {
 		return score;
 	}
 
-	public void setScore(String score) {
+	public void setScore(Double score) {
 		this.score = score;
 	}
 	

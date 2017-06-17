@@ -28,7 +28,7 @@ public class DesignRestController extends BaseRestController {
     public RestResult delete(Design design){
         //删除设计
         designService.delete(design);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null,0);
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
     }
     /**
      * 优秀设计
@@ -39,7 +39,7 @@ public class DesignRestController extends BaseRestController {
     public RestResult best(Design design){
         //删除设计
         List<Design> bestDesign=designService.findList(design);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign,bestDesign.size());
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
     }
     /**
      * 我的设计
@@ -50,7 +50,7 @@ public class DesignRestController extends BaseRestController {
     public RestResult mylist(Design design){
         //删除设计
         List<Design> bestDesign=designService.findList(design);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign,bestDesign.size());
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
     }
 
     /**
@@ -62,8 +62,10 @@ public class DesignRestController extends BaseRestController {
     public RestResult info(String  id){
         //删除设计
         Design design=designService.get(id);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,design,1);
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,design);
     }
+
+
 
 
 
