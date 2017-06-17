@@ -1,9 +1,9 @@
-package com.thinkgem.jeesite.modules.ftc.dto;
+package com.thinkgem.jeesite.modules.ftc.dto.advert;
 
 import com.thinkgem.jeesite.modules.ftc.entity.advert.AdvertDetail;
 
 /**
- * Created by bingbing on 2017/6/16.
+ * Created by wangqingxiang on 2017/6/16.
  */
 public class AdvertDetailDto {
     private String gid;

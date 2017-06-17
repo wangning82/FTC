@@ -1,9 +1,8 @@
-package com.thinkgem.jeesite.modules.ftc.dto;
+package com.thinkgem.jeesite.modules.ftc.dto.product;
 
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Specification;
 
 import java.util.ArrayList;
 import java.util.List;

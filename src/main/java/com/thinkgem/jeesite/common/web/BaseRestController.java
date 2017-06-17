@@ -1,11 +1,7 @@
 package com.thinkgem.jeesite.common.web;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
-import com.thinkgem.jeesite.modules.ftc.dto.ProductDto;
-import org.apache.poi.ss.formula.functions.T;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 
 /**
  * Created by wangqingxiang on 2017/6/6.

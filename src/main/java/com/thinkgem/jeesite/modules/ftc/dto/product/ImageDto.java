@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.modules.ftc.dto;
+package com.thinkgem.jeesite.modules.ftc.dto.product;
 
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 

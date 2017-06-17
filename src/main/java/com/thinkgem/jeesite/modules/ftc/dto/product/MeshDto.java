@@ -1,7 +1,4 @@
-package com.thinkgem.jeesite.modules.ftc.dto;
-
-import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+package com.thinkgem.jeesite.modules.ftc.dto.product;
 
 /**
  * Created by bingbing on 2017/6/16.

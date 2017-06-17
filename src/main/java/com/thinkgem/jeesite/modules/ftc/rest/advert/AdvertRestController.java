@@ -1,7 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.rest.advert;
 
 import com.thinkgem.jeesite.common.web.BaseRestController;
-import com.thinkgem.jeesite.modules.ftc.dto.AdvertDetailDto;
+import com.thinkgem.jeesite.modules.ftc.dto.advert.AdvertDetailDto;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.Advert;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.AdvertDetail;
 import com.thinkgem.jeesite.modules.ftc.rest.entity.RestResult;

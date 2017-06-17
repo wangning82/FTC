@@ -2,7 +2,8 @@ package com.thinkgem.jeesite.modules.ftc.rest.product;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseRestController;
-import com.thinkgem.jeesite.modules.ftc.dto.ProductDto;
+import com.thinkgem.jeesite.modules.ftc.convert.ProductConvert;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.rest.entity.RestResult;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
@@ -30,6 +31,8 @@ public class ProductRestController extends BaseRestController {
     private ProductService productService;
     @Autowired
     private ProductSpecService productSpecService;
+    @Autowired
+    private ProductConvert productConvert;
 
     /**
      * 获取商品列表，传入参数
@@ -104,16 +107,5 @@ public class ProductRestController extends BaseRestController {
         Page<Product> page = productService.findPage(new Page<Product>(request, response), product);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,page);
     }
-    private ProductDto convert(Product product){
-        ProductDto productDto=new ProductDto();
-        productDto.convert(product);
-        return productDto;
-    }
-    private List<ProductDto> convertList(List<Product> productList){
-        List<ProductDto> productDtoList=new ArrayList<>();
-        for(Product product:productList){
-           productDtoList.add( convert(product));
-        }
-        return productDtoList;
-    }
+
 }
