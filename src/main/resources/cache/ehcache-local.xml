@@ -15,13 +15,13 @@
 	
 	<!-- 集团缓存 -->
 	<cache name="corpCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
-	
-	<!-- 内容管理模块缓存 -->
-	<cache name="cmsCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
-    
-	<!-- 工作流模块缓存 -->
-	<cache name="actCache" maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true" statistics="true"/>
-	
+
+	<!-- 手机验证码缓存 -->
+	<cache name="captchaCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+
+	<!-- 令牌缓存 -->
+	<cache name="tokenCache" maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true" statistics="true"/>
+
     <!-- 简单页面缓存 -->
     <cache name="pageCachingFilter" maxEntriesLocalHeap="1000" eternal="false" timeToIdleSeconds="120"
     	timeToLiveSeconds="120" overflowToDisk="true" memoryStoreEvictionPolicy="LFU" statistics="true"/>
