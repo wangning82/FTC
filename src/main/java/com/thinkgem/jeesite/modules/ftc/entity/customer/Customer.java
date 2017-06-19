@@ -22,7 +22,7 @@ public class Customer extends DataEntity<Customer> {
 	private String userName;		// 昵称
 	private String loginPassword;		// 登录密码
 	private String salt;		// 加密密码的盐
-	private String realName;		// 真实姓名
+	private String realName;	// 真实姓名
 	private Integer sex;		// 性别
 	private Integer age;		// 年龄
 	private String picImg;		// 用户头像
@@ -30,10 +30,11 @@ public class Customer extends DataEntity<Customer> {
 	private String emailIsActive;		// 邮箱激活
 	private String email;		// 电子邮箱
 	private String telephone;		// 手机号码
+	private String shopName;    // 店铺名称
 	private Date lastLoginTime;		// 最后登录时间
 	private String lastLoginIp;		// 最后登录IP
 	private Long loginNumber;		// 登录次数
-	private Date regeistTime;		// 注册时间
+	private Date registerTime;		// 注册时间
 	private BigDecimal billBlance;		// 账户余额
 	private BigDecimal amount;		// 消费额
 	private String rankId;		// 会员等级ID
@@ -180,16 +181,16 @@ public class Customer extends DataEntity<Customer> {
 	public void setLoginNumber(Long loginNumber) {
 		this.loginNumber = loginNumber;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	public Date getRegeistTime() {
-		return regeistTime;
+	public Date getRegisterTime() {
+		return registerTime;
 	}
 
-	public void setRegeistTime(Date regeistTime) {
-		this.regeistTime = regeistTime;
+	public void setRegisterTime(Date registerTime) {
+		this.registerTime = registerTime;
 	}
-	
+
 	public BigDecimal getBillBlance() {
 		return billBlance;
 	}
@@ -240,5 +241,13 @@ public class Customer extends DataEntity<Customer> {
 	public void setWechat(String wechat) {
 		this.wechat = wechat;
 	}
-	
+
+	@Length(min=0, max=100, message="shopName长度必须介于 0 和 100 之间")
+	public String getShopName() {
+		return shopName;
+	}
+
+	public void setShopName(String shopName) {
+		this.shopName = shopName;
+	}
 }

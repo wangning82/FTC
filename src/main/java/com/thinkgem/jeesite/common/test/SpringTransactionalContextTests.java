@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
  * Spring 单元测试基类
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
  * @version 2013-05-15
  */
 @ActiveProfiles("production")
+@WebAppConfiguration
 @ContextConfiguration(locations = {"/spring-context.xml"})
 public class SpringTransactionalContextTests extends AbstractTransactionalJUnit4SpringContextTests {
 

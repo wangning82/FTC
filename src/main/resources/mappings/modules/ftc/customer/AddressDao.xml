@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.customer.AddressDao">
+    
+	<sql id="addressColumns">
+		a.id AS "id",
+		a.user_id AS "customer.id",
+		a.user_name AS "customer.userName",
+		a.user_tag AS "userTag",
+		a.user_phone AS "userPhone",
+		a.province_id AS "province.id",
+		a.province_name AS "province.name",
+		a.city_id AS "city.id",
+		a.city_name AS "city.name",
+		a.district_id AS "district.id",
+		a.district_name AS "district.name",
+		a.user_adress AS "userAdress",
+		a.user_zipcode AS "userZipcode",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<sql id="addressJoins">
+		LEFT JOIN os_customer u2 ON u2.id = a.user_id
+		LEFT JOIN sys_area a6 ON a6.id = a.province_id
+		LEFT JOIN sys_area a8 ON a8.id = a.city_id
+		LEFT JOIN sys_area a10 ON a10.id = a.district_id
+	</sql>
+    
+	<select id="get" resultType="Address">
+		SELECT 
+			<include refid="addressColumns"/>
+		FROM os_address a
+		<include refid="addressJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Address">
+		SELECT 
+			<include refid="addressColumns"/>
+		FROM os_address a
+		<include refid="addressJoins"/>
+		<where>
+			
+			<if test="customer != null and customer.userName != null and customer.userName != ''">
+				AND a.user_name = #{customer.userName}
+			</if>
+			<if test="userPhone != null and userPhone != ''">
+				AND a.user_phone = #{userPhone}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Address">
+		SELECT 
+			<include refid="addressColumns"/>
+		FROM os_address a
+		<include refid="addressJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_address(
+			id,
+			user_id,
+			user_name,
+			user_tag,
+			user_phone,
+			province_id,
+			province_name,
+			city_id,
+			city_name,
+			district_id,
+			district_name,
+			user_adress,
+			user_zipcode,
+			create_date,
+			update_date
+		) VALUES (
+			#{id},
+			#{customer.id},
+			#{customer.userName},
+			#{userTag},
+			#{userPhone},
+			#{province.id},
+			#{province.name},
+			#{city.id},
+			#{city.name},
+			#{district.id},
+			#{district.name},
+			#{userAdress},
+			#{userZipcode},
+			#{createDate},
+			#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_address SET 	
+			user_id = #{customer.id},
+			user_name = #{customer.userName},
+			user_tag = #{userTag},
+			user_phone = #{userPhone},
+			province_id = #{province.id},
+			province_name = #{province.name},
+			city_id = #{city.id},
+			city_name = #{city.name},
+			district_id = #{district.id},
+			district_name = #{district.name},
+			user_adress = #{userAdress},
+			user_zipcode = #{userZipcode},
+			create_date = #{createDate},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_address
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
