@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * Created by bingbing on 2017/6/8.
+ * Created by wangqingxiang on 2017/6/8.
  */
 @RestController
 @RequestMapping(value = "/rest/ftc/design/")
@@ -41,25 +41,13 @@ public class DesignRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
     }
     /**
-     * 我的设计
-     * @param
-     * @return
-     */
-    @RequestMapping(value = {"mylist"})
-    public RestResult mylist(Design design){
-        //删除设计
-        List<Design> bestDesign=designService.findList(design);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
-    }
-
-    /**
      * 设计明细
      * @param
      * @return
      */
     @RequestMapping(value = {"info"})
     public RestResult info(String  id){
-        //删除设计
+
         Design design=designService.get(id);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,design);
     }

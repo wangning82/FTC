@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.ftc.dto.product;
 
+import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by bingbing on 2017/6/14.
  */
-public class ProductDto {
+public class ProductDto extends BaseDto<ProductDto>{
     private String  id;//id
     private String did;
     private String name;//名称

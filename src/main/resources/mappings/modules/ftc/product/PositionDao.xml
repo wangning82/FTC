@@ -13,7 +13,13 @@
 		a.remarks AS "remarks",
 		a.id AS "id",
 		a.update_date AS "updateDate",
-		a.update_by AS "updateBy.id"
+		a.update_by AS "updateBy.id",
+		a.width AS "width",
+		a.height AS　"height",
+		a.from_x AS "fromX",
+		a.from_y AS "fromY",
+		a.scale AS "scale",
+		a.rotation AS "rotation"
 	</sql>
 
 	<sql id="positionJoins">
@@ -71,7 +77,13 @@
 		remarks,
 		id,
 		update_date,
-		update_by
+		update_by,
+		width,
+		height ,
+		from_x,
+		from_y,
+		scale,
+		rotation
 		) VALUES (
 		#{category.id},
 		#{name},
@@ -82,7 +94,15 @@
 		#{remarks},
 		#{id},
 		#{updateDate},
-		#{updateBy.id}
+		#{createDate},
+		#{remarks},
+		#{width},
+		#{height},
+		#{fromX},
+		#{fromY},
+		#{scale},
+		#{rotation}
+
 		)
 	</insert>
 
