@@ -4,9 +4,12 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.convert.ProductConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Position;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,8 @@ public class ProductRestController extends BaseRestController {
     private ProductSpecService productSpecService;
     @Autowired
     private ProductConverter productConvert;
+    @Autowired
+    private PositionService positionService;
 
     /**
      * 获取商品列表，传入参数
@@ -83,35 +88,7 @@ public class ProductRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS);
     }
 
-    /**
-     * 模型列表
-     * @param product
-     * @return
-     */
-    @RequestMapping(value = {"model"})
-    public RestResult model(Product product, HttpServletRequest request, HttpServletResponse response) {
-        //只查询是模型的数据
-        product.setModelFlag("1");
-        Page<Product> page = productService.findPage(new Page<Product>(request, response), product);
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,page);
-    }
-    /**
-     * 我要设计
-     * @param
-     * @return
-     */
-    @RequestMapping(value = {"iwant"})
-    public RestResult iWant(){
-        //我要设计，默认取第一个模型
-        Product product=new Product();
-        product.setModelFlag("1");
-        List<Product> list=productService.findList(product);
-        if(list!=null&&list.size()>0){
-            product=list.get(0);
-        }
-        return new RestResult(CODE_SUCCESS,
-                MSG_SUCCESS,productConvert.convertModelToDto(product));
-    }
+
 
 
 }

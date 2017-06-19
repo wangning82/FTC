@@ -15,7 +15,7 @@
 		a.update_date AS "updateDate",
 		a.update_by AS "updateBy.id",
 		a.width AS "width",
-		a.height AS　"height",
+		a.height AS "height",
 		a.from_x AS "fromX",
 		a.from_y AS "fromY",
 		a.scale AS "scale",
