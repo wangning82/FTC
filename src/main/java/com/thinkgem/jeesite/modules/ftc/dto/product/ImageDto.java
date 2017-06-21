@@ -8,8 +8,18 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
  */
 public class ImageDto extends BaseDto<ImageDto> {
     private String id;
-    private String imgUrl;
+    private String name;//位置id
+    private String imgUrl;//图片
+
     private MeshDto meshDto=new MeshDto();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getId() {
         return id;

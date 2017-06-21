@@ -15,6 +15,31 @@ public class DesignDto extends BaseDto<DesignDto>{
     private List<ImageDto> imageDtoList;
     private String name;
     private String number;
+    private Double price;
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
 
     public DesignDto() {
     }
