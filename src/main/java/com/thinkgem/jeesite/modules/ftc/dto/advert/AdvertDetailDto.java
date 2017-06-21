@@ -1,11 +1,12 @@
 package com.thinkgem.jeesite.modules.ftc.dto.advert;
 
+import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.AdvertDetail;
 
 /**
  * Created by wangqingxiang on 2017/6/16.
  */
-public class AdvertDetailDto {
+public class AdvertDetailDto extends BaseDto<AdvertDetailDto>{
     private String gid;
     private String imageUrl;
     private String linkUrl;
