@@ -16,6 +16,7 @@
 		a.district_name AS "district.name",
 		a.user_adress AS "userAdress",
 		a.user_zipcode AS "userZipcode",
+		a.is_default AS "isDefault",
 		a.create_date AS "createDate",
 		a.update_date AS "updateDate"
 	</sql>
@@ -41,12 +42,14 @@
 		FROM os_address a
 		<include refid="addressJoins"/>
 		<where>
-			
-			<if test="customer != null and customer.userName != null and customer.userName != ''">
-				AND a.user_name = #{customer.userName}
+			<if test="customer != null and customer.id != null and customer.id != ''">
+				AND a.user_id = #{customer.id}
 			</if>
 			<if test="userPhone != null and userPhone != ''">
 				AND a.user_phone = #{userPhone}
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				AND a.is_default = #{isDefault}
 			</if>
 		</where>
 		<choose>
@@ -90,6 +93,7 @@
 			district_name,
 			user_adress,
 			user_zipcode,
+			is_default,
 			create_date,
 			update_date
 		) VALUES (
@@ -106,6 +110,7 @@
 			#{district.name},
 			#{userAdress},
 			#{userZipcode},
+			#{isDefault},
 			#{createDate},
 			#{updateDate}
 		)
@@ -125,6 +130,7 @@
 			district_name = #{district.name},
 			user_adress = #{userAdress},
 			user_zipcode = #{userZipcode},
+			is_default = #{isDefault},
 			create_date = #{createDate},
 			update_date = #{updateDate}
 		WHERE id = #{id}

@@ -3,13 +3,9 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.customer;
 
-import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
-import org.hibernate.validator.constraints.Length;
-import com.thinkgem.jeesite.modules.sys.entity.Area;
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.sys.entity.Area;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 收货地址Entity
@@ -27,6 +23,7 @@ public class Address extends DataEntity<Address> {
 	private Area district;		// 区域ID
 	private String userAdress;		// 详细地址
 	private String userZipcode;		// 邮政编码
+	private String isDefault;  // 是否默认
 
 	public Address() {
 		super();
@@ -95,5 +92,20 @@ public class Address extends DataEntity<Address> {
 	public void setUserZipcode(String userZipcode) {
 		this.userZipcode = userZipcode;
 	}
-	
+
+	public String getIsDefault() {
+		return isDefault;
+	}
+
+	public void setIsDefault(String isDefault) {
+		this.isDefault = isDefault;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 }

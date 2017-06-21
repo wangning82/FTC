@@ -30,7 +30,9 @@ public class Customer extends DataEntity<Customer> {
 	private String emailIsActive;		// 邮箱激活
 	private String email;		// 电子邮箱
 	private String telephone;		// 手机号码
+	private String signature;  // 用户签名
 	private String shopName;    // 店铺名称
+	private String shopBackground; // 店铺背景图
 	private Date lastLoginTime;		// 最后登录时间
 	private String lastLoginIp;		// 最后登录IP
 	private Long loginNumber;		// 登录次数
@@ -249,5 +251,21 @@ public class Customer extends DataEntity<Customer> {
 
 	public void setShopName(String shopName) {
 		this.shopName = shopName;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public String getShopBackground() {
+		return shopBackground;
+	}
+
+	public void setShopBackground(String shopBackground) {
+		this.shopBackground = shopBackground;
 	}
 }
