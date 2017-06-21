@@ -77,19 +77,21 @@ public class SpecificationService extends CrudService<SpecificationDao, Specific
 	}
 
 	public List<Specification> findByCategory(Category category){
-		List<Specification> specificationList=new ArrayList<>();
+		List<Specification> specificationList=findList(new Specification(category));
 		String parentIds=category.getParentIds();
-		if(parentIds.length()==0){
+		if(parentIds==null||parentIds.length()==0){
 			category=categoryDao.get(category);
+			parentIds=category.getParentIds();
 		}
+
 		for(String parentId:parentIds.split(",")){
 			if(parentId==null||parentId.length()==0){
 				continue;
 			}
 			Specification s=new Specification();
-			s.setCategory(category);
+			s.setCategory(new Category(parentId));
 			List<Specification> specifications=findList(s);
-			specifications.addAll(specifications);
+			specificationList.addAll(specifications);
 		}
 		return  specificationList;
 

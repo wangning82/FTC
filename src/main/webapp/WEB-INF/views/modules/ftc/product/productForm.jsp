@@ -85,7 +85,7 @@
                         html += "<tr>";
                         html += "<td><label class='control-label'>" + spec.name + "：</label></td>";
                         $.each(spec.specAttributeList, function (index, attribute) {
-                            html += "<td><input type='radio' name='" + spec.id + "'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>" + attribute.name + "</td>"
+                            html += "<td><input type='radio' father='"+spec.name+"' name='" + spec.id + "'title='" + attribute.name + "' value='" + attribute.id + "' style='margin-left: 30px'/>" + attribute.name + "</td>"
 
                         });
                         html += "</tr>";
@@ -102,10 +102,10 @@
             $(":radio[checked]").each(function (index, element) {
                 if (ids.length == 0) {
                     ids += element.value;
-                    names += element.title;
+                    names += $(element).attr("father")+":"+element.title;
                 } else {
                     ids += "," + element.value;
-                    names += "," + element.title;
+                    names += "," +$(element).attr("father")+":"+ element.title;
                 }
 
 

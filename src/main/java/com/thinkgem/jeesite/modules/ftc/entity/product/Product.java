@@ -120,7 +120,6 @@ public class Product extends DataEntity<Product> {
 		this.name = name;
 	}
 	
-	@Length(min=0, max=11, message="显示积分长度必须介于 0 和 11 之间")
 	public Double getShowScore() {
 		return showScore;
 	}

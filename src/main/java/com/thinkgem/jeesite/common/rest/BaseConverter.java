@@ -19,16 +19,21 @@ public class BaseConverter <T extends DataEntity<T>,D extends BaseDto>{
     }
     public List<D> convertListFromModelToDto(List<T> modelList){
         List<D> dtoList=new ArrayList<D>();
-        for(T model:modelList){
-            dtoList.add( convertModelToDto(model));
+        if(modelList!=null&&modelList.size()>0){
+            for(T model:modelList){
+                dtoList.add( convertModelToDto(model));
+            }
         }
         return dtoList;
     }
     public List<T> convertListFromDtoToModel(List<D>dtoList){
         List<T> modelList=new ArrayList<T>();
-        for(D d:dtoList){
-            modelList.add( convertDtoToModel(d));
+        if(dtoList!=null&&dtoList.size()>0){
+            for(D d:dtoList){
+                modelList.add( convertDtoToModel(d));
+            }
         }
+
         return modelList;
     }
 }

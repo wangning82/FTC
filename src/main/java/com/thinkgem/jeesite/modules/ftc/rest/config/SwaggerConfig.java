@@ -14,8 +14,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.thinkgem.jeesite.modules.ftc.rest.customer"})
+@ComponentScan(basePackages = {"com.thinkgem.jeesite.modules.ftc.rest"})
 public class SwaggerConfig {
+
 	
    @Bean
     public Docket platformApi() {

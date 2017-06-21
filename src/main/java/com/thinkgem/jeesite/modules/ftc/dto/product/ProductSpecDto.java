@@ -1,11 +1,12 @@
 package com.thinkgem.jeesite.modules.ftc.dto.product;
 
+import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 
 /**
  * Created by wangqignxiang on 2017/6/17.
  */
-public class ProductSpecDto {
+public class ProductSpecDto extends BaseDto<ProductSpecDto>{
     private String id;
     private String name;
     private String value;

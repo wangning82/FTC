@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.modules.ftc.convert;
+package com.thinkgem.jeesite.modules.ftc.convert.product;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.product.SpecAttributeDto;

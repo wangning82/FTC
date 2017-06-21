@@ -20,7 +20,7 @@ public class ProductDto extends BaseDto<ProductDto>{
     private int  count;//库存
     private boolean open;
     List<ImageDto> textures;//图片
-    List<ProductSpecDto> clothing;//规格
+    List<ProductSpecDto> attrs;//规格
 
     public String getId() {
         return id;
@@ -86,16 +86,11 @@ public class ProductDto extends BaseDto<ProductDto>{
         this.textures = textures;
     }
 
-    public List<ProductSpecDto> getClothing() {
-        return clothing;
+    public List<ProductSpecDto> getAttrs() {
+        return attrs;
     }
 
-    public void setClothing(List<ProductSpecDto> clothing) {
-        this.clothing = clothing;
-    }
-    public void convert(Product product){
-
-
-
+    public void setAttrs(List<ProductSpecDto> attrs) {
+        this.attrs = attrs;
     }
 }

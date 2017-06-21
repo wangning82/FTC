@@ -6,10 +6,10 @@ package com.thinkgem.jeesite.modules.ftc.dto.product;
 public class MeshDto {
     private String name;
     private ImageDto texture;
-    private double x;
-    private double y;
-    private double rotation;
-    private double scale;
+    private Double x;
+    private Double y;
+    private Double rotation;
+    private Double scale;
 
     public String getName() {
         return name;
@@ -27,23 +27,23 @@ public class MeshDto {
         this.texture = texture;
     }
 
-    public double getX() {
+    public Double getX() {
         return x;
     }
 
-    public void setX(double x) {
+    public void setX(Double x) {
         this.x = x;
     }
 
-    public double getY() {
+    public Double getY() {
         return y;
     }
 
-    public void setY(double y) {
+    public void setY(Double y) {
         this.y = y;
     }
 
-    public double getRotation() {
+    public Double getRotation() {
         return rotation;
     }
 
@@ -51,11 +51,11 @@ public class MeshDto {
         this.rotation = rotation;
     }
 
-    public double getScale() {
+    public Double getScale() {
         return scale;
     }
 
-    public void setScale(double scale) {
+    public void setScale(Double scale) {
         this.scale = scale;
     }
 
