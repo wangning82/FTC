@@ -10,6 +10,7 @@ import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
@@ -36,6 +37,8 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	private ImageDao imageDao;
 	@Autowired
 	private ProductDao productDao;
+	@Autowired
+	private ProductSpecDao productSpecDao;
 	public Design get(String id) {
 		Design design=super.get(id);
 		Image image=new Image();
@@ -66,7 +69,8 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	@Transactional(readOnly = false)
 	public void saveForRest(Design design){
 		List<Image> images=design.getImages();
-		super.save(design);
+		List<ProductSpec> specs=design.getProduct().getSpecs();
+
 		//获取modelid,复制model信息为新的商品
 		String modelId=design.getProduct().getId();
 
@@ -74,8 +78,13 @@ public class DesignService extends CrudService<DesignDao, Design> {
 		//复制product
 		Product product=productDao.get(modelId);
 		product.setId(IdGen.uuid());
+		product.setNumber(ProductNoGenerator.INSTANCE.nextId());
 		productDao.insert(product);
 
+		design.setCode(ProductNoGenerator.INSTANCE.nextId());
+		design.setDesignStatus("0");
+		//保存设计
+		super.save(design);
 
 		//保存商品图片
 		for(Image image:images){
@@ -89,7 +98,19 @@ public class DesignService extends CrudService<DesignDao, Design> {
 
 
 		//保存图片到规格小图
+		for(ProductSpec spec:specs){
+			ProductSpec modelSpec=productSpecDao.get(spec.getId());
+			ProductSpec productSpec=new ProductSpec();
+			productSpec.setProductId(product.getId());
+			productSpec.setSpec(modelSpec.getSpec());
+			productSpec.setProductSpecNumber(ProductNoGenerator.INSTANCE.nextId());
+			productSpec.setPrice(modelSpec.getPrice());
+			productSpec.setPicImg(spec.getPicImg());
+			productSpec.setScore(modelSpec.getScore());
+			productSpec.setStock(modelSpec.getStock());
+			productSpec.setId(IdGen.uuid());
+			productSpecDao.insert(productSpec);
+		}
 
-		//保存设计图片
 	}
 }

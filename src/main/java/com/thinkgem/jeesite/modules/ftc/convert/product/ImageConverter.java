@@ -29,7 +29,7 @@ public class ImageConverter extends BaseConverter<Image,ImageDto> {
         Image image=new Image();
         image.setUrl(dto.getImgUrl());
         image.setRotation(dto.getMeshDto().getRotation());
-        image.setPosition(new Position(dto.getName()));
+        image.setPosition(new Position(dto.getMeshDto().getId()));
         image.setX(dto.getMeshDto().getX());
         image.setY(dto.getMeshDto().getY());
         image.setScale(dto.getMeshDto().getScale());

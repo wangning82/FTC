@@ -4,6 +4,7 @@ import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 import com.thinkgem.jeesite.modules.ftc.service.product.CategoryService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/rest/ftc/category/")
+@Api(value = "分类管理", description = "获取分类信息")
 public class CategoryRestController extends BaseRestController {
     @Autowired
     private CategoryService categoryService;

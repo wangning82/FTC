@@ -49,6 +49,9 @@
 			<if test="product != null and product != '' and product.id != null and product.id != ''">
 				AND a.product_id = #{product.id}
 			</if>
+			<if test="design != null and design.id != null and design.id != ''">
+				AND a.design_id = #{design.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -92,8 +95,8 @@
 			rotation,
 			scale,
 			name,
-			x,
-			y
+			position_x,
+			position_y
 		) VALUES (
 			#{id},
 			#{product.id},

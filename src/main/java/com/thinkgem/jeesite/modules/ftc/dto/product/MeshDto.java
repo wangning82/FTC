@@ -4,12 +4,21 @@ package com.thinkgem.jeesite.modules.ftc.dto.product;
  * Created by bingbing on 2017/6/16.
  */
 public class MeshDto {
-    private String name;
-    private ImageDto texture;
+    private String id;//位置id
+    private String name;//位置
+    private ImageDto texture;//图片
     private Double x;
     private Double y;
     private Double rotation;
     private Double scale;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

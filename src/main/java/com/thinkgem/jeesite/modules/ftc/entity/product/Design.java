@@ -4,6 +4,8 @@
 package com.thinkgem.jeesite.modules.ftc.entity.product;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.sys.entity.User;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
@@ -22,6 +24,15 @@ public class Design extends DataEntity<Design> {
 	private Double price;		// 设计费
 	private String designStatus;		// 状态
 	private List<Image> images;
+	private Customer customer;
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 
 	public Design() {
 		super();

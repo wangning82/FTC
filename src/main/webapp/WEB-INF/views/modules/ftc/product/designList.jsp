@@ -69,13 +69,13 @@
 					${design.price}
 				</td>
 				<td>
-					${design.createBy.name}
+					${design.customer.userName}
 				</td>
 				<td>
 					<fmt:formatDate value="${design.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
-					${design.designStatus}
+						${fns:getDictLabel(design.designStatus, 'ftc_product_design_status', '')}
 				</td>
 				<shiro:hasPermission name="ftc:product:design:edit"><td>
     				<a href="${ctx}/ftc/product/design/form?id=${design.id}">修改</a>

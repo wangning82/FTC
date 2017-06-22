@@ -72,7 +72,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
 			design.setCode(ProductNoGenerator.INSTANCE.nextId());
 			design.setName(product.getName());
 			design.setDesignStatus("0");;
-			design.setPrice("0");
+			design.setPrice(0d);
 			design.setProduct(product);
 			design.preInsert();
 			designDao.insert(design);

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao">
-    
-	<sql id="designColumns">
+
+    <sql id="designColumns">
 		a.id AS "id",
 		a.name AS "name",
 		a.code AS "code",
@@ -15,79 +15,80 @@
 		a.del_flag AS "delFlag",
 		a.design_status AS "designStatus",
 		b.name AS "product.name",
-		d.user_name AS "createBy.name"
+		d.user_name AS "customer.userName",
+		a.customer_id As "customer.id"
 	</sql>
-	
-	<sql id="designJoins">
+
+    <sql id="designJoins">
 
 		left join os_product b on a.product_id =b.id
-		LEFT JOIN os_customer d ON d.id = a.create_by
+		LEFT JOIN os_customer d ON d.id = a.customer_id
 	</sql>
-    
-	<select id="get" resultType="Design">
-		SELECT 
-			<include refid="designColumns"/>
-		FROM os_product_design a
-		<include refid="designJoins"/>
-		WHERE a.id = #{id}
-	</select>
-	<select id="findByProductId" resultType="Design">
-		SELECT
-		<include refid="designColumns"/>
-		FROM os_product_design a
-		<include refid="designJoins"/>
-		WHERE a.product_id = #{id}
-	</select>
-	
-	<select id="findList" resultType="Design">
-		SELECT 
-			<include refid="designColumns"/>
-		FROM os_product_design a
-		<include refid="designJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
-			</if>
-			<if test="code != null and code != ''">
-				AND a.code = #{code}
-			</if>
-			<if test="createBy != null and createBy.id != null and createBy.id != ''">
-				AND a.create_by = #{createBy.id}
-			</if>
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
 
-	<select id="findAllList" resultType="Design">
-		SELECT 
-			<include refid="designColumns"/>
-		FROM os_product_design a
-		<include refid="designJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<insert id="insert">
+    <select id="get" resultType="Design">
+        SELECT
+        <include refid="designColumns"/>
+        FROM os_product_design a
+        <include refid="designJoins"/>
+        WHERE a.id = #{id}
+    </select>
+    <select id="findByProductId" resultType="Design">
+        SELECT
+        <include refid="designColumns"/>
+        FROM os_product_design a
+        <include refid="designJoins"/>
+        WHERE a.product_id = #{id}
+    </select>
+
+    <select id="findList" resultType="Design">
+        SELECT
+        <include refid="designColumns"/>
+        FROM os_product_design a
+        <include refid="designJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+                <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+            </if>
+            <if test="code != null and code != ''">
+                AND a.code = #{code}
+            </if>
+            <if test="customer != null and customer.id != null and customer.id != ''">
+                AND a.customer_id = #{customer.id}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="Design">
+        SELECT
+        <include refid="designColumns"/>
+        FROM os_product_design a
+        <include refid="designJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
 		INSERT INTO os_product_design(
 			id,
 			name,
@@ -99,23 +100,25 @@
 			update_by,
 			update_date,
 			del_flag,
-			design_status
+			design_status,
+			customer_id
 		) VALUES (
 			#{id},
 			#{name},
 			#{code},
 			#{product.id},
 			#{price},
-			#{createBy.id},
-			#{createDate},
-			#{updateBy.id},
+            #{createBy.id},
+            #{createDate},
+            #{updateBy.id},
 			#{updateDate},
 			#{delFlag},
-			#{designStatus}
+			#{designStatus},
+			#{customer.id}
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE os_product_design SET 	
 			name = #{name},
 			code = #{code},
@@ -126,11 +129,11 @@
 			design_status = #{designStatus}
 		WHERE id = #{id}
 	</update>
-	
-	<update id="delete">
+
+    <update id="delete">
 		UPDATE os_product_design SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
+
 </mapper>
