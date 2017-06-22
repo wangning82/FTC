@@ -3,11 +3,8 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.order;
 
-import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
-import com.thinkgem.jeesite.modules.ftc.entity.order.OrderShipment;
-import org.hibernate.validator.constraints.Length;
-
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * 运单Entity

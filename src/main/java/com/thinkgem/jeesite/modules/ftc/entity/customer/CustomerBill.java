@@ -3,12 +3,11 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.customer;
 
-import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
-import java.math.BigDecimal;
 import org.hibernate.validator.constraints.Length;
 
-import com.thinkgem.jeesite.common.persistence.DataEntity;
+import java.math.BigDecimal;
 
 /**
  * 账单Entity
