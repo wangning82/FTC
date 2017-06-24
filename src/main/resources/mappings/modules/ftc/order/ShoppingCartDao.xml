@@ -12,13 +12,18 @@
 		a.check_status AS "checkStatus",
 		b.user_name AS "customer.userName",
 		c.spec_name AS "productSpec.spec.name",
-		d.name AS "product.name"
+		c.price AS "productSpec.price",
+		d.name AS "product.name",
+		d.product_number AS "product.number",
+		d.pic_img AS "product.picImg",
+		e.price AS "product.design.price"
 	</sql>
 	
 	<sql id="shoppingCartJoins">
 		LEFT JOIN os_customer b ON b.id = a.customer_id
 		LEFT JOIN os_product_specification c ON c.product_spec_number = a.product_spec_number
 		LEFT JOIN os_product d ON d.id = c.product_id
+		LEFT JOIN os_product_design e ON e.product_id = d.id
 	</sql>
     
 	<select id="get" resultType="ShoppingCart">

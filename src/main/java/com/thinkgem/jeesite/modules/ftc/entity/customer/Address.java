@@ -16,6 +16,7 @@ public class Address extends DataEntity<Address> {
 	
 	private static final long serialVersionUID = 1L;
 	private Customer customer;		// 用户ID
+	private String userName;  // 收件人姓名
 	private String userTag;		// 地址标签
 	private String userPhone;		// 手机号码
 	private Area province;		// 省份ID
@@ -107,5 +108,13 @@ public class Address extends DataEntity<Address> {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 }

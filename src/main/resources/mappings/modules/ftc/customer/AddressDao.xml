@@ -5,7 +5,7 @@
 	<sql id="addressColumns">
 		a.id AS "id",
 		a.user_id AS "customer.id",
-		a.user_name AS "customer.userName",
+		a.user_name AS "userName",
 		a.user_tag AS "userTag",
 		a.user_phone AS "userPhone",
 		a.province_id AS "province.id",

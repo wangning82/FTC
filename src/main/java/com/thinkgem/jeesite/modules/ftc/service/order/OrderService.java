@@ -9,9 +9,18 @@ import java.util.List;
 
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.utils.OrderNoGenerator;
+import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.OrderStatusEnum;
+import com.thinkgem.jeesite.modules.ftc.constant.ShipmentAmountEnum;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
+import com.thinkgem.jeesite.modules.ftc.entity.order.OrderShipment;
 import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
+import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
+import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerBillService;
+import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +47,18 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
 	@Autowired
 	private ShoppingCartService shoppingCartService;
+
+	@Autowired
+	private AddressService addressService;
+
+	@Autowired
+	private OrderShipmentService orderShipmentService;
+
+	@Autowired
+	private CustomerService customerService;
+
+	@Autowired
+	private CustomerBillService customerBillService;
 	
 	public Order get(String id) {
 		Order order = super.get(id);
@@ -115,13 +136,82 @@ public class OrderService extends CrudService<OrderDao, Order> {
 			orderProduct.setDesign(shoppingCart.getProduct().getDesign());
 			orderProduct.setDesignPrice(new BigDecimal(shoppingCart.getProduct().getDesign().getPrice()));
 			orderProduct.setDesignAmount(new BigDecimal(shoppingCart.getProduct().getDesign().getPrice()).multiply(shoppingCart.getBuyNumber()));
-
-
+			orderProduct.setPrice(orderProduct.getProductAmount().add(orderProduct.getDesignAmount()));
+			orderProduct.setCommentStatus(FlagEnum.Flag_NO.getValue());
+			orderProduct.preInsert();
+			orderProductDao.insert(orderProduct);
 			shoppingCartService.delete(shoppingCart); // 删除购物车
 		}
 
 	}
 
+	/**
+	 * 订单确认
+	 * @param customer
+	 * @param orderNo
+	 * @param addressId
+	 * @param invoiceType
+	 * @param invoiceTitle
+	 * @param shipmentTime 配送时间
+	 * @param shipmentType 配送方式
+	 */
+	@Transactional(readOnly = false)
+	public void confirmOrder(Customer customer, String orderNo, String addressId, String invoiceType, String invoiceTitle, String shipmentTime, String shipmentType) {
+		Order param = new Order();
+		param.setOrderNo(orderNo);
+		List<Order> result = this.findList(param);
+		if(CollectionUtils.isNotEmpty(result)){
+			Order order = result.get(0);
+			BigDecimal orderAmount = BigDecimal.ZERO;
+			BigDecimal buyNumber = BigDecimal.ZERO;
+			OrderProduct orderProductParam = new OrderProduct();
+			orderProductParam.setOrder(order);
+			List<OrderProduct> orderProductList = orderProductDao.findList(orderProductParam);
+			for(OrderProduct orderProduct : orderProductList){
+				orderAmount = orderAmount.add(orderProduct.getPrice());
+				buyNumber = buyNumber.add(orderProduct.getBuyNumber());
+			}
+			order.setBuyNumber(buyNumber);
+			order.setInvoiceType(invoiceType);
+			order.setInvoiceTitle(invoiceTitle);
+			order.setShipmentTime(shipmentTime);
+			order.setShipmentType(shipmentType);
+			order.setOrderAmount(orderAmount.add(ShipmentAmountEnum.INSTANCE.getAmount(shipmentType)));
+			super.save(order);
+
+			Address address = addressService.get(addressId);
+			OrderShipment orderShipment = new OrderShipment();
+			orderShipment.setOrder(order);
+			orderShipment.setUserName(address.getUserName());
+			orderShipment.setUserPhone(address.getUserPhone());
+			orderShipment.setProvinceId(address.getProvince().getId());
+			orderShipment.setProvinceName(address.getProvince().getName());
+			orderShipment.setCityId(address.getCity().getId());
+			orderShipment.setCityName(address.getCity().getName());
+			orderShipment.setDistrictId(address.getDistrict().getId());
+			orderShipment.setDistrictName(address.getDistrict().getName());
+			orderShipment.setUserAdress(address.getUserAdress());
+			orderShipment.setUserZipcode(Integer.parseInt(address.getUserZipcode()));
+			orderShipmentService.save(orderShipment);
+		}
+	}
+
+	@Transactional(readOnly = false)
+	public void payOrder(Customer customer, String orderNo, String payType){
+		Order param = new Order();
+		param.setOrderNo(orderNo);
+		List<Order> result = this.findList(param);
+		if(CollectionUtils.isNotEmpty(result)){
+			Order order = result.get(0);
+			order.setPayAmount(order.getOrderAmount());
+			order.setOrderStatus(OrderStatusEnum.ORDER_STATUS_FORDELIVERYED.getValue());
+			super.save(order);
+
+			CustomerBill customerBill = new CustomerBill();
+			customerBill.setCustomer(customer);
+
+		}
+	}
 
 
 }
