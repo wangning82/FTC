@@ -3,6 +3,9 @@ package com.thinkgem.jeesite.common.rest;
 import com.thinkgem.jeesite.common.utils.EhCacheUtils;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by wangqingxiang on 2017/6/6.
  */
@@ -11,6 +14,8 @@ public class BaseRestController {
     public static String CODE_ERROR = "2";
     public static String CODE_NULL = "3";
     public static String MSG_SUCCESS = "成功";
+
+    protected int expires = 7200; // 凭证有效时间（2小时），单位：秒
 
     protected static final String CAPTCHA_CACHE = "captchaCache"; // 短信验证码缓存
     protected static final String TOKEN_CACHE = "tokenCache"; // 接口令牌缓存
@@ -40,7 +45,24 @@ public class BaseRestController {
      * @return
      */
     protected Customer findCustomerByToken(String token){
-        return (Customer)EhCacheUtils.get(TOKEN_CACHE, token);
+        Customer customer = (Customer) EhCacheUtils.get(TOKEN_CACHE, token);
+        if(customer != null){
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(customer.getExpiresTime());
+            calendar.add(Calendar.SECOND, expires);
+
+            Calendar now = Calendar.getInstance();
+            now.setTime(new Date());
+
+            if(calendar.before(now)){
+                EhCacheUtils.remove(TOKEN_CACHE, token);
+                return null;
+            }else{
+                return (Customer)EhCacheUtils.get(TOKEN_CACHE, token);
+            }
+        }else{
+            return null;
+        }
     }
 
 }

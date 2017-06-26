@@ -43,6 +43,9 @@ public class Customer extends DataEntity<Customer> {
 	private BigDecimal score;		// 会员积分
 	private String qq;		// qq
 	private String wechat;		// wechat
+
+	private String accessToken; // 令牌
+	private Date expiresTime; // 令牌有效时间
 	
 	public Customer() {
 		super();
@@ -267,5 +270,21 @@ public class Customer extends DataEntity<Customer> {
 
 	public void setShopBackground(String shopBackground) {
 		this.shopBackground = shopBackground;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public Date getExpiresTime() {
+		return expiresTime;
+	}
+
+	public void setExpiresTime(Date expiresTime) {
+		this.expiresTime = expiresTime;
 	}
 }

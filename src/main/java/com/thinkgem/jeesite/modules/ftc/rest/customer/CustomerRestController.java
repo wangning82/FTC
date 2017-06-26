@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -99,7 +100,10 @@ public class CustomerRestController extends BaseRestController {
         if (CollectionUtils.isNotEmpty(result)) {
             Customer customer = result.get(0);
             if (password.equals(customer.getLoginPassword())) {
-                EhCacheUtils.put(TOKEN_CACHE, UUID.randomUUID().toString(), customer);
+                String token = UUID.randomUUID().toString();
+                customer.setAccessToken(token);
+                customer.setExpiresTime(new Date());
+                EhCacheUtils.put(TOKEN_CACHE, token, customer);
                 return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customer);
             } else {
                 return new RestResult(CODE_ERROR, "用户密码不正确");
