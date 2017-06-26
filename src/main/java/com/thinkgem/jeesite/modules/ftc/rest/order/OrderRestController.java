@@ -61,7 +61,7 @@ public class OrderRestController extends BaseRestController {
             cartService.save(shoppingCart);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
     }
@@ -82,7 +82,7 @@ public class OrderRestController extends BaseRestController {
             List<ShoppingCart> result = cartService.findList(param);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, result);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
     }
@@ -102,7 +102,7 @@ public class OrderRestController extends BaseRestController {
             Order order = orderService.createOrder(customer, cartIds);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, order);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
     }
@@ -123,7 +123,7 @@ public class OrderRestController extends BaseRestController {
             List<Order> result = orderService.findList(param);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, result);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
     }
 
@@ -142,7 +142,7 @@ public class OrderRestController extends BaseRestController {
             orderService.cancelOrder(customer, orderNo);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
     }
 
@@ -171,7 +171,7 @@ public class OrderRestController extends BaseRestController {
             orderService.confirmOrder(customer, orderNo, addressId, invoiceType, invoiceTitle, shipmentTime, shipmentType);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
     }
 
@@ -193,7 +193,7 @@ public class OrderRestController extends BaseRestController {
             orderService.payOrder(customer, orderNo, payType);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
     }
@@ -221,7 +221,7 @@ public class OrderRestController extends BaseRestController {
                 return new RestResult(CODE_ERROR, "没有找到运单信息！");
             }
         } else {
-            return new RestResult(CODE_ERROR, "用户访问超时，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
     }
 

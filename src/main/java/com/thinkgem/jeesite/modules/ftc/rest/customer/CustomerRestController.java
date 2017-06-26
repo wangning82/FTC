@@ -154,7 +154,7 @@ public class CustomerRestController extends BaseRestController {
     public RestResult updateCustomer(@RequestParam("token") String token, Customer customer) {
         Customer loginCustomer = findCustomerByToken(token);
         if (loginCustomer == null) {
-            return new RestResult(CODE_ERROR, "令牌无效，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             customerService.save(customer);
             EhCacheUtils.put(TOKEN_CACHE, token, customer);
@@ -174,7 +174,7 @@ public class CustomerRestController extends BaseRestController {
     public RestResult findAddressList(@RequestParam("token") String token){
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
-            return new RestResult(CODE_ERROR, "令牌无效，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             Address param = new Address();
             param.setCustomer(customer);
@@ -188,7 +188,7 @@ public class CustomerRestController extends BaseRestController {
     public RestResult findDefualtAddress(@RequestParam("token") String token){
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
-            return new RestResult(CODE_ERROR, "令牌无效，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             Address param = new Address();
             param.setCustomer(customer);
@@ -202,12 +202,12 @@ public class CustomerRestController extends BaseRestController {
         }
     }
 
-    @ApiOperation(value = "保存收货地址列表", notes = "用户新建或修改收货地址时使用，修改时需要地址标识。")
+    @ApiOperation(value = "保存收货地址", notes = "用户新建或修改收货地址时使用，修改时需要地址标识。")
     @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST})
     public RestResult saveAddress(@RequestParam("token") String token, Address address){
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
-            return new RestResult(CODE_ERROR, "令牌无效，请重新登录！");
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             addressService.save(address);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
