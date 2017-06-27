@@ -67,8 +67,8 @@
 		<div class="control-group">
 			<label class="control-label">分类：</label>
 			<div class="controls">
-				<sys:treeselect id="category" name="category.id" value="${category.id}" labelName="" labelValue="${category.name}"
-								title="分类" url="/ftc/product/category/treeData" extId="${category.id}" cssClass="" allowClear="true"/>
+				<sys:treeselect id="category" name="category.id" value="${specification.category.id}" labelName="" labelValue="${specification.category.name}"
+								title="分类" url="/ftc/product/category/treeData" extId="${specification.category.id}" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">

@@ -56,7 +56,7 @@ public class MeshDto {
         return rotation;
     }
 
-    public void setRotation(double rotation) {
+    public void setRotation(Double rotation) {
         this.rotation = rotation;
     }
 

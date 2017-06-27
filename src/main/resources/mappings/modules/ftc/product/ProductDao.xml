@@ -185,8 +185,16 @@
 	</update>
 	
 	<update id="delete">
-		DELETE FROM os_product
+		update  os_product
+		set del_flag=#{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-
+	<update id="upShelve">
+		update os_product set show_in_shelve="1"
+		WHERE id = #{id}
+	</update>
+	<update id="downShelve">
+		update os_product set show_in_shelve="2"
+		WHERE id = #{id}
+	</update>
 </mapper>

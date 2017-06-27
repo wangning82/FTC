@@ -85,4 +85,7 @@ public enum ProductNoGenerator {
         final ProductNoGenerator generator = ProductNoGenerator.INSTANCE;
         System.out.println(generator.nextId());
     }
+    public static String getNo(){
+        return  ProductNoGenerator.INSTANCE.nextId();
+    }
 }

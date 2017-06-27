@@ -14,5 +14,6 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
  */
 @MyBatisDao
 public interface ProductDao extends CrudDao<Product> {
-	
+    public void upShelve(Product product);
+    public void downShelve(Product product);
 }

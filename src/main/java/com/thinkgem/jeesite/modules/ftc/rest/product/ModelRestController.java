@@ -79,7 +79,7 @@ public class ModelRestController extends BaseRestController {
         Category category=product.getCategory();
         List<Position> positionList =positionService.findList(new Position(category));
         List<PositionDto> positionDtoList=positionConverter.convertListFromModelToDto(positionList);
-        dto.setPositionList(positionDtoList);
+        dto.setSprites(positionDtoList);
         return new RestResult(CODE_SUCCESS,
                 MSG_SUCCESS,dto);
     }

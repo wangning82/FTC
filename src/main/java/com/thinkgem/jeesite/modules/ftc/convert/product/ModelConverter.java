@@ -34,7 +34,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
 
         List<ProductSpecDto> specDtos=
                 productSpecConverter.convertListFromModelToDto(model.getSpecs());
-        d.setSpecList(specDtos);
+        d.setAttrs(specDtos);
         return d;
     }
 
@@ -42,7 +42,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
     public Product convertDtoToModel(ModelDto dto) {
         Product model=new Product();
         model.setId(dto.getId());
-        List<ProductSpec> productSpecList=productSpecConverter.convertListFromDtoToModel(dto.getSpecList());
+        List<ProductSpec> productSpecList=productSpecConverter.convertListFromDtoToModel(dto.getAttrs());
         model.setSpecs(productSpecList);
         return model;
     }

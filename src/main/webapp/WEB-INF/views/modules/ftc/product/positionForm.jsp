@@ -47,6 +47,42 @@
 			</div>
 		</div>
 		<div class="control-group">
+			<label class="control-label">宽度：</label>
+			<div class="controls">
+				<form:input path="width" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">高度：</label>
+			<div class="controls">
+				<form:input path="height" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">X坐标：</label>
+			<div class="controls">
+				<form:input path="fromX" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">Y坐标：</label>
+			<div class="controls">
+				<form:input path="fromY" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">缩放：</label>
+			<div class="controls">
+				<form:input path="scale" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">旋转：</label>
+			<div class="controls">
+				<form:input path="rotation" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
 			<label class="control-label">排序：</label>
 			<div class="controls">
 				<form:input path="sort" htmlEscape="false" maxlength="9" class="input-xlarge "/>

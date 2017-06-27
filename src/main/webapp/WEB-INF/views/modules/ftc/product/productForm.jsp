@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp" %>
+<%@ taglib prefix="fnf" uri="/WEB-INF/tlds/fnf.tld" %>
 <html>
 <head>
     <title>商品管理</title>
@@ -37,10 +38,6 @@
         });
 
         function addRow(list, idx, tpl, row) {
-
-
-
-
             $(list).append(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
@@ -110,7 +107,8 @@
 
 
             })
-            var row = {spec: {name: names, id: ids}, productSpecNumber: '00000001'};
+            <%--var no=${fnf:getNextNo()};--%>
+            var row = {spec: {name: names, id: ids}, productSpecNumber:"" };
             addRow('#specList', specRowIdx, specTpl,row);
             specRowIdx = specRowIdx + 1;
         }
@@ -156,12 +154,12 @@
 
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label">标签ID：</label>
-        <div class="controls">
-            <form:input path="labelId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-        </div>
-    </div>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">标签ID：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="labelId" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
     <div class="control-group">
         <label class="control-label">商品名称：</label>
         <div class="controls">
@@ -255,7 +253,7 @@
 
 							</td>
 							<td>
-								<input id="specs{{idx}}_name" name="specs[{{idx}}].productSpecNumber" type="text" value="{{row.productSpecNumber}}" maxlength="100" class="input-small " />
+								<input id="specs{{idx}}_name" name="specs[{{idx}}].productSpecNumber" type="text" value="{{row.productSpecNumber}}" maxlength="100" class="input-small "  readonly="readonly"/>
 							</td>
 							<td>
 								<input id="specs{{idx}}_spec_name" name="specs[{{idx}}].spec.name" type="text" value="{{row.spec.name}}" readonly="readonly" maxlength="100" class="input-small "/>

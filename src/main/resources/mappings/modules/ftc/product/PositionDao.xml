@@ -9,6 +9,7 @@
 		a.sort AS "sort",
 		a.status AS "status",
 		a.create_by AS "createBy.id",
+		c.name AS "createBy.name",
 		a.create_date AS "createDate",
 		a.remarks AS "remarks",
 		a.id AS "id",
@@ -24,6 +25,7 @@
 
 	<sql id="positionJoins">
 		left join os_category b on a.category_id=b.id
+		left join sys_user c on a.create_by=c.id
 	</sql>
 
 	<select id="get" resultType="Position">
@@ -94,15 +96,13 @@
 		#{remarks},
 		#{id},
 		#{updateDate},
-		#{createDate},
-		#{remarks},
+		#{updateBy.id},
 		#{width},
 		#{height},
 		#{fromX},
 		#{fromY},
 		#{scale},
 		#{rotation}
-
 		)
 	</insert>
 
@@ -115,14 +115,20 @@
 		create_date = #{createDate},
 		remarks = #{remarks},
 		update_date = #{updateDate},
-		update_by = #{updateBy.id}
+		update_by = #{updateBy.id},
+		width=#{width},
+		height =#{height},
+		from_x=#{fromX},
+		from_y=#{fromY},
+		scale=#{scale},
+		rotation=#{rotation}
 		WHERE id = #{id}
 	</update>
 
 
-
 	<update id="delete">
-		DELETE FROM os_position
+		update  os_position
+		set del_flag=#{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
 

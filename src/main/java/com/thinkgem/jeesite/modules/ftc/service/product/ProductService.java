@@ -81,46 +81,55 @@ public class ProductService extends CrudService<ProductDao, Product> {
 			product.preUpdate();
 			dao.update(product);
 		}
-		for (ProductSpec productSpec : product.getSpecs()){
-			if (productSpec.getId() == null){
-				continue;
-			}
-			if (SpecAttribute.DEL_FLAG_NORMAL.equals(productSpec.getDelFlag())){
-				if (StringUtils.isBlank(productSpec.getId())){
-					productSpec.setProductId(product.getId());
-					productSpec.preInsert();
-					productSpecDao.insert(productSpec);
-				}else{
-					productSpec.preUpdate();
-					productSpecDao.update(productSpec);
+		//保存规格
+		if(product.getSpecs()!=null&&product.getSpecs().size()>0){
+			for (ProductSpec productSpec : product.getSpecs()){
+				if (productSpec.getId() == null){
+					continue;
 				}
-			}else{
-				productSpecDao.delete(productSpec);
+				if (SpecAttribute.DEL_FLAG_NORMAL.equals(productSpec.getDelFlag())){
+					if (StringUtils.isBlank(productSpec.getId())){
+						productSpec.setProductId(product.getId());
+						productSpec.setProductSpecNumber(ProductNoGenerator.INSTANCE.nextId());
+						productSpec.preInsert();
+						productSpecDao.insert(productSpec);
+					}else{
+						productSpec.preUpdate();
+						productSpecDao.update(productSpec);
+					}
+				}else{
+					productSpecDao.delete(productSpec);
+				}
 			}
 		}
+
 		//将设计保存到图片上
 		Design design=product.getDesign();
 		if(design==null){
 			design=designDao.findByProductId(product.getId());
 		}
-		for (Image  image : product.getImages()){
-			if (image.getId() == null){
-				continue;
-			}
-			if (SpecAttribute.DEL_FLAG_NORMAL.equals(image.getDelFlag())){
-				if (StringUtils.isBlank(image.getId())){
-					image.setProduct(product);
-					image.setDesign(design);
-					image.preInsert();
-					imageDao.insert(image);
-				}else{
-					image.preUpdate();
-					imageDao.update(image);
+		//保存图片
+		if(product.getImages()!=null&&product.getImages().size()>0){
+			for (Image  image : product.getImages()){
+				if (image.getId() == null){
+					continue;
 				}
-			}else{
-				imageDao.delete(image);
+				if (SpecAttribute.DEL_FLAG_NORMAL.equals(image.getDelFlag())){
+					if (StringUtils.isBlank(image.getId())){
+						image.setProduct(product);
+						image.setDesign(design);
+						image.preInsert();
+						imageDao.insert(image);
+					}else{
+						image.preUpdate();
+						imageDao.update(image);
+					}
+				}else{
+					imageDao.delete(image);
+				}
 			}
 		}
+
 	}
 	
 	@Transactional(readOnly = false)
@@ -132,6 +141,12 @@ public class ProductService extends CrudService<ProductDao, Product> {
 			design=designDao.findByProductId(product.getId());
 		}
 		designDao.delete(design);
+	}
+	public void upShelve(Product product){
+		dao.upShelve(product);
+	}
+	public void downShelve(Product product){
+		dao.downShelve(product);
 	}
 	
 }

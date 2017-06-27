@@ -60,10 +60,10 @@
 						${position.sort}
 				</td>
 				<td>
-						${position.createBy.id}
+						${position.createBy.name}
 				</td>
 				<td>
-					<fmt:formatDate value="${product.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${position.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 
 				</td>
 				<td>

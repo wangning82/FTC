@@ -106,7 +106,7 @@ public class DesignRestController extends BaseRestController {
         specDto.setId("bcd6e64e728a42b8a6df9d1ce42f748e");
         List<ProductSpecDto> specDtoList=new ArrayList<>();
         specDtoList.add(specDto);
-        modelDto.setSpecList(specDtoList);
+        modelDto.setAttrs(specDtoList);
 
         designDto.setModelDto(modelDto);
         List<ImageDto> imageDtos=new ArrayList<>();

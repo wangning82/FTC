@@ -27,8 +27,8 @@ public class ModelDto extends BaseDto<ModelDto> {
     }
 
     List<ImageDto> textures;//图片
-    private List<PositionDto> positionList;
-    private List<ProductSpecDto>  specList;
+    private List<PositionDto> sprites;
+    private List<ProductSpecDto>  attrs;
 
     public String getDid() {
         return did;
@@ -86,13 +86,6 @@ public class ModelDto extends BaseDto<ModelDto> {
         this.textures = textures;
     }
 
-    public List<ProductSpecDto> getSpecList() {
-        return specList;
-    }
-
-    public void setSpecList(List<ProductSpecDto> specList) {
-        this.specList = specList;
-    }
 
     public String getId() {
         return id;
@@ -102,12 +95,19 @@ public class ModelDto extends BaseDto<ModelDto> {
         this.id = id;
     }
 
-    public List<PositionDto> getPositionList() {
-        return positionList;
+    public List<PositionDto> getSprites() {
+        return sprites;
     }
 
-    public void setPositionList(List<PositionDto> positionList) {
-        this.positionList = positionList;
+    public void setSprites(List<PositionDto> sprites) {
+        this.sprites = sprites;
     }
 
+    public List<ProductSpecDto> getAttrs() {
+        return attrs;
+    }
+
+    public void setAttrs(List<ProductSpecDto> attrs) {
+        this.attrs = attrs;
+    }
 }
