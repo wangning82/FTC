@@ -110,16 +110,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">登录次数：</label>
-			<div class="controls">
-				<form:input path="loginNumber" htmlEscape="false" maxlength="20" class="input-xlarge  digits"/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">注册时间：</label>
 			<div class="controls">
-				<input name="regeistTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-					value="<fmt:formatDate value="${customer.regeistTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+				<input name="registerTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+					value="<fmt:formatDate value="${customer.registerTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
 					onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
 			</div>
 		</div>

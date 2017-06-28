@@ -63,7 +63,6 @@
 				<th>手机号码</th>
 				<th>最后登录时间</th>
 				<th>最后登录IP</th>
-				<th>登录次数</th>
 				<th>注册时间</th>
 				<th>消费额</th>
 				<shiro:hasPermission name="ftc:customer:customer:edit"><th>操作</th></shiro:hasPermission>
@@ -100,10 +99,7 @@
 					${customer.lastLoginIp}
 				</td>
 				<td>
-					${customer.loginNumber}
-				</td>
-				<td>
-					<fmt:formatDate value="${customer.regeistTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${customer.registerTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 				<td>
 					${customer.amount}
