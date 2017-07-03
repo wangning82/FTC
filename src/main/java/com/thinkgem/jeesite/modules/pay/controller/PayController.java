@@ -35,8 +35,8 @@ import static com.thinkgem.jeesite.modules.pay.dao.ApyAccountRepository.apyAccou
  * @email egzosn@gmail.com
  * @date 2016/11/18 0:25
  */
-@RestController
-@RequestMapping(value = "/rest/ftc/advert/")
+//@RestController
+//@RequestMapping(value = "/rest/ftc/advert/")
 public class PayController {
 
     @Autowired

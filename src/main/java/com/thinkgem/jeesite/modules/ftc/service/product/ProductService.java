@@ -49,23 +49,14 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	
 	@Transactional(readOnly = false)
 	public void save(Product product) {
-		//保存商品时，检查设计，一个商品一个设计，如果商品是新增，要同时生成一个设计
+		//保存商品时
 
 		if (product.getIsNewRecord()){
 			product.preInsert();
-			dao.insert(product);
-
 			if(product.getNumber()==null||product.getNumber().length()==0){
 				product.setNumber(ProductNoGenerator.INSTANCE.nextId());
 			}
-			Design design=new Design();
-			design.setCode(ProductNoGenerator.INSTANCE.nextId());
-			design.setName(product.getName());
-			design.setDesignStatus("0");;
-			design.setPrice(0d);
-			design.setProduct(product);
-			design.preInsert();
-			designDao.insert(design);
+			dao.insert(product);
 
 		}else{
 			product.preUpdate();
@@ -93,11 +84,6 @@ public class ProductService extends CrudService<ProductDao, Product> {
 			}
 		}
 
-		//将设计保存到图片上
-		Design design=product.getDesign();
-		if(design==null){
-			design=designDao.findByProductId(product.getId());
-		}
 		//保存图片
 		if(product.getImages()!=null&&product.getImages().size()>0){
 			for (Image  image : product.getImages()){
@@ -107,7 +93,6 @@ public class ProductService extends CrudService<ProductDao, Product> {
 				if (SpecAttribute.DEL_FLAG_NORMAL.equals(image.getDelFlag())){
 					if (StringUtils.isBlank(image.getId())){
 						image.setProduct(product);
-						image.setDesign(design);
 						image.preInsert();
 						imageDao.insert(image);
 					}else{
@@ -125,18 +110,15 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	@Transactional(readOnly = false)
 	public void delete(Product product) {
 		super.delete(product);
-		//将设计保存到图片上
-		Design design=product.getDesign();
-		if(design==null){
-			design=designDao.findByProductId(product.getId());
-		}
-		designDao.delete(design);
 	}
 	public void upShelve(Product product){
 		dao.upShelve(product);
 	}
 	public void downShelve(Product product){
 		dao.downShelve(product);
+	}
+	public void addHot(Product product){
+		dao.addHot(product);
 	}
 	
 }

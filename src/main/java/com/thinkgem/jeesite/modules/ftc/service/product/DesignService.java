@@ -66,10 +66,10 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	@Transactional(readOnly = false)
 	public void saveForRest(Design design){
 		List<Image> images=design.getImages();
-		List<ProductSpec> specs=design.getProduct().getSpecs();
+		List<ProductSpec> specs=design.getModel().getSpecs();
 
 		//获取modelid,复制model信息为新的商品
-		String modelId=design.getProduct().getId();
+		String modelId=design.getModel().getId();
 		//复制product
 		Product product=productDao.get(modelId);
 		product.setId(IdGen.uuid());

@@ -14,18 +14,18 @@
 		a.product_score AS "productScore",
 		a.product_amount AS "productAmount",
 		a.buy_number AS "buyNumber",
-		a.design_id AS "design.id",
+		a.design_by AS "designBy.id",
 		a.design_price AS "designPrice",
 		a.design_amount AS "designAmount",
 		a.price AS "price",
 		a.score AS "score",
 		a.comment_status AS "commentStatus",
-		c.code AS "design.code"
+		c.user_name AS "designBy.userName"
 	</sql>
 	
 	<sql id="orderProductJoins">
 		LEFT JOIN os_order b ON b.id = a.order_id
-		LEFT JOIN os_product_design c ON c.id = a.design_id
+		LEFT JOIN os_customer c ON c.id = a.design_by
 	</sql>
     
 	<select id="get" resultType="OrderProduct">
@@ -92,7 +92,7 @@
 			product_score,
 			product_amount,
 			buy_number,
-			design_id,
+			design_by,
 			design_price,
 			design_amount,
 			price,
@@ -110,7 +110,7 @@
 			#{productScore},
 			#{productAmount},
 			#{buyNumber},
-			#{design.id},
+			#{designBy.id},
 			#{designPrice},
 			#{designAmount},
 			#{price},

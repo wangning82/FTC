@@ -45,14 +45,15 @@ public class ProductRestController extends BaseRestController {
      */
     @ApiOperation(value = "商品列表", notes = "获取商品列表")
     @RequestMapping(value = {"list", ""},method = { RequestMethod.GET})
-    public RestResult list(ProductDto productDto, HttpServletRequest request, HttpServletResponse response) {
+    public RestResult list(ProductDto goods, HttpServletRequest request, HttpServletResponse response) {
         Page<Product> page = productService.
                 findPage(new Page<Product>(request, response),
-                        productConvert.convertDtoToModel(productDto));
+                        productConvert.convertDtoToModel(goods));
         List<ProductDto> productDtoList=
                 productConvert.convertListFromModelToDto(page.getList());
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
     }
+
 
     /**
      * 获取商品信息
@@ -65,6 +66,8 @@ public class ProductRestController extends BaseRestController {
         Product product=productService.get(id);
         List<ProductSpec> specs=productSpecService.findList(new ProductSpec(product));
         product.setSpecs(specs);
+        //更新热度，自动加一
+        productService.addHot(product);
         return new RestResult(CODE_SUCCESS,
                 MSG_SUCCESS,productConvert.convertModelToDto(product));
     }
@@ -90,8 +93,7 @@ public class ProductRestController extends BaseRestController {
     @ApiOperation(value ="删除商品", notes = "删除商品信息")
     public RestResult delete(ProductDto  productDto){
         //删除设计，产品下架，系统定时检查已下架并且设计已删除的商品，检查是否有未结束的订单，删除商品
-
-        productService.delete(productConvert.convertDtoToModel(productDto));
+        productService.downShelve(productConvert.convertDtoToModel(productDto));
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS);
     }
 

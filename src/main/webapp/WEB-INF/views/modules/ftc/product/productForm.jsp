@@ -145,13 +145,7 @@
     <div class="control-group">
         <label class="control-label">设计者：</label>
         <div class="controls">
-            <c:if test="${design.createBy}">
-                <form:input path="design.createBy.name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-            </c:if>
-            <c:if test="${!design.createBy}">
-                <input type="text" value="${product.createBy.name}" class="input-xlarge"/>
-            </c:if>
-
+                <input type="text" value="${product.designBy.name}" class="input-xlarge"/>
         </div>
     </div>
     <%--<div class="control-group">--%>

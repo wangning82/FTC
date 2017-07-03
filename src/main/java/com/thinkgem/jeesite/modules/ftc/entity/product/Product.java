@@ -3,8 +3,11 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.product;
 
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.sys.entity.User;
 import org.hibernate.validator.constraints.Length;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +41,16 @@ public class Product extends DataEntity<Product> {
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
 	private String modelFlag;//是否为模型
-	private Design design;
+	private Customer designBy;//设计者
+	private BigDecimal designPrice;//设计费
+
+	public void setDesignPrice(BigDecimal designPrice) {
+		this.designPrice = designPrice;
+	}
+
+	public BigDecimal getDesignPrice() {
+		return designPrice;
+	}
 
 	public String getModelFlag() {
 		return modelFlag;
@@ -48,12 +60,12 @@ public class Product extends DataEntity<Product> {
 		this.modelFlag = modelFlag;
 	}
 
-	public Design getDesign() {
-		return design;
+	public Customer getDesignBy() {
+		return designBy;
 	}
 
-	public void setDesign(Design design) {
-		this.design = design;
+	public void setDesignBy(Customer designBy) {
+		this.designBy = designBy;
 	}
 
 	private List<Image>images;

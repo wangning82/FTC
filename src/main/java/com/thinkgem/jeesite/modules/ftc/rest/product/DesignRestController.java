@@ -51,10 +51,6 @@ public class DesignRestController extends BaseRestController {
     public RestResult delete(Design design){
         //删除设计
         designService.delete(design);
-        //删除设计要将商品下架
-        Product p=design.getProduct();
-        p.setShowInShelve("1");
-        productService.save(p);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
     }
     /**
@@ -65,7 +61,7 @@ public class DesignRestController extends BaseRestController {
     @ApiOperation(value = "优秀设计", notes = "获取优秀设计列表")
     @RequestMapping(value = {"best"},method = { RequestMethod.GET})
     public RestResult best(Design design){
-        //删除设计
+        //
         List<Design> bestDesign=designService.findList(design);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
     }
@@ -98,11 +94,7 @@ public class DesignRestController extends BaseRestController {
     public RestResult info(String  id){
 
         Design design=designService.get(id);
-        if(design.getProduct()!=null){
-           Product p=productService.get(design.getProduct().getId());
-           design.setProduct(p);
-           design.setImages(p.getImages());
-        }
+
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,designConverter.convertModelToDto(design));
     }
 

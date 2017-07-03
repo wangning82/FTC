@@ -20,7 +20,7 @@ public class Design extends DataEntity<Design> {
 	private static final long serialVersionUID = 1L;
 	private String name;		// 名称
 	private String code;		// 编号
-	private Product product;		// 商品id
+	private Product model;		// 模型
 	private Double price;		// 设计费
 	private String designStatus;		// 状态
 	private List<Image> images;
@@ -68,12 +68,12 @@ public class Design extends DataEntity<Design> {
 		this.code = code;
 	}
 
-	public Product getProduct() {
-		return product;
+	public void setModel(Product model) {
+		this.model = model;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public Product getModel() {
+		return model;
 	}
 
 	public Double getPrice() {

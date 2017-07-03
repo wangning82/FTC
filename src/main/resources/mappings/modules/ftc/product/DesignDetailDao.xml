@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.DesignDetailDao">
+    
+	<sql id="imageColumns">
+		a.id AS "id",
+
+		a.pic_img AS "picImg",
+		a.sort AS "sort",
+		a.status AS "status",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.position_id AS "position.id",
+		b.name AS "position.name",
+		a.design_id AS "design.id",
+		a.info AS "info",
+		a.rotation AS "rotation",
+		a.scale AS "scale",
+		a.position_x AS "x",
+		a.position_y As "y"
+	</sql>
+	
+	<sql id="imageJoins">
+		left join os_position b on a.position_id=b.id
+	</sql>
+    
+	<select id="get" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM os_design_detail a
+		<include refid="imageJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM os_design_detail a
+		<include refid="imageJoins"/>
+		<where>
+
+
+			<if test="design != null and design.id != null and design.id != ''">
+				AND a.design_id = #{design.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Image">
+		SELECT 
+			<include refid="imageColumns"/>
+		FROM os_design_detail a
+		<include refid="imageJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_design_detail(
+			id,
+
+			pic_img,
+			sort,
+			status,
+			create_date,
+			create_by,
+			position_id,
+			position_name,
+			design_id,
+			info,
+			rotation,
+			scale,
+
+			position_x,
+			position_y
+		) VALUES (
+			#{id},
+
+			#{picImg},
+			#{sort},
+			#{status},
+			#{createDate},
+			#{createBy.id},
+			#{position.id},
+			#{position.name},
+			#{design.id},
+			#{info},
+			#{rotation},
+			#{scale},
+
+			#{x},
+			#{y}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_design_detail SET
+
+			pic_img = #{picImg},
+			sort = #{sort},
+			status = #{status},
+			position_id = #{position.id},
+			position_name = #{position.name},
+			design_id = #{design.id},
+			info = #{info},
+			rotation = #{rotation},
+			scale = #{scale}
+
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM os_design_detail
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

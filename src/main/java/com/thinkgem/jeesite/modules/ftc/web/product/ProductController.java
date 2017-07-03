@@ -88,8 +88,7 @@ public class ProductController extends BaseController {
 			image.setProduct(product);
 			List<Image> images=imageService.findList(image);
 			product.setImages(images);
-			Design design=designService.findByProductId(product.getId());
-			product.setDesign(design);
+
 		}
 		model.addAttribute("product", product);
 		return "modules/ftc/product/productForm";

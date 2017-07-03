@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.ftc.entity.order;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Design;
 import org.hibernate.validator.constraints.Length;
 
@@ -27,7 +28,7 @@ public class OrderProduct extends DataEntity<OrderProduct> {
 	private BigDecimal productScore;		// 商品总积分
 	private BigDecimal productAmount;		// 商品总金额
 	private BigDecimal buyNumber;		// 商品总数量
-	private Design design;		// 设计标识
+	private Customer designBy;		// 设计者
 	private BigDecimal designPrice;		// 设计单价
 	private BigDecimal designAmount;		// 设计总费用
 	private BigDecimal price;		// 价格
@@ -130,15 +131,15 @@ public class OrderProduct extends DataEntity<OrderProduct> {
 	public void setBuyNumber(BigDecimal buyNumber) {
 		this.buyNumber = buyNumber;
 	}
-	
-	public Design getDesign() {
-		return design;
+
+	public Customer getDesignBy() {
+		return designBy;
 	}
 
-	public void setDesign(Design design) {
-		this.design = design;
+	public void setDesignBy(Customer designBy) {
+		this.designBy = designBy;
 	}
-	
+
 	public BigDecimal getDesignPrice() {
 		return designPrice;
 	}

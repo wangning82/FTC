@@ -5,16 +5,15 @@ package com.thinkgem.jeesite.modules.ftc.dao.product;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.entity.product.DesignDetail;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 
 /**
- * 商品DAO接口
+ * 设计明细
  * @author wangqingxiang
- * @version 2017-05-19
+ * @version 2017-06-01
  */
 @MyBatisDao
-public interface ProductDao extends CrudDao<Product> {
-    public void upShelve(Product product);
-    public void downShelve(Product product);
-    public void addHot(Product product);
+public interface DesignDetailDao extends CrudDao<DesignDetail> {
+	
 }

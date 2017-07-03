@@ -29,13 +29,19 @@
 		b.id AS "category.id",
 		b.name AS "category.name",
 		c.name AS "createBy.name",
-		a.model_flag AS "modelFlag"
+		a.model_flag AS "modelFlag",
+		a.hot_num as "hotNum",
+		a.del_flag as "delFlag",
+		a.design_by As "designBy.id",
+		d.user_name As "designBy.userName",
+		a.design_price As "designPrice"
 
 	</sql>
 	
 	<sql id="productJoins">
 		left join os_category b on a.category_id=b.id
 		left join sys_user  c on a.create_by=c.id
+		left join os_customer d on a.design_by=d.id
 	</sql>
     
 	<select id="get" resultType="Product">
@@ -126,7 +132,11 @@
 			page_keyword,
 			remarks,
 			category_id,
-			model_flag
+			model_flag,
+			hot_num,
+			design_by,
+			design_price
+
 		) VALUES (
 			#{id},
 			#{number},
@@ -152,7 +162,10 @@
 			#{pageKeyword},
 			#{remarks},
 			#{category.id},
-			#{modelFlag}
+			#{modelFlag},
+			#{hotNum},
+			#{designBy.id},
+			#{designPrice}
 		)
 	</insert>
 	
@@ -195,6 +208,10 @@
 	</update>
 	<update id="downShelve">
 		update os_product set show_in_shelve="2"
+		WHERE id = #{id}
+	</update>
+	<update id="addHot">
+		update os_product set hot_num=hot_num+1
 		WHERE id = #{id}
 	</update>
 </mapper>

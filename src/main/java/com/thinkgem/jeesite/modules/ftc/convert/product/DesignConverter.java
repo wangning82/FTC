@@ -2,6 +2,7 @@ package com.thinkgem.jeesite.modules.ftc.convert.product;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Design;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
@@ -26,9 +27,12 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
         model.setPrice(dto.getPrice());
         model.setCode(dto.getNumber());
         Product product =modelConverter.convertDtoToModel(dto.getModelDto());
-        model.setProduct(product);
+        model.setModel(product);
         List<Image> images=imageConverter.convertListFromDtoToModel(dto.getImageDtoList());
         model.setImages(images);
+
+        Customer customer=model.getCustomer();
+
         return model;
     }
 }

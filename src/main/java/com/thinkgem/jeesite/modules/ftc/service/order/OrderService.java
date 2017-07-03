@@ -142,9 +142,9 @@ public class OrderService extends CrudService<OrderDao, Order> {
             orderProduct.setProductPrice(new BigDecimal(shoppingCart.getProductSpec().getPrice()));
             orderProduct.setBuyNumber(shoppingCart.getBuyNumber());
             orderProduct.setProductAmount(new BigDecimal(shoppingCart.getProductSpec().getPrice()).multiply(shoppingCart.getBuyNumber()));
-            orderProduct.setDesign(shoppingCart.getProduct().getDesign());
-            orderProduct.setDesignPrice(new BigDecimal(shoppingCart.getProduct().getDesign().getPrice()));
-            orderProduct.setDesignAmount(new BigDecimal(shoppingCart.getProduct().getDesign().getPrice()).multiply(shoppingCart.getBuyNumber()));
+            orderProduct.setDesignBy(shoppingCart.getProduct().getDesignBy());
+            orderProduct.setDesignPrice(shoppingCart.getProduct().getDesignPrice());
+            orderProduct.setDesignAmount(shoppingCart.getProduct().getDesignPrice().multiply(shoppingCart.getBuyNumber()));
             orderProduct.setPrice(orderProduct.getProductAmount().add(orderProduct.getDesignAmount()));
             orderProduct.setCommentStatus(FlagEnum.Flag_NO.getValue());
             orderProduct.preInsert();
