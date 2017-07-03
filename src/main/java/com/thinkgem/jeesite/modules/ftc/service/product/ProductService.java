@@ -35,17 +35,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	private DesignDao designDao;
 	public Product get(String id) {
 		Product product= super.get(id);
-		ProductSpec spec=new ProductSpec();
-		spec.setProductId(product.getId());
-		List<ProductSpec> specs=productSpecDao.findList(spec);
-		product.setSpecs(specs);
-		Image image=new Image();
-		image.setProduct(product);
-		List<Image> images=imageDao.findList(image);
-		product.setImages(images);
 
-		Design design=designDao.findByProductId(id);
-		product.setDesign(design);
 		return product;
 	}
 	

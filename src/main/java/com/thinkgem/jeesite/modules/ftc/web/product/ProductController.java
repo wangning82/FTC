@@ -10,9 +10,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
 import com.thinkgem.jeesite.modules.ftc.entity.product.*;
-import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
-import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
-import com.thinkgem.jeesite.modules.ftc.service.product.SpecificationService;
+import com.thinkgem.jeesite.modules.ftc.service.product.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +25,6 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 
 import java.util.List;
 import java.util.Map;
@@ -51,7 +48,10 @@ public class ProductController extends BaseController {
 	private SpecificationService specificationService;
 	@Autowired
 	private PositionService positionService;
-	
+	@Autowired
+	private DesignService designService;
+	@Autowired
+	private ImageService imageService;
 	@ModelAttribute
 	public Product get(@RequestParam(required=false) String id) {
 		Product entity = null;
@@ -79,6 +79,17 @@ public class ProductController extends BaseController {
 
 		if(StringUtils.isEmpty(product.getId())){
 			product.setNumber(ProductNoGenerator.INSTANCE.nextId());
+		}else{
+			ProductSpec spec=new ProductSpec();
+			spec.setProductId(product.getId());
+			List<ProductSpec> specs=productSpecService.findList(spec);
+			product.setSpecs(specs);
+			Image image=new Image();
+			image.setProduct(product);
+			List<Image> images=imageService.findList(image);
+			product.setImages(images);
+			Design design=designService.findByProductId(product.getId());
+			product.setDesign(design);
 		}
 		model.addAttribute("product", product);
 		return "modules/ftc/product/productForm";

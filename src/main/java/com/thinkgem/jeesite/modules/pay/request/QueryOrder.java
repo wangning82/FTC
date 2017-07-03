@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.common.pay.request;
+package com.thinkgem.jeesite.modules.pay.request;
 
 import java.math.BigDecimal;
 import java.util.Date;

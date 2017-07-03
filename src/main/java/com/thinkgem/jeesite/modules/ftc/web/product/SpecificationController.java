@@ -68,6 +68,10 @@ public class SpecificationController extends BaseController {
 	@RequiresPermissions("ftc:product:specification:view")
 	@RequestMapping(value = "form")
 	public String form(Specification specification, Model model) {
+		if(StringUtils.isNotEmpty(specification.getId())){
+			specification.setSpecAttributeList(specAttributeService.findList(new SpecAttribute(specification)));
+
+		}
 		model.addAttribute("specification", specification);
 		return "modules/ftc/product/specificationForm";
 	}

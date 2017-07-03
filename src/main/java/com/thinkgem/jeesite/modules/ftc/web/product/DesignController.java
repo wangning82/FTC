@@ -6,6 +6,8 @@ package com.thinkgem.jeesite.modules.ftc.web.product;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+import com.thinkgem.jeesite.modules.ftc.service.product.ImageService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Design;
 import com.thinkgem.jeesite.modules.ftc.service.product.DesignService;
 
+import java.util.List;
+
 /**
  * 设计Controller
  * @author wangqingxiang
@@ -33,7 +37,8 @@ public class DesignController extends BaseController {
 
 	@Autowired
 	private DesignService designService;
-	
+	@Autowired
+	private ImageService imageService;
 	@ModelAttribute
 	public Design get(@RequestParam(required=false) String id) {
 		Design entity = null;
@@ -57,6 +62,13 @@ public class DesignController extends BaseController {
 	@RequiresPermissions("ftc:product:design:view")
 	@RequestMapping(value = "form")
 	public String form(Design design, Model model) {
+		if(StringUtils.isNotEmpty(design.getId())){
+			Image image=new Image();
+			image.setDesign(design);
+			List<Image> images=imageService.findList(image);
+			design.setImages(images);
+		}
+
 		model.addAttribute("design", design);
 		return "modules/ftc/product/designForm";
 	}

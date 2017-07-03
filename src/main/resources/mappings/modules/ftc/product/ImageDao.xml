@@ -16,7 +16,7 @@
 		a.info AS "info",
 		a.rotation AS "rotation",
 		a.scale AS "scale",
-		a.name AS "name",
+		a.source_url AS "sourceUrl",
 		a.position_x AS "x",
 		a.position_y As "y"
 	</sql>
@@ -39,13 +39,7 @@
 		FROM os_product_image a
 		<include refid="imageJoins"/>
 		<where>
-			
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
-			</if>
+
 			<if test="product != null and product != '' and product.id != null and product.id != ''">
 				AND a.product_id = #{product.id}
 			</if>
@@ -94,7 +88,7 @@
 			info,
 			rotation,
 			scale,
-			name,
+			source_url,
 			position_x,
 			position_y
 		) VALUES (
@@ -111,7 +105,7 @@
 			#{info},
 			#{rotation},
 			#{scale},
-			#{name},
+			#{sourceUrl},
 			#{x},
 			#{y}
 		)
@@ -129,7 +123,7 @@
 			info = #{info},
 			rotation = #{rotation},
 			scale = #{scale},
-			name = #{name}
+			source_url = #{sourceUrl}
 		WHERE id = #{id}
 	</update>
 	

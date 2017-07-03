@@ -36,7 +36,6 @@ public class SpecificationService extends CrudService<SpecificationDao, Specific
 	
 	public Specification get(String id) {
 		Specification specification = super.get(id);
-		specification.setSpecAttributeList(specAttributeDao.findList(new SpecAttribute(specification)));
 		return specification;
 	}
 	

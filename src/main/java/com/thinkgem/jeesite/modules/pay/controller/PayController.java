@@ -1,22 +1,21 @@
 
-package com.thinkgem.jeesite.common.pay.controller;
+package com.thinkgem.jeesite.modules.pay.controller;
 
 
 import com.egzosn.pay.common.api.Callback;
 import com.egzosn.pay.common.bean.*;
 import com.egzosn.pay.common.util.str.StringUtils;
-import com.egzosn.pay.demo.entity.ApyAccount;
-import com.egzosn.pay.demo.request.QueryOrder;
-import com.egzosn.pay.demo.service.ApyAccountService;
-import com.egzosn.pay.demo.service.PayResponse;
-import com.egzosn.pay.demo.entity.PayType;
+import com.thinkgem.jeesite.modules.pay.entity.ApyAccount;
+import com.thinkgem.jeesite.modules.pay.request.QueryOrder;
+import com.thinkgem.jeesite.modules.pay.service.ApyAccountService;
+import com.thinkgem.jeesite.modules.pay.service.PayResponse;
+import com.thinkgem.jeesite.modules.pay.entity.PayType;
 import com.egzosn.pay.common.api.PayConfigStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
@@ -26,7 +25,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.egzosn.pay.demo.dao.ApyAccountRepository.apyAccounts;
+import static com.thinkgem.jeesite.modules.pay.dao.ApyAccountRepository.apyAccounts;
+
 
 /**
  * 发起支付入口
@@ -40,7 +40,7 @@ import static com.egzosn.pay.demo.dao.ApyAccountRepository.apyAccounts;
 public class PayController {
 
     @Autowired
-    private ApyAccountService service;
+    private ApyAccountService apyAccountService;
 
 
     /**
@@ -55,7 +55,6 @@ public class PayController {
         Map<String, Object> data = new HashMap<>();
         data.put("code", 0);
         data.put("account", account);
-
         return data;
     }
 
@@ -72,7 +71,7 @@ public class PayController {
     @RequestMapping(value = "toPay.html", produces = "text/html;charset=UTF-8")
     public String toPay(Integer payId, String transactionType, String bankType, BigDecimal price) {
         //获取对应的支付账户操作工具（可根据账户id）
-        PayResponse payResponse = service.getPayResponse(payId);
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
 
         PayOrder order = new PayOrder("订单title", "摘要", null == price ? new BigDecimal(0.01) : price, UUID.randomUUID().toString().replace("-", ""), PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType(transactionType));
 
@@ -96,7 +95,7 @@ public class PayController {
     @RequestMapping(value = "jsapi" )
     public Map toPay(Integer payId, String openid, BigDecimal price) {
         //获取对应的支付账户操作工具（可根据账户id）
-        PayResponse payResponse = service.getPayResponse(payId);
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
 
         PayOrder order = new PayOrder("订单title", "摘要", null == price ? new BigDecimal(0.01) : price, UUID.randomUUID().toString().replace("-", ""), PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType("JSAPI"));
         order.setOpenid(openid);
@@ -116,7 +115,7 @@ public class PayController {
     @RequestMapping(value = "microPay")
     public Map<String, Object> microPay(Integer payId, String transactionType, BigDecimal price, String authCode) throws IOException {
         //获取对应的支付账户操作工具（可根据账户id）
-        PayResponse payResponse = service.getPayResponse(payId);
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
 
         PayOrder order = new PayOrder("订单title", "摘要", null == price ? new BigDecimal(0.01) : price, UUID.randomUUID().toString().replace("-", ""), PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType(transactionType));
         //设置授权码，条码等
@@ -143,7 +142,7 @@ public class PayController {
     @RequestMapping(value = "toQrPay.jpg", produces = "image/jpeg;charset=UTF-8")
     public byte[] toWxQrPay(Integer payId, String transactionType, BigDecimal price) throws IOException {
         //获取对应的支付账户操作工具（可根据账户id）
-        PayResponse payResponse = service.getPayResponse(payId);
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         ImageIO.write(payResponse.getService().genQrPay(new PayOrder("订单title", "摘要", null == price ? new BigDecimal(0.01) : price, UUID.randomUUID().toString().replace("-", ""), PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType(transactionType))), "JPEG", baos);
@@ -161,7 +160,7 @@ public class PayController {
     @RequestMapping("getOrderInfo")
     public Map<String, Object> getOrderInfo(Integer payId, String transactionType, BigDecimal price) {
         //获取对应的支付账户操作工具（可根据账户id）
-        PayResponse payResponse = service.getPayResponse(payId);
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
         Map<String, Object> data = new HashMap<>();
         data.put("code", 0);
         PayOrder order = new PayOrder("订单title", "摘要", null == price ? new BigDecimal(0.01) : price, UUID.randomUUID().toString().replace("-", ""), PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType(transactionType));
@@ -179,7 +178,7 @@ public class PayController {
     @RequestMapping(value = "payBack{payId}.json")
     public String payBack(HttpServletRequest request, @PathVariable Integer payId) throws IOException {
         //根据账户id，获取对应的支付账户操作工具
-        PayResponse payResponse = service.getPayResponse(payId);
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
         PayConfigStorage storage = payResponse.getStorage();
         //获取支付方返回的对应参数
         Map<String, Object> params = payResponse.getService().getParameter2Map(request.getParameterMap(), request.getInputStream());
@@ -205,7 +204,7 @@ public class PayController {
      */
     @RequestMapping("query")
     public Map<String, Object> query(QueryOrder order) {
-        PayResponse payResponse = service.getPayResponse(order.getPayId());
+        PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         return payResponse.getService().query(order.getTradeNo(), order.getOutTradeNo());
     }
 
@@ -217,7 +216,7 @@ public class PayController {
      */
     @RequestMapping("close")
     public Map<String, Object> close(QueryOrder order) {
-        PayResponse payResponse = service.getPayResponse(order.getPayId());
+        PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         return payResponse.getService().close(order.getTradeNo(), order.getOutTradeNo());
     }
 
@@ -229,7 +228,7 @@ public class PayController {
      */
     @RequestMapping("refund")
     public Map<String, Object> refund(QueryOrder order) {
-        PayResponse payResponse = service.getPayResponse(order.getPayId());
+        PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
 
 
         return payResponse.getService().refund(order.getTradeNo(), order.getOutTradeNo(), order.getRefundAmount(), order.getTotalAmount());
@@ -243,7 +242,7 @@ public class PayController {
      */
     @RequestMapping("refundquery")
     public Map<String, Object> refundquery(QueryOrder order) {
-        PayResponse payResponse = service.getPayResponse(order.getPayId());
+        PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         return payResponse.getService().refundquery(order.getTradeNo(), order.getOutTradeNo());
     }
 
@@ -255,7 +254,7 @@ public class PayController {
      */
     @RequestMapping("downloadbill")
     public Object downloadbill(QueryOrder order) {
-        PayResponse payResponse = service.getPayResponse(order.getPayId());
+        PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
 
         return payResponse.getService().downloadbill(order.getBillDate(), order.getBillType());
     }
@@ -269,7 +268,7 @@ public class PayController {
      */
     @RequestMapping("secondaryInterface")
     public Map<String, Object> secondaryInterface(QueryOrder order) {
-        PayResponse payResponse = service.getPayResponse(order.getPayId());
+        PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         TransactionType type = PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType(order.getTransactionType());
         return payResponse.getService().secondaryInterface(order.getTradeNoOrBillDate(), order.getOutTradeNoBillType(), type, new Callback<Map<String, Object>>() {
             @Override

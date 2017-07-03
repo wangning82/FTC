@@ -70,6 +70,25 @@ public class DesignRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
     }
     /**
+     * 修改设计
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "修改设计", notes = "对设计进行修改")
+    @RequestMapping(value = {"modify"},method = { RequestMethod.POST})
+    public RestResult modify(DesignDto  design){
+
+        Design designModel=designService.get(design.getId());
+        designModel.setName(design.getName());
+        designModel.setPrice(design.getPrice());
+        designModel.setDesignStatus(design.getStatus());
+        designModel.setUpdateDate(new Date());
+        designService.save(designModel);
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
+    }
+
+
+    /**
      * 设计明细
      * @param
      * @return
@@ -122,12 +141,6 @@ public class DesignRestController extends BaseRestController {
         imageDto.getMeshDto().setRotation(30d);
         imageDtos.add(imageDto);
         designDto.setImageDtoList(imageDtos);
-
-
-
-
-
-
         Design design=designConverter.convertDtoToModel(designDto);
         design.setCustomer( customer);
         designService.saveForRest(design);

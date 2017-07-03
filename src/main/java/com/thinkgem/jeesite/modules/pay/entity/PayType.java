@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.common.pay.entity;
+package com.thinkgem.jeesite.modules.pay.entity;
 
 import com.egzosn.pay.ali.api.AliPayConfigStorage;
 import com.egzosn.pay.ali.api.AliPayService;
@@ -6,7 +6,6 @@ import com.egzosn.pay.ali.bean.AliTransactionType;
 import com.egzosn.pay.common.api.PayService;
 import com.egzosn.pay.common.bean.BasePayType;
 import com.egzosn.pay.common.bean.TransactionType;
-import com.thinkgem.jeesite.common.pay.service.handler.FuiouPayMessageHandler;
 
 import com.egzosn.pay.wx.api.WxPayConfigStorage;
 import com.egzosn.pay.wx.api.WxPayService;

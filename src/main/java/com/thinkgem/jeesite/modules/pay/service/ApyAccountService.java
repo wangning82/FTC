@@ -1,10 +1,11 @@
 
-package com.thinkgem.jeesite.common.pay.service;
+package com.thinkgem.jeesite.modules.pay.service;
 
-import com.thinkgem.jeesite.common.pay.entity.ApyAccount;
-import com.thinkgem.jeesite.common.pay.dao.ApyAccountRepository;
+import com.thinkgem.jeesite.modules.pay.entity.ApyAccount;
+import com.thinkgem.jeesite.modules.pay.dao.ApyAccountRepository;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
  * @date 2016/11/18 1:11
  */
 
+@Service
 public class ApyAccountService {
 
 //    @Resource

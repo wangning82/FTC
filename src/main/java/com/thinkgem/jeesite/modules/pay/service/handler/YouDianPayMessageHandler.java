@@ -1,4 +1,4 @@
-package com.thinkgem.jeesite.common.pay.service.handler;
+package com.thinkgem.jeesite.modules.pay.service.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.egzosn.pay.common.api.PayService;

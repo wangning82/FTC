@@ -1,12 +1,12 @@
 
 
 
-package com.thinkgem.jeesite.common.pay.dao;
+package com.thinkgem.jeesite.modules.pay.dao;
 
 import com.egzosn.pay.common.bean.MsgType;
 import com.egzosn.pay.common.util.sign.SignUtils;
-import com.thinkgem.jeesite.common.pay.entity.ApyAccount;
-import com.thinkgem.jeesite.common.pay.entity.PayType;
+import com.thinkgem.jeesite.modules.pay.entity.ApyAccount;
+import com.thinkgem.jeesite.modules.pay.entity.PayType;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,22 +1,16 @@
-package com.thinkgem.jeesite.common.pay.service;
+package com.thinkgem.jeesite.modules.pay.service;
 
 import com.egzosn.pay.common.api.PayMessageRouter;
 import com.egzosn.pay.common.http.HttpConfigStorage;
-import com.thinkgem.jeesite.common.pay.service.handler.FuiouPayMessageHandler;
-import com.thinkgem.jeesite.common.pay.service.handler.YouDianPayMessageHandler;
-import com.thinkgem.jeesite.common.pay.service.interceptor.AliPayMessageInterceptor;
-import com.thinkgem.jeesite.common.pay.entity.ApyAccount;
-import com.thinkgem.jeesite.common.pay.entity.PayType;
-import com.thinkgem.jeesite.common.pay.service.handler.AliPayMessageHandler;
-import com.thinkgem.jeesite.common.pay.service.handler.FuiouPayMessageHandler;
-import com.thinkgem.jeesite.common.pay.service.handler.WxPayMessageHandler;
-import com.thinkgem.jeesite.common.pay.service.handler.YouDianPayMessageHandler;
-import com.thinkgem.jeesite.common.pay.service.interceptor.AliPayMessageInterceptor;
+import com.thinkgem.jeesite.modules.pay.service.interceptor.AliPayMessageInterceptor;
+import com.thinkgem.jeesite.modules.pay.entity.ApyAccount;
+import com.thinkgem.jeesite.modules.pay.entity.PayType;
+import com.thinkgem.jeesite.modules.pay.service.handler.AliPayMessageHandler;
+import com.thinkgem.jeesite.modules.pay.service.handler.WxPayMessageHandler;
 import com.egzosn.pay.common.api.PayConfigStorage;
 import com.egzosn.pay.common.api.PayMessageHandler;
 import com.egzosn.pay.common.api.PayService;
 import com.egzosn.pay.common.bean.MsgType;
-import com.thinkgem.jeesite.common.pay.service.interceptor.YoudianPayMessageInterceptor;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import javax.annotation.Resource;

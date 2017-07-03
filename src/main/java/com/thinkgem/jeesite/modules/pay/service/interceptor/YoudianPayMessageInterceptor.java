@@ -1,5 +1,5 @@
 
-package com.thinkgem.jeesite.common.pay.service.interceptor;
+package com.thinkgem.jeesite.modules.pay.service.interceptor;
 
 import com.egzosn.pay.common.api.PayMessageHandler;
 import com.egzosn.pay.common.api.PayMessageInterceptor;

@@ -1,6 +1,6 @@
 
 
-package com.thinkgem.jeesite.common.pay.entity;
+package com.thinkgem.jeesite.modules.pay.entity;
 
 import com.egzosn.pay.common.bean.MsgType;
 

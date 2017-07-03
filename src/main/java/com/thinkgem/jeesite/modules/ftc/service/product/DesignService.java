@@ -40,14 +40,11 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	@Autowired
 	private ProductSpecDao productSpecDao;
 	public Design get(String id) {
-		Design design=super.get(id);
-		Image image=new Image();
-		image.setDesign(design);
-		List<Image> images=imageDao.findList(image);
-		design.setImages(images);
-		return design;
+		return super.get(id);
 	}
-	
+	public Design findByProductId(String productId){
+		return dao.findByProductId(productId);
+	}
 	public List<Design> findList(Design design) {
 		return super.findList(design);
 	}
@@ -73,8 +70,6 @@ public class DesignService extends CrudService<DesignDao, Design> {
 
 		//获取modelid,复制model信息为新的商品
 		String modelId=design.getProduct().getId();
-
-
 		//复制product
 		Product product=productDao.get(modelId);
 		product.setId(IdGen.uuid());

@@ -16,6 +16,15 @@ public class DesignDto extends BaseDto<DesignDto>{
     private String name;
     private String number;
     private Double price;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public Double getPrice() {
         return price;

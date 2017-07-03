@@ -22,6 +22,8 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.service.product.ImageService;
 
+import java.util.List;
+
 /**
  * 图片Controller
  * @author wangqingxiang

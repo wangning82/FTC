@@ -27,7 +27,7 @@ public class Image extends DataEntity<Image> {
 	private String info;		// 信息
 	private Double rotation;		// 旋转
 	private Double scale;		// 缩放
-	private String name;		// 名称
+	private String sourceUrl;		// 原图路径
 	private Double x;//横坐标
 	private Double y;//纵坐标
 
@@ -129,14 +129,12 @@ public class Image extends DataEntity<Image> {
 	public void setScale(Double scale) {
 		this.scale = scale;
 	}
-	
-	@Length(min=0, max=255, message="名称长度必须介于 0 和 255 之间")
-	public String getName() {
-		return name;
+
+	public String getSourceUrl() {
+		return sourceUrl;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSourceUrl(String sourceUrl) {
+		this.sourceUrl = sourceUrl;
 	}
-	
 }
