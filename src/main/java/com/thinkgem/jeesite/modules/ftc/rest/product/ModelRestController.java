@@ -67,12 +67,10 @@ public class ModelRestController extends BaseRestController {
     @RequestMapping(value = {"iwant"},method = { RequestMethod.GET})
     public RestResult iWant(){
         //我要设计，默认取第一个模型
-        Product product=new Product();
-        product.setModelFlag("1");
-        List<Product> list=productService.findList(product);
-        if(list!=null&&list.size()>0){
-            product=list.get(0);
-        }
+        Product product=productService.get("c66595288aff4fee98533f9e949b9b1f");
+//        if(list!=null&&list.size()>0){
+//            product=list.get(0);
+//        }
         product=productService.get(product.getId());
         ModelDto dto=modelConverter.convertModelToDto(product);
         //还要获取模型的分类包含的图片位置信息

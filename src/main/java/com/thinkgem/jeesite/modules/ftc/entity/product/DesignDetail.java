@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.ftc.entity.product;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -26,6 +27,16 @@ public class DesignDetail extends DataEntity<DesignDetail> {
 	private String sourceUrl;		// 原图路径
 	private Double x;//横坐标
 	private Double y;//纵坐标
+
+	private Customer customer;
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 
 	public Double getX() {
 		return x;

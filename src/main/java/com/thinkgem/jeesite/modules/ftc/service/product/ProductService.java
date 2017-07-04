@@ -111,12 +111,15 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	public void delete(Product product) {
 		super.delete(product);
 	}
+	@Transactional(readOnly = false)
 	public void upShelve(Product product){
 		dao.upShelve(product);
 	}
+	@Transactional(readOnly = false)
 	public void downShelve(Product product){
 		dao.downShelve(product);
 	}
+	@Transactional(readOnly = false)
 	public void addHot(Product product){
 		dao.addHot(product);
 	}

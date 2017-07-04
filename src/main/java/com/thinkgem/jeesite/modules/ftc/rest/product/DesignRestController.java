@@ -105,37 +105,10 @@ public class DesignRestController extends BaseRestController {
      */
     @ApiOperation(value = "保存设计", notes = "获取设计的详情")
     @RequestMapping(value = {"save"},method = { RequestMethod.POST})
-    public RestResult save(DesignDto designDto,@RequestParam("token") String token){
-        //作假数据测试
-        Customer customer=new Customer("28");
-        designDto.setName("aaaaa");
-        designDto.setPrice(1000d);
-        ModelDto modelDto=new ModelDto();
-        modelDto.setId("a7f88d26ded141ca8c4e5ac2c2e72660");
-        ProductSpecDto specDto=new ProductSpecDto();
-        specDto.setImageUrl("aaaaaa");
-        specDto.setId("bcd6e64e728a42b8a6df9d1ce42f748e");
-        List<ProductSpecDto> specDtoList=new ArrayList<>();
-        specDtoList.add(specDto);
-        modelDto.setAttrs(specDtoList);
+    public RestResult save(DesignDto design,@RequestParam("token") String token){
 
-        designDto.setModelDto(modelDto);
-        List<ImageDto> imageDtos=new ArrayList<>();
-
-        ImageDto imageDto=new ImageDto();
-        imageDto.setImgUrl("bbbbbb");
-        imageDto.getMeshDto().setId("58cdc442b95d45f39c4ee1cfe62a1833");
-        imageDto.getMeshDto().setRotation(100d);
-        imageDtos.add(imageDto);
-        imageDto=new ImageDto();
-        imageDto.setImgUrl("cccccc");
-        imageDto.getMeshDto().setId("d45641a293cb4f099308b940ad4e1b01");
-        imageDto.getMeshDto().setRotation(30d);
-        imageDtos.add(imageDto);
-        designDto.setImageDtoList(imageDtos);
-        Design design=designConverter.convertDtoToModel(designDto);
-        design.setCustomer( customer);
-        designService.saveForRest(design);
+        Design model=designConverter.convertDtoToModel(design);
+        designService.saveForRest(model);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
     }
 
