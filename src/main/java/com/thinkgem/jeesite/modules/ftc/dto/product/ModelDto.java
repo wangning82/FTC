@@ -18,6 +18,7 @@ public class ModelDto extends BaseDto<ModelDto> {
     private String showImg;
 
 
+
     public String getShowImg() {
         return showImg;
     }

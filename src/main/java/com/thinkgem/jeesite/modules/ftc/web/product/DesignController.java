@@ -6,7 +6,9 @@ package com.thinkgem.jeesite.modules.ftc.web.product;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.thinkgem.jeesite.modules.ftc.entity.product.DesignDetail;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+import com.thinkgem.jeesite.modules.ftc.service.product.DesignDetailService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ImageService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,7 @@ public class DesignController extends BaseController {
 	@Autowired
 	private DesignService designService;
 	@Autowired
-	private ImageService imageService;
+	private DesignDetailService designDetailService;
 	@ModelAttribute
 	public Design get(@RequestParam(required=false) String id) {
 		Design entity = null;
@@ -63,10 +65,10 @@ public class DesignController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Design design, Model model) {
 		if(StringUtils.isNotEmpty(design.getId())){
-			Image image=new Image();
-			image.setDesign(design);
-			List<Image> images=imageService.findList(image);
-			design.setImages(images);
+			DesignDetail designDetail=new DesignDetail();
+			designDetail.setDesign(design);
+			List<DesignDetail> designDetails=designDetailService.findList(designDetail);
+			design.setDetails(designDetails);
 		}
 
 		model.addAttribute("design", design);

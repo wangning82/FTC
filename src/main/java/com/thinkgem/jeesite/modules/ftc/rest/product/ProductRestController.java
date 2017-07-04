@@ -2,7 +2,9 @@ package com.thinkgem.jeesite.modules.ftc.rest.product;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
+import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.common.rest.RestResult;
@@ -37,6 +39,8 @@ public class ProductRestController extends BaseRestController {
     private ProductConverter productConvert;
     @Autowired
     private PositionService positionService;
+    @Autowired
+    private CustomerConverter customerConverter;
 
     /**
      * 获取商品列表，传入参数
@@ -51,9 +55,63 @@ public class ProductRestController extends BaseRestController {
                         productConvert.convertDtoToModel(goods));
         List<ProductDto> productDtoList=
                 productConvert.convertListFromModelToDto(page.getList());
+
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
     }
+    /**
+     * 获取商品列表，传入参数
+     * 可以根据分类获取商品或模型
+     * @return
+     */
+    @ApiOperation(value = "推荐列表", notes = "获取推荐商品列表")
+    @RequestMapping(value = {"recommend", ""},method = { RequestMethod.GET})
+    public RestResult  recommend(ProductDto goods, HttpServletRequest request, HttpServletResponse response) {
+        Page<Product> page = productService.
+                findPage(new Page<Product>(request, response),
+                        productConvert.convertDtoToModel(goods));
+        List<ProductDto> productDtoList=
+                productConvert.convertListFromModelToDto(page.getList());
 
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
+    }
+    /**
+     * 潮人馆商品列表
+     *
+     * @return
+     */
+    @ApiOperation(value = "潮人馆商品列表", notes = "获取设计者的商品")
+    @RequestMapping(value = {"findByUser", ""},method = { RequestMethod.GET})
+    public RestResult findByUser(CustomerDto user, HttpServletRequest request, HttpServletResponse response) {
+
+        Product product=new Product();
+        product.setDesignBy(customerConverter.convertDtoToModel(user));
+
+        Page<Product> page = productService.
+                findPage(new Page<Product>(request, response),
+                        product);
+        List<ProductDto> productDtoList=
+                productConvert.convertListFromModelToDto(page.getList());
+
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
+    }
+    /**
+     * 获取商品列表，传入参数
+     * 可以根据分类获取商品或模型
+     * @return
+     */
+    @ApiOperation(value = "最热商品", notes = "获取最热商品列表")
+    @RequestMapping(value = {"hotest"},method = { RequestMethod.GET})
+    public RestResult hotest(ProductDto goods, HttpServletRequest request, HttpServletResponse response) {
+
+        Product product=productConvert.convertDtoToModel(goods);
+        Page<Product> page = productService.
+                findPage(new Page<Product>(request, response),product
+                        );
+        List<ProductDto> productDtoList=
+                productConvert.convertListFromModelToDto(page.getList());
+
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
+    }
 
     /**
      * 获取商品信息

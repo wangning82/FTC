@@ -2,6 +2,7 @@ package com.thinkgem.jeesite.modules.ftc.dto.product;
 
 import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.product.DesignDetail;
 
 import java.util.List;
 
@@ -10,9 +11,8 @@ import java.util.List;
  */
 public class DesignDto extends BaseDto<DesignDto>{
     private String id;
-    private Customer customer;
-    private ModelDto modelDto;
-    private List<ImageDto> imageDtoList;
+    private ModelDto model;
+    private List<DesignDetailDto> meshes;
     private String name;
     private String number;
     private Double price;
@@ -63,28 +63,29 @@ public class DesignDto extends BaseDto<DesignDto>{
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public ModelDto getModel() {
+        return model;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setModel(ModelDto model) {
+        this.model = model;
     }
 
-    public ModelDto getModelDto() {
-        return modelDto;
+    public List<DesignDetailDto> getMeshes() {
+        return meshes;
     }
 
-    public void setModelDto(ModelDto modelDto) {
-        this.modelDto = modelDto;
+    public void setMeshes(List<DesignDetailDto> meshes) {
+        this.meshes = meshes;
     }
 
-    public List<ImageDto> getImageDtoList() {
-        return imageDtoList;
+    public Customer getUser() {
+        return user;
     }
 
-    public void setImageDtoList(List<ImageDto> imageDtoList) {
-        this.imageDtoList = imageDtoList;
+    public void setUser(Customer user) {
+        this.user = user;
     }
-}
+
+   }
 

@@ -23,7 +23,7 @@ public class Design extends DataEntity<Design> {
 	private Product model;		// 模型
 	private Double price;		// 设计费
 	private String designStatus;		// 状态
-	private List<Image> images;
+	private List<DesignDetail> details;//设计明细
 	private Customer customer;
 
 	public Customer getCustomer() {
@@ -42,12 +42,12 @@ public class Design extends DataEntity<Design> {
 		super(id);
 	}
 
-	public List<Image> getImages() {
-		return images;
+	public List<DesignDetail> getDetails() {
+		return details;
 	}
 
-	public void setImages(List<Image> images) {
-		this.images = images;
+	public void setDetails(List<DesignDetail> details) {
+		this.details = details;
 	}
 
 	@Length(min=0, max=64, message="名称长度必须介于 0 和 64 之间")
