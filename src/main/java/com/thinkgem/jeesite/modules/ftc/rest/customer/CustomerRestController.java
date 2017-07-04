@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.modules.ftc.rest.customer;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.utils.EhCacheUtils;
 import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
+import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.common.rest.RestResult;
@@ -87,29 +88,42 @@ public class CustomerRestController extends BaseRestController {
     /**
      * 用户登录
      *
-     * @param mobile
+     * @param platformType
+     * @param userId
      * @param password
      * @return
      */
-    @ApiOperation(value = "用户登录", notes = "用户登录，密码为密文")
-    @RequestMapping(value = {"login"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public RestResult login(@RequestParam("mobile") String mobile, @RequestParam("password") String password) {
+    @ApiOperation(value = "用户登录", notes = "支持短信登录，微信和QQ登录")
+    @RequestMapping(value = {"login"}, method = {RequestMethod.POST})
+    public RestResult login(@RequestParam("type") String platformType, @RequestParam("pUid") String userId,
+                            @RequestParam("password") String password) {
         Customer param = new Customer();
-        param.setTelephone(mobile);
+        if (PlatformTypeEnum.Phone.getValue().equals(platformType)) {
+            param.setTelephone(userId);
+        } else if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
+            param.setWechat(userId);
+        } else if (PlatformTypeEnum.QQ.getValue().equals(platformType)) {
+            param.setQq(userId);
+        }
         List<Customer> result = customerService.findList(param);
         if (CollectionUtils.isNotEmpty(result)) {
             Customer customer = result.get(0);
-            if (password.equals(customer.getLoginPassword())) {
-                String token = UUID.randomUUID().toString();
-                customer.setAccessToken(token);
-                customer.setExpiresTime(new Date());
-                EhCacheUtils.put(TOKEN_CACHE, token, customer);
-                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customer);
-            } else {
-                return new RestResult(CODE_ERROR, "用户密码不正确");
+            if (PlatformTypeEnum.Phone.getValue().equals(platformType)) {
+                String captcha = (String) EhCacheUtils.get(CAPTCHA_CACHE, userId);
+                if (password.equals(captcha)) {
+                    String token = UUID.randomUUID().toString();
+                    customer.setAccessToken(token);
+                    customer.setExpiresTime(new Date());
+                    EhCacheUtils.put(TOKEN_CACHE, token, customer);
+                    return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customer);
+                } else {
+                    return new RestResult(CODE_ERROR, "短信验证码不正确");
+                }
+            }else {
+                return new RestResult(CODE_ERROR, "登录类型不正确");
             }
         } else {
-            return new RestResult(CODE_ERROR, "该手机号没有注册用户");
+            return new RestResult(CODE_ERROR, "没有找到该用户信息");
         }
     }
 
