@@ -12,7 +12,7 @@ public enum FlagEnum {
 
     private String valueInfo;
 
-    FlagEnum(String value, String valueInfo){
+    FlagEnum(String value, String valueInfo) {
         this.value = value;
         this.valueInfo = valueInfo;
     }
@@ -26,3 +26,5 @@ public enum FlagEnum {
     }
 
 }
+
+
