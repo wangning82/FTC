@@ -7,6 +7,7 @@ import com.thinkgem.jeesite.modules.ftc.dto.product.ImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -28,6 +29,8 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
     public Product convertDtoToModel(ProductDto dto) {
         Product model = new Product();
         model.setId(dto.getId());
+        model.setCategory(new Category(dto.getCategoryId()));
+        model.setUpdateDate(dto.getDate());
         return model;
     }
 
@@ -42,6 +45,7 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
         dto.setPicImg(model.getPicImg());
         dto.setPrice(model.getShowPrice());
         dto.setDesignPrice(model.getDesignPrice());
+        dto.setCategoryId(model.getCategory().getId());
         Customer customer=model.getDesignBy();
         CustomerDto customerDto=customerConverter.convertModelToDto(customer);
         dto.setDesignBy(customerDto);

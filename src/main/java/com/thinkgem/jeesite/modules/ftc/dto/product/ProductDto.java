@@ -8,6 +8,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,14 +21,32 @@ public class ProductDto extends BaseDto<ProductDto>{
     private String desc;//描述
     private Double price;//价格
     private int  count;//库存
+    private String categoryId;//分类id
 
     private boolean open;//是否开放
     private BigDecimal designPrice;
     private CustomerDto designBy;
     private String picImg;//产品主图
+    private Date date;
 
     List<ImageDto> textures;//图片
     List<ProductSpecDto> attrs;//规格
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getPicImg() {
         return picImg;

@@ -1,20 +1,18 @@
 package com.thinkgem.jeesite.modules.ftc.rest.product;
 
 import com.thinkgem.jeesite.common.rest.BaseRestController;
-import com.thinkgem.jeesite.common.utils.IdGen;
-import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
-import com.thinkgem.jeesite.modules.ftc.convert.product.DesignConverter;
-import com.thinkgem.jeesite.modules.ftc.convert.product.ImageConverter;
-import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
-import com.thinkgem.jeesite.modules.ftc.dto.product.ImageDto;
-import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
-import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
-import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
-import com.thinkgem.jeesite.modules.ftc.entity.product.*;
 import com.thinkgem.jeesite.common.rest.RestResult;
+import com.thinkgem.jeesite.modules.ftc.convert.product.DesignConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.product.ModelConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.product.PositionConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
+import com.thinkgem.jeesite.modules.ftc.dto.product.PositionDto;
+import com.thinkgem.jeesite.modules.ftc.entity.product.*;
 import com.thinkgem.jeesite.modules.ftc.service.product.DesignService;
-import com.thinkgem.jeesite.modules.ftc.service.product.ImageService;
+import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +38,14 @@ public class DesignRestController extends BaseRestController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductSpecService productSpecService;
+    @Autowired
+    private ModelConverter modelConverter;
+    @Autowired
+    private PositionService positionService;
+    @Autowired
+    private PositionConverter positionConverter;
     /**
      * 删除
      * @param
@@ -112,6 +117,30 @@ public class DesignRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
     }
 
-
+    /**
+     * 我要设计
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "我要设计", notes = "我要设计，获取模型信息")
+    @RequestMapping(value = {"iwant"},method = { RequestMethod.GET})
+    public RestResult iWant(){
+        //我要设计，默认取第一个模型
+        Product product=productService.get("c66595288aff4fee98533f9e949b9b1f");
+//        if(list!=null&&list.size()>0){
+//            product=list.get(0);
+//        }
+        product=productService.get(product.getId());
+        List<ProductSpec> specs=productSpecService.findList(new ProductSpec(product));
+        product.setSpecs(specs);
+        ModelDto dto=modelConverter.convertModelToDto(product);
+        //还要获取模型的分类包含的图片位置信息
+        Category category=product.getCategory();
+        List<Position> positionList =positionService.findList(new Position(category));
+        List<PositionDto> positionDtoList=positionConverter.convertListFromModelToDto(positionList);
+        dto.setSprites(positionDtoList);
+        return new RestResult(CODE_SUCCESS,
+                MSG_SUCCESS,dto);
+    }
 
 }

@@ -43,6 +43,15 @@ public class Product extends DataEntity<Product> {
 	private String modelFlag;//是否为模型
 	private Customer designBy;//设计者
 	private BigDecimal designPrice;//设计费
+	private int hotNum;
+
+	public void setHotNum(int hotNum) {
+		this.hotNum = hotNum;
+	}
+
+	public int getHotNum() {
+		return hotNum;
+	}
 
 	public void setDesignPrice(BigDecimal designPrice) {
 		this.designPrice = designPrice;

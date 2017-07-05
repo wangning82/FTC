@@ -4,6 +4,7 @@ import com.thinkgem.jeesite.common.rest.BaseConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
         d.setOpen(true);
         d.setPrice(model.getShowPrice());
         d.setShowImg(model.getPicImg());
+        d.setCategoryId(model.getCategory().getId());
         List<ImageDto> textures=imageConverter.convertListFromModelToDto(model.getImages());
         d.setTextures(textures);
 
@@ -42,6 +44,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
     public Product convertDtoToModel(ModelDto dto) {
         Product model=new Product();
         model.setId(dto.getId());
+        model.setCategory(new Category(dto.getCategoryId()));
         List<ProductSpec> productSpecList=productSpecConverter.convertListFromDtoToModel(dto.getAttrs());
         model.setSpecs(productSpecList);
         return model;

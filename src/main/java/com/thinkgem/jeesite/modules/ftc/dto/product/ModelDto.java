@@ -16,8 +16,24 @@ public class ModelDto extends BaseDto<ModelDto> {
     private int  count;//库存
     private boolean open;
     private String showImg;
+    private String categoryName;
+    private String categoryId;
 
+    public String getCategoryName() {
+        return categoryName;
+    }
 
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getShowImg() {
         return showImg;
