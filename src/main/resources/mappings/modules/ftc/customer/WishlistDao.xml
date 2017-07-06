@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.customer.WishlistDao">
+    
+	<sql id="wishlistColumns">
+		a.id AS "id",
+		a.product_id AS "product.id",
+		a.customer_id AS "customer.id",
+		a.designer_id AS "designer.id",
+		a.type AS "type",
+		a.del_flag AS "delFlag",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id"
+	</sql>
+	
+	<sql id="wishlistJoins">
+	</sql>
+    
+	<select id="get" resultType="Wishlist">
+		SELECT 
+			<include refid="wishlistColumns"/>
+		FROM os_wishlist a
+		<include refid="wishlistJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Wishlist">
+		SELECT 
+			<include refid="wishlistColumns"/>
+		FROM os_wishlist a
+		<include refid="wishlistJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
+			</if>
+			<if test="designer != null and designer.id != null and designer.id != ''">
+				AND a.designer_id = #{designer.id}
+			</if>
+			<if test="type != null and type != ''">
+				AND a.type = #{type}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Wishlist">
+		SELECT 
+			<include refid="wishlistColumns"/>
+		FROM os_wishlist a
+		<include refid="wishlistJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO os_wishlist(
+			id,
+			product_id,
+			customer_id,
+			designer_id,
+			type,
+			del_flag,
+			create_date,
+			create_by,
+			update_date,
+			update_by
+		) VALUES (
+			#{id},
+			#{product.id},
+			#{customer.id},
+			#{designer.id},
+			#{type},
+			#{delFlag},
+			#{createDate},
+			#{createBy.id},
+			#{updateDate},
+			#{updateBy.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE os_wishlist SET 	
+			product_id = #{product.id},
+			customer_id = #{customer.id},
+			designer_id = #{designer.id},
+			type = #{type},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE os_wishlist SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

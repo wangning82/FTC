@@ -94,24 +94,7 @@ public class ProductRestController extends BaseRestController {
 
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
     }
-    /**
-     * 获取商品列表，传入参数
-     * 可以根据分类获取商品或模型
-     * @return
-     */
-    @ApiOperation(value = "最热商品", notes = "获取最热商品列表")
-    @RequestMapping(value = {"hotest"},method = { RequestMethod.GET})
-    public RestResult hotest(ProductDto goods, HttpServletRequest request, HttpServletResponse response) {
 
-        Product product=productConvert.convertDtoToModel(goods);
-        Page<Product> page = productService.
-                findPage(new Page<Product>(request, response),product
-                        );
-        List<ProductDto> productDtoList=
-                productConvert.convertListFromModelToDto(page.getList());
-
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
-    }
 
     /**
      * 获取商品信息
