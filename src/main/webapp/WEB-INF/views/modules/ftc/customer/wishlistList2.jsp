@@ -18,8 +18,8 @@
 </head>
 <body>
 	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/ftc/customer/wishlist/list?type=1">商品收藏</a></li>
-		<li class="active">><a href="${ctx}/ftc/customer/wishlist/list?type=2">店铺收藏</a></li>
+		<li ><a href="${ctx}/ftc/customer/wishlist/list?type=1">商品收藏</a></li>
+		<li class="active"><a href="${ctx}/ftc/customer/wishlist/list?type=2">店铺收藏</a></li>
 	</ul>
 	<form:form id="searchForm" modelAttribute="wishlist" action="${ctx}/ftc/customer/wishlist/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -49,7 +49,7 @@
 			<tr>
 
 				<td>
-					${wishlist.designer.id}
+					${wishlist.designer.shopName}
 				</td>
 
 				<shiro:hasPermission name="ftc:customer:wishlist:edit"><td>

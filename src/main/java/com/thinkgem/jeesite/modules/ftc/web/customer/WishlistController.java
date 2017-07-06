@@ -6,6 +6,7 @@ package com.thinkgem.jeesite.modules.ftc.web.customer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.thinkgem.jeesite.modules.ftc.constant.WishlistTypeEnum;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,7 +52,11 @@ public class WishlistController extends BaseController {
 	public String list(Wishlist wishlist, HttpServletRequest request, HttpServletResponse response, Model model) {
 		Page<Wishlist> page = wishlistService.findPage(new Page<Wishlist>(request, response), wishlist); 
 		model.addAttribute("page", page);
-		return "modules/ftc/customer/wishlistList";
+		if(WishlistTypeEnum.WISHLIST_SHOP.getValue().equals( wishlist.getType())){
+			return "modules/ftc/customer/wishlistList2";
+		}else{
+			return "modules/ftc/customer/wishlistList";
+		}
 	}
 
 	@RequiresPermissions("ftc:customer:wishlist:view")
