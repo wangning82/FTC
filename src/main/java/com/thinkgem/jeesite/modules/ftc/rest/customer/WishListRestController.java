@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping(value = "/rest/ftc/wishlist/")
 @Api(value = "收藏管理", description = "收藏")
-public class WishListRestController extends BaseRestController {
+public class WishlistRestController extends BaseRestController {
     @Autowired
     private WishlistService wishlistService;
 

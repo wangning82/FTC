@@ -12,10 +12,16 @@
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
-		a.update_by AS "updateBy.id"
+		a.update_by AS "updateBy.id",
+		b.user_name as "customer.userName",
+		c.shop_name As "designer.shopName",
+		d.name As "product.name"
 	</sql>
 	
 	<sql id="wishlistJoins">
+		left join os_customer b on a.customer_id=b.id
+		left join os_customer c on a.designer_id=c.id
+		left join os_product d on a.product_id=d.id
 	</sql>
     
 	<select id="get" resultType="Wishlist">
@@ -38,6 +44,9 @@
 			</if>
 			<if test="designer != null and designer.id != null and designer.id != ''">
 				AND a.designer_id = #{designer.id}
+			</if>
+			<if test="customer != null and customer.id != null and customer.id != ''">
+				AND a.customer_id = #{customer.id}
 			</if>
 			<if test="type != null and type != ''">
 				AND a.type = #{type}

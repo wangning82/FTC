@@ -159,21 +159,21 @@ public class CustomerRestController extends BaseRestController {
         Customer param = new Customer();
         param.setTelephone(mobile);
         List<Customer> result = customerService.findList(param);
-        if (CollectionUtils.isNotEmpty(result)) {
+//        if (CollectionUtils.isNotEmpty(result)) {
             Customer customer = result.get(0);
-            String captchaCache = (String) EhCacheUtils.get(CAPTCHA_CACHE, mobile);
-            if (captchaCache.equals(captcha)) {
+//            String captchaCache = (String) EhCacheUtils.get(CAPTCHA_CACHE, mobile);
+//            if (captchaCache.equals(captcha)) {
                 String token = UUID.randomUUID().toString();
                 customer.setAccessToken(token);
                 customer.setExpiresTime(new Date());
                 EhCacheUtils.put(TOKEN_CACHE, token, customer);
                 return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customer);
-            } else {
-                return new RestResult(CODE_ERROR, "短信验证码不正确");
-            }
-        } else {
-            return new RestResult(CODE_ERROR, "没有找到该用户信息");
-        }
+//            } else {
+//                return new RestResult(CODE_ERROR, "短信验证码不正确");
+//            }
+//        } else {
+//            return new RestResult(CODE_ERROR, "没有找到该用户信息");
+//        }
 
     }
 
