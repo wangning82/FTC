@@ -138,7 +138,7 @@ public class CustomerRestController extends BaseRestController {
     public RestResult login(@RequestParam("type") String platformType, @RequestParam("pUid") String userId,
                             @RequestParam("password") String password) {
         if (PlatformTypeEnum.Phone.getValue().equals(platformType)) {
-            return loginByShotMessage(userId, password);
+            return loginByShortMessage(userId, password);
         } else if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
             return null;
         } else if (PlatformTypeEnum.QQ.getValue().equals(platformType)) {
@@ -155,7 +155,7 @@ public class CustomerRestController extends BaseRestController {
      * @param captcha
      * @return
      */
-    private RestResult loginByShotMessage(String mobile, String captcha) {
+    private RestResult loginByShortMessage(String mobile, String captcha) {
         Customer param = new Customer();
         param.setTelephone(mobile);
         List<Customer> result = customerService.findList(param);
@@ -176,6 +176,8 @@ public class CustomerRestController extends BaseRestController {
         }
 
     }
+
+
 
     @ApiOperation(value = "使用令牌登录", notes = "使用令牌登录")
     @RequestMapping(value = {"loginByToken"}, method = {RequestMethod.POST})
@@ -208,7 +210,7 @@ public class CustomerRestController extends BaseRestController {
         }
     }
 
-    @ApiOperation(value = "获取地区列表", notes = "用户编辑收货地址时的备选条件")
+    @ApiOperation(value = "获取地区列表", notes = "用户编辑收货地址时的备选条件 ")
     @RequestMapping(value = {"findAreaList"}, method = {RequestMethod.GET})
     public RestResult findAreaList() {
         List<Area> areaList = areaService.findAll();

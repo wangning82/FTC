@@ -28,6 +28,10 @@ public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
 
     @Override
     public Customer convertDtoToModel(CustomerDto dto) {
-        return super.convertDtoToModel(dto);
+        Customer customer = new Customer();
+        customer.setUserName(dto.getName());
+        customer.setSignature(dto.getDesc());
+        customer.setPicImg(dto.getImgUrl());
+        return customer;
     }
 }
