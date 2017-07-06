@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
  * Created by bingbing on 2017/7/3.
  */
 @Component
-public class CustomerConverter extends BaseConverter<Customer,CustomerDto>{
+public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
     @Override
     public CustomerDto convertModelToDto(Customer model) {
-
-        CustomerDto dto=new CustomerDto();
-        if(model==null)return dto;
+        CustomerDto dto = new CustomerDto();
+        if (model == null)
+            return dto;
         dto.setId(model.getId());
         dto.setName(model.getUserName());
         dto.setDesc(model.getSignature());
@@ -24,5 +24,14 @@ public class CustomerConverter extends BaseConverter<Customer,CustomerDto>{
         dto.setDesignCount(100);
         dto.setImgUrl(model.getPicImg());
         return dto;
+    }
+
+    @Override
+    public Customer convertDtoToModel(CustomerDto dto) {
+        Customer customer = new Customer();
+        customer.setUserName(dto.getName());
+        customer.setSignature(dto.getDesc());
+        customer.setPicImg(dto.getImgUrl());
+        return customer;
     }
 }

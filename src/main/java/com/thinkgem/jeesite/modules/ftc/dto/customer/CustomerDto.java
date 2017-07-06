@@ -5,8 +5,8 @@ import com.thinkgem.jeesite.common.rest.BaseDto;
 /**
  * Created by bingbing on 2017/7/3.
  */
-public class CustomerDto  extends BaseDto<CustomerDto>{
-    private String  id ;//
+public class CustomerDto extends BaseDto<CustomerDto> {
+    private String id;//
     private String name;//名字
     private String desc;//描述
     private String imgUrl;//头像
