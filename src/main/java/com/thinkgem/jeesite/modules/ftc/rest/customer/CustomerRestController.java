@@ -8,6 +8,7 @@ import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
@@ -130,19 +131,19 @@ public class CustomerRestController extends BaseRestController {
      *
      * @param platformType
      * @param userId
-     * @param password
+     * @param code
      * @return
      */
     @ApiOperation(value = "用户登录", notes = "支持短信、微信和QQ登录")
     @RequestMapping(value = {"login"}, method = {RequestMethod.POST})
-    public RestResult login(@RequestParam("type") String platformType, @RequestParam("pUid") String userId,
-                            @RequestParam("password") String password) {
+    public RestResult login(@RequestParam("pType") String platformType, @RequestParam("pUid") String userId,
+                            @RequestParam("pCode") String code) throws Exception {
         if (PlatformTypeEnum.Phone.getValue().equals(platformType)) {
-            return loginByShortMessage(userId, password);
+            return loginByShortMessage(userId, code);
         } else if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
-            return null;
+            return loginByWeChat(userId, code);
         } else if (PlatformTypeEnum.QQ.getValue().equals(platformType)) {
-            return null;
+            return null; // TODO QQ登录
         } else {
             return new RestResult(CODE_ERROR, "不支持的登录方式");
         }
@@ -159,33 +160,98 @@ public class CustomerRestController extends BaseRestController {
         Customer param = new Customer();
         param.setTelephone(mobile);
         List<Customer> result = customerService.findList(param);
-//        if (CollectionUtils.isNotEmpty(result)) {
+        if (CollectionUtils.isNotEmpty(result)) {
             Customer customer = result.get(0);
-//            String captchaCache = (String) EhCacheUtils.get(CAPTCHA_CACHE, mobile);
-//            if (captchaCache.equals(captcha)) {
+            String captchaCache = (String) EhCacheUtils.get(CAPTCHA_CACHE, mobile);
+            if (captchaCache.equals(captcha)) {
                 String token = UUID.randomUUID().toString();
                 customer.setAccessToken(token);
                 customer.setExpiresTime(new Date());
                 EhCacheUtils.put(TOKEN_CACHE, token, customer);
-                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customer);
-//            } else {
-//                return new RestResult(CODE_ERROR, "短信验证码不正确");
-//            }
-//        } else {
-//            return new RestResult(CODE_ERROR, "没有找到该用户信息");
-//        }
-
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerConverter.convertModelToDto(customer));
+            } else {
+                return new RestResult(CODE_ERROR, "短信验证码不正确");
+            }
+        } else {
+            return new RestResult(CODE_ERROR, "没有找到该用户信息");
+        }
     }
 
-
+    /**
+     * 微信登录
+     * @param openid
+     * @return
+     */
+    private RestResult loginByWeChat(String openid, String accessToken) throws Exception{
+        Customer param = new Customer();
+        param.setWechat(openid);
+        List<Customer> result = customerService.findList(param);
+        Customer customer = null;
+        if (CollectionUtils.isNotEmpty(result)) {
+            customer = result.get(0);
+        }else {
+            customer = ThirdPartyLoginHelper.getWxUserinfo(accessToken, openid);
+            customerService.save(customer);
+        }
+        String token = UUID.randomUUID().toString();
+        customer.setAccessToken(token);
+        customer.setExpiresTime(new Date());
+        EhCacheUtils.put(TOKEN_CACHE, token, customer);
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerConverter.convertModelToDto(customer));
+    }
 
     @ApiOperation(value = "使用令牌登录", notes = "使用令牌登录")
     @RequestMapping(value = {"loginByToken"}, method = {RequestMethod.POST})
     public RestResult loginByToken(@RequestParam("token") String token) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customer);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerConverter.convertModelToDto(customer));
         } else {
+            return new RestResult(CODE_ERROR, "没有找到用户信息");
+        }
+    }
+
+    @ApiOperation(value = "绑定第三方平台用户", notes = "绑定第三方平台用户")
+    @RequestMapping(value = {"bindUser"}, method = {RequestMethod.POST})
+    public RestResult bindUser(@RequestParam("uid") String customerId, @RequestParam("pType") String platformType,
+                               @RequestParam("pUid") String openid, @RequestParam("pCode") String code){
+        Customer customer = customerService.get(customerId);
+        if(customer != null){
+            if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
+                customer.setWechat(openid);
+                customerService.save(customer);
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+            } else if (PlatformTypeEnum.QQ.getValue().equals(platformType)) {
+                customer.setQq(openid);
+                customerService.save(customer);
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+            } else {
+                return new RestResult(CODE_ERROR, "不支持的绑定方式");
+            }
+        }else {
+            return new RestResult(CODE_ERROR, "没有找到用户信息");
+        }
+
+    }
+
+    @ApiOperation(value = "解绑第三方平台用户", notes = "解绑第三方平台用户")
+    @RequestMapping(value = {"unBindUser"}, method = {RequestMethod.POST})
+    public RestResult unBindUser(@RequestParam("uid") String customerId, @RequestParam("pType") String platformType,
+                                 @RequestParam("pUid") String openid, @RequestParam("pCode") String code){
+        Customer customer = customerService.get(customerId);
+        if(customer != null){
+            if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
+                customer.setWechat(null);
+                customerService.save(customer);
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+            } else if (PlatformTypeEnum.QQ.getValue().equals(platformType)) {
+                customer.setQq(null);
+                customerService.save(customer);
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+            } else {
+                return new RestResult(CODE_ERROR, "不支持的解绑方式");
+            }
+        }else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");
         }
     }
@@ -194,18 +260,21 @@ public class CustomerRestController extends BaseRestController {
      * 更新用户信息
      *
      * @param token
-     * @param customer
+     * @param customerDto
      * @return
      */
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
     @RequestMapping(value = {"updateCustomer"}, method = {RequestMethod.POST})
-    public RestResult updateCustomer(@RequestParam("token") String token, Customer customer) {
+    public RestResult updateCustomer(@RequestParam("token") String token, CustomerDto customerDto) {
         Customer loginCustomer = findCustomerByToken(token);
         if (loginCustomer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            customerService.save(customer);
-            EhCacheUtils.put(TOKEN_CACHE, token, customer);
+            loginCustomer.setUserName(customerDto.getName());
+            loginCustomer.setSignature(customerDto.getDesc());
+            loginCustomer.setPicImg(customerDto.getImgUrl()); // TODO 更新图片
+            customerService.save(loginCustomer);
+            EhCacheUtils.put(TOKEN_CACHE, token, loginCustomer);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }
@@ -260,6 +329,18 @@ public class CustomerRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             addressService.save(addressConverter.convertDtoToModel(address));
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+        }
+    }
+
+    @ApiOperation(value = "删除收货地址", notes = "删除收货地址")
+    @RequestMapping(value = {"delAddress"}, method = {RequestMethod.POST})
+    public RestResult delAddress(@RequestParam("token") String token, AddressDto address) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            addressService.delete(addressConverter.convertDtoToModel(address));
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }

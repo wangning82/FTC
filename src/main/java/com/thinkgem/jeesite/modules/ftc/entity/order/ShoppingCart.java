@@ -22,8 +22,8 @@ public class ShoppingCart extends DataEntity<ShoppingCart> {
     private static final long serialVersionUID = 1L;
     private ProductSpec productSpec;        // 商品规格编号
     private Customer customer;        // 顾客ID
-    private BigDecimal buyNumber;        // 购买数量
-    private String checkStatus;        // 购物车状态
+    private BigDecimal buyNumber;     // 购买数量
+    private String checkStatus;       // 购物车状态
     private Product product;
 
     public ShoppingCart() {
