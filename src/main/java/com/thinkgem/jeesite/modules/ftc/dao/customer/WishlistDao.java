@@ -14,5 +14,17 @@ import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
  */
 @MyBatisDao
 public interface WishlistDao extends CrudDao<Wishlist> {
-	
+    /**
+     * 获取店铺收藏数量
+     * @param shopId
+     * @return
+     */
+	int getShopWishlistNumber(String shopId);
+
+    /**
+     * 获取产品收藏数量
+     * @param productId
+     * @return
+     */
+	int getProductWishlistNumber(String productId);
 }

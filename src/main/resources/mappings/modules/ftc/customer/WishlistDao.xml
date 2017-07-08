@@ -122,5 +122,23 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
+
+	<select id="getShopWishlistNumber" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*)
+		from os_wishlist
+		where 1=1
+		<if test="shopId != null and shopId != ''">
+			and	designer_id = #{shopId}
+		</if>
+	</select>
+
+	<select id="getProductWishlistNumber" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(*)
+		from os_wishlist
+		where 1=1
+		<if test="productId != null and productId != ''">
+			and	product_id = #{productId}
+		</if>
+	</select>
 	
 </mapper>

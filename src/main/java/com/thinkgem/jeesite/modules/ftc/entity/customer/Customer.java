@@ -43,6 +43,7 @@ public class Customer extends DataEntity<Customer> {
 	private BigDecimal score;		// 会员积分
 	private String qq;		// qq
 	private String wechat;		// wechat
+	private Integer wishlistNumber; // 关注人数
 
 	private String accessToken; // 令牌
 	private Date expiresTime; // 令牌有效时间
@@ -286,5 +287,13 @@ public class Customer extends DataEntity<Customer> {
 
 	public void setExpiresTime(Date expiresTime) {
 		this.expiresTime = expiresTime;
+	}
+
+	public Integer getWishlistNumber() {
+		return wishlistNumber;
+	}
+
+	public void setWishlistNumber(Integer wishlistNumber) {
+		this.wishlistNumber = wishlistNumber;
 	}
 }

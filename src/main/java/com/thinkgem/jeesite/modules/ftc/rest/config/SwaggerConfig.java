@@ -29,8 +29,8 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("F2C RESTful APIs")
-                .description("Copyright © 2017, WangNing, F2C. All Rights Reserved.")
-                .contact(new Contact("WangNing", "https://github.com/wangning82/FTC", "wa_ning@163.com"))
+                .description("Copyright © 2017, 王宁, F2C. All Rights Reserved.")
+                .contact(new Contact("王宁", "https://github.com/wangning82/FTC", "wa_ning@163.com"))
                 .license("Apache License Version 2.0")
                 .termsOfServiceUrl("https://github.com/wangning82/FTC")
                 .version("1.0.0-SNAPSHOT")

@@ -1,11 +1,9 @@
 package com.thinkgem.jeesite.modules.ftc.constant;
 
-import com.thinkgem.jeesite.common.rest.BaseEnum;
-
 /**
  * Created by houyi on 2017/6/20 0020.
  */
-public enum WishlistTypeEnum  {
+public enum WishlistTypeEnum {
 
     WISHLIST_PRODUCT("1", "商品"),
     WISHLIST_SHOP("2", "店铺");

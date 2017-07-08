@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.ftc.rest.customer;
 
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.common.utils.EhCacheUtils;
@@ -7,12 +8,16 @@ import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
 import io.swagger.annotations.Api;
@@ -24,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -50,6 +57,15 @@ public class CustomerRestController extends BaseRestController {
 
     @Autowired
     private AddressConverter addressConverter;
+
+    @Autowired
+    private ShopConverter shopConverter;
+
+    @Autowired
+    private ProductConverter productConverter;
+
+    @Autowired
+    private ProductService productService;
 
     /**
      * 发送短信验证码
@@ -342,6 +358,24 @@ public class CustomerRestController extends BaseRestController {
         } else {
             addressService.delete(addressConverter.convertDtoToModel(address));
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+        }
+    }
+
+    @ApiOperation(value = "潮店推荐列表", notes = "根据店铺收藏量倒序排列")
+    @RequestMapping(value = {"hotShop"}, method = {RequestMethod.POST})
+    public RestResult hotShop(@RequestParam("token") String token, HttpServletRequest request, HttpServletResponse response) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Page<Customer> param = new Page<Customer>(request, response);
+            param.setOrderBy("a.wishlist_number desc");
+            Page<Customer> result = customerService.findPage(param, new Customer());
+            List<Customer> shopList = result.getList();
+            for(Customer obj : shopList){
+                // TODO 查询商品
+            }
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertListFromModelToDto(shopList));
         }
     }
 

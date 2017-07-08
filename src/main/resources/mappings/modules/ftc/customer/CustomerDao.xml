@@ -31,7 +31,8 @@
 		a.rank_id AS "rankId",
 		a.score AS "score",
 		a.qq AS "qq",
-		a.wechat AS "wechat"
+		a.wechat AS "wechat",
+		a.wishlist_number AS "wishlistNumber"
 	</sql>
 	
 	<sql id="customerJoins">
@@ -72,7 +73,7 @@
 			</if>
 		</where>
 		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+			<when test="page != null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
@@ -129,7 +130,8 @@
 			rank_id,
 			score,
 			qq,
-			wechat
+			wechat,
+			wishlist_number
 		) VALUES (
 			#{id},
 			#{userCode},
@@ -159,7 +161,8 @@
 			#{rankId},
 			#{score},
 			#{qq},
-			#{wechat}
+			#{wechat},
+			#{wishlistNumber}
 		)
 	</insert>
 	
@@ -191,7 +194,8 @@
 			rank_id = #{rankId},
 			score = #{score},
 			qq = #{qq},
-			wechat = #{wechat}
+			wechat = #{wechat},
+			wishlist_number = #{wishlistNumber}
 		WHERE id = #{id}
 	</update>
 	
@@ -199,5 +203,5 @@
 		DELETE FROM os_customer
 		WHERE id = #{id}
 	</update>
-	
+
 </mapper>

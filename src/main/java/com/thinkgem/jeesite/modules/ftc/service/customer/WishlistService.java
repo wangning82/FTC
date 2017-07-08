@@ -5,6 +5,9 @@ package com.thinkgem.jeesite.modules.ftc.service.customer;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.ftc.constant.WishlistTypeEnum;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,9 @@ import com.thinkgem.jeesite.modules.ftc.dao.customer.WishlistDao;
 @Transactional(readOnly = true)
 public class WishlistService extends CrudService<WishlistDao, Wishlist> {
 
+	@Autowired
+	private CustomerService customerService;
+
 	public Wishlist get(String id) {
 		return super.get(id);
 	}
@@ -36,6 +42,12 @@ public class WishlistService extends CrudService<WishlistDao, Wishlist> {
 	
 	@Transactional(readOnly = false)
 	public void save(Wishlist wishlist) {
+		if(WishlistTypeEnum.WISHLIST_SHOP.getValue().equals(wishlist.getType())){
+			// 统计店铺收藏数量
+			Customer customer = customerService.get(wishlist.getCustomer().getId());
+			customer.setWishlistNumber(dao.getShopWishlistNumber(wishlist.getDesigner().getId()));
+			customerService.save(customer);
+		}
 		super.save(wishlist);
 	}
 	
