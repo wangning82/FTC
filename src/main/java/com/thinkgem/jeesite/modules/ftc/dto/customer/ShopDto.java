@@ -2,7 +2,6 @@ package com.thinkgem.jeesite.modules.ftc.dto.customer;
 
 import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,8 +12,8 @@ public class ShopDto extends BaseDto<ShopDto> {
     private String id;
     private String name;
     private String desc;
-    private CustomerDto customerDto;
-    private List<ProductDto> productDtoList;
+    private CustomerDto user;
+    private List<ProductDto> goods;
 
     public String getId() {
         return id;
@@ -40,19 +39,19 @@ public class ShopDto extends BaseDto<ShopDto> {
         this.desc = desc;
     }
 
-    public CustomerDto getCustomerDto() {
-        return customerDto;
+    public CustomerDto getUser() {
+        return user;
     }
 
-    public void setCustomerDto(CustomerDto customerDto) {
-        this.customerDto = customerDto;
+    public void setUser(CustomerDto user) {
+        this.user = user;
     }
 
-    public List<ProductDto> getProductDtoList() {
-        return productDtoList;
+    public List<ProductDto> getGoods() {
+        return goods;
     }
 
-    public void setProductDtoList(List<ProductDto> productDtoList) {
-        this.productDtoList = productDtoList;
+    public void setGoods(List<ProductDto> goods) {
+        this.goods = goods;
     }
 }

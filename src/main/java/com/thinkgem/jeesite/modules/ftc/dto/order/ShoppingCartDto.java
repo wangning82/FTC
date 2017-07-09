@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class ShoppingCartDto extends BaseDto<ShoppingCartDto> {
 
     private String id;
-    private ProductDto productDto;
+    private ProductDto good;
     private BigDecimal buyNumber;
     private String selected;
 
@@ -23,12 +23,12 @@ public class ShoppingCartDto extends BaseDto<ShoppingCartDto> {
         this.id = id;
     }
 
-    public ProductDto getProductDto() {
-        return productDto;
+    public ProductDto getGood() {
+        return good;
     }
 
-    public void setProductDto(ProductDto productDto) {
-        this.productDto = productDto;
+    public void setGood(ProductDto good) {
+        this.good = good;
     }
 
     public String getSelected() {

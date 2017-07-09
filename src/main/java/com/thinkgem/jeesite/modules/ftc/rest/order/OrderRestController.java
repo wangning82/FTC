@@ -4,6 +4,7 @@ import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.order.ShoppingCartConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.order.ShoppingCartDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderWaybill;
@@ -73,7 +74,23 @@ public class OrderRestController extends BaseRestController {
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
+    }
 
+    @ApiOperation(value = "从购物车移出商品", notes = "从购物车移出商品")
+    @RequestMapping(value = {"removeFromCart"}, method = {RequestMethod.POST})
+    public RestResult removeFromCart(@RequestParam("token") String token,
+                                     @RequestParam("productSpecNumber") String productSpecNumber) {
+        Customer customer = findCustomerByToken(token);
+        if (customer != null) {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            ProductSpec spec = new ProductSpec();
+            spec.setProductSpecNumber(productSpecNumber);
+            shoppingCart.setCustomer(customer);
+            cartService.delete(shoppingCart);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+        } else {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        }
     }
 
     /**
@@ -101,16 +118,16 @@ public class OrderRestController extends BaseRestController {
      * 生成订单
      *
      * @param token
-     * @param cartIds 购物车标识
+     * @param shoppingCartDtoList 购物车
      * @return
      */
     @ApiOperation(value = "生成订单", notes = "生成订单")
     @RequestMapping(value = {"createOrder"}, method = {RequestMethod.POST})
-    public RestResult createOrder(@RequestParam("token") String token, String[] cartIds) {
+    public RestResult createOrder(@RequestParam("token") String token, List<ShoppingCartDto> shoppingCartDtoList) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            Order order = orderService.createOrder(customer, cartIds);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, order);
+            Order order = orderService.createOrder(customer, shoppingCartConverter.convertListFromDtoToModel(shoppingCartDtoList));
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, orderConverter.convertModelToDto(order));
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
@@ -131,7 +148,7 @@ public class OrderRestController extends BaseRestController {
             Order param = new Order();
             param.setCustomer(customer);
             List<Order> result = orderService.findList(param);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, result);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, orderConverter.convertListFromModelToDto(result));
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
@@ -195,8 +212,8 @@ public class OrderRestController extends BaseRestController {
      */
     @ApiOperation(value = "支付订单", notes = "支付订单")
     @RequestMapping(value = {"orderList"}, method = {RequestMethod.POST})
-    public RestResult orderPay(@RequestParam("token") String token, @RequestParam("orderNo") String orderNo,
-                               @RequestParam("payType") String payType) {
+    public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderNo,
+                               @RequestParam("pType") String payType) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             // TODO 第三方支付
