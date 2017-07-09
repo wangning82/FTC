@@ -10,10 +10,10 @@ public class CustomerDto extends BaseDto<CustomerDto> {
     private String name;//名字
     private String desc;//描述
     private String imgUrl;//头像
-    private int followingCount;//关注
-    private int followerCount;//粉丝
-    private int designCount;//设计数量
-    private int favouriteCount;//收藏数量
+    private Integer followingCount;//关注
+    private Integer followerCount;//粉丝
+    private Integer designCount;//设计数量
+    private Integer favouriteCount;//收藏数量
 
     private String accessToken;
 
@@ -49,35 +49,35 @@ public class CustomerDto extends BaseDto<CustomerDto> {
         this.imgUrl = imgUrl;
     }
 
-    public int getFollowingCount() {
+    public Integer getFollowingCount() {
         return followingCount;
     }
 
-    public void setFollowingCount(int followingCount) {
+    public void setFollowingCount(Integer followingCount) {
         this.followingCount = followingCount;
     }
 
-    public int getFollowerCount() {
+    public Integer getFollowerCount() {
         return followerCount;
     }
 
-    public void setFollowerCount(int followerCount) {
+    public void setFollowerCount(Integer followerCount) {
         this.followerCount = followerCount;
     }
 
-    public int getDesignCount() {
+    public Integer getDesignCount() {
         return designCount;
     }
 
-    public void setDesignCount(int designCount) {
+    public void setDesignCount(Integer designCount) {
         this.designCount = designCount;
     }
 
-    public int getFavouriteCount() {
+    public Integer getFavouriteCount() {
         return favouriteCount;
     }
 
-    public void setFavouriteCount(int favouriteCount) {
+    public void setFavouriteCount(Integer favouriteCount) {
         this.favouriteCount = favouriteCount;
     }
 

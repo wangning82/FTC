@@ -5,7 +5,7 @@ package com.thinkgem.jeesite.modules.ftc.dao.product;
 
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 
 /**
  * 图片DAO接口
@@ -13,6 +13,6 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
  * @version 2017-06-01
  */
 @MyBatisDao
-public interface ImageDao extends CrudDao<Image> {
+public interface ProductImageDao extends CrudDao<ProductImage> {
 	
 }

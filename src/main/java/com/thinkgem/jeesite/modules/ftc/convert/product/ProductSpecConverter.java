@@ -14,18 +14,13 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec,ProductSpecD
     public ProductSpecDto convertModelToDto(ProductSpec model) {
         ProductSpecDto dto=new ProductSpecDto();
         dto.setId(model.getId());
-        dto.setName(model.getSpec().getName());
-        dto.setImageUrl(model.getPicImg());
-        dto.setPrice(model.getPrice());
-        dto.setStock(model.getStock());
-        dto.setNumber(model.getProductSpecNumber());
+
         return dto;
     }
 
     @Override
     public ProductSpec convertDtoToModel(ProductSpecDto dto) {
         ProductSpec model=new ProductSpec();
-        model.setPicImg(dto.getImageUrl());
         model.setId(dto.getId());
         return model;
     }

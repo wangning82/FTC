@@ -63,9 +63,9 @@ public class DesignRestController extends BaseRestController {
      * @param
      * @return
      */
-    @ApiOperation(value = "优秀设计", notes = "获取优秀设计列表")
-    @RequestMapping(value = {"best"},method = { RequestMethod.GET})
-    public RestResult best(Design design){
+    @ApiOperation(value = "设计列表", notes = "获取设计列表")
+    @RequestMapping(value = {"list"},method = { RequestMethod.GET})
+    public RestResult list(Design design){
         //
         List<Design> bestDesign=designService.findList(design);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);

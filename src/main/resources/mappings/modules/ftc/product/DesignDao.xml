@@ -20,7 +20,7 @@
 
     <sql id="designJoins">
 
-		left join os_product b on a.product_id =b.id
+		left join os_product b on a.model_id =b.id
 		left join os_customer c on a.create_by =c.id
 
 	</sql>

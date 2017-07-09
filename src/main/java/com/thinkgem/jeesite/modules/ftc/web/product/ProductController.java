@@ -51,7 +51,7 @@ public class ProductController extends BaseController {
 	@Autowired
 	private DesignService designService;
 	@Autowired
-	private ImageService imageService;
+	private ProductImageService productImageService;
 	@ModelAttribute
 	public Product get(@RequestParam(required=false) String id) {
 		Product entity = null;
@@ -81,12 +81,12 @@ public class ProductController extends BaseController {
 			product.setNumber(ProductNoGenerator.INSTANCE.nextId());
 		}else{
 			ProductSpec spec=new ProductSpec();
-			spec.setProductId(product.getId());
+			spec.setProduct(product);
 			List<ProductSpec> specs=productSpecService.findList(spec);
 			product.setSpecs(specs);
-			Image image=new Image();
+			ProductImage image=new ProductImage();
 			image.setProduct(product);
-			List<Image> images=imageService.findList(image);
+			List<ProductImage> images= productImageService.findList(image);
 			product.setImages(images);
 
 		}

@@ -43,15 +43,30 @@ public class Product extends DataEntity<Product> {
 	private String modelFlag;//是否为模型
 	private Customer designBy;//设计者
 	private BigDecimal designPrice;//设计费
-	private int hotNum;
+	private Integer hotNum;//热度
+	private Integer priaseCount;//点赞数量
+	private Integer favouritCount;//收藏数量
 
-	public void setHotNum(int hotNum) {
+	public void setHotNum(Integer hotNum) {
 		this.hotNum = hotNum;
 	}
 
-	public int getHotNum() {
-		return hotNum;
+	public Integer getPriaseCount() {
+		return priaseCount;
 	}
+
+	public void setPriaseCount(Integer priaseCount) {
+		this.priaseCount = priaseCount;
+	}
+
+	public Integer getFavouritCount() {
+		return favouritCount;
+	}
+
+	public void setFavouritCount(Integer favouritCount) {
+		this.favouritCount = favouritCount;
+	}
+
 
 	public void setDesignPrice(BigDecimal designPrice) {
 		this.designPrice = designPrice;
@@ -77,13 +92,13 @@ public class Product extends DataEntity<Product> {
 		this.designBy = designBy;
 	}
 
-	private List<Image>images;
+	private List<ProductImage>images;
 
-	public List<Image> getImages() {
+	public List<ProductImage> getImages() {
 		return images;
 	}
 
-	public void setImages(List<Image> images) {
+	public void setImages(List<ProductImage> images) {
 		this.images = images;
 	}
 

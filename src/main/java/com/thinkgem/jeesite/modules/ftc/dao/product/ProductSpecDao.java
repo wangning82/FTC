@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 
+import java.util.List;
+
 /**
  * 商品规格DAO接口
  * @author wangqignxiang
@@ -14,5 +16,6 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
  */
 @MyBatisDao
 public interface ProductSpecDao extends CrudDao<ProductSpec> {
-	
+	public List<ProductSpec> findForRest(ProductSpec spec);
+
 }

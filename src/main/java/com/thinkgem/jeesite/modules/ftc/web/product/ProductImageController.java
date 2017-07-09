@@ -3,9 +3,13 @@
  */
 package com.thinkgem.jeesite.modules.ftc.web.product;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductImageService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,14 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.thinkgem.jeesite.common.config.Global;
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.common.utils.StringUtils;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
-import com.thinkgem.jeesite.modules.ftc.service.product.ImageService;
-
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 图片Controller
@@ -31,53 +29,53 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "${adminPath}/ftc/product/image")
-public class ImageController extends BaseController {
+public class ProductImageController extends BaseController {
 
 	@Autowired
-	private ImageService imageService;
+	private ProductImageService productImageService;
 	
 	@ModelAttribute
-	public Image get(@RequestParam(required=false) String id) {
-		Image entity = null;
+	public ProductImage get(@RequestParam(required=false) String id) {
+		ProductImage entity = null;
 		if (StringUtils.isNotBlank(id)){
-			entity = imageService.get(id);
+			entity = productImageService.get(id);
 		}
 		if (entity == null){
-			entity = new Image();
+			entity = new ProductImage();
 		}
 		return entity;
 	}
 	
 	@RequiresPermissions("ftc:product:image:view")
 	@RequestMapping(value = {"list", ""})
-	public String list(Image image, HttpServletRequest request, HttpServletResponse response, Model model) {
-		Page<Image> page = imageService.findPage(new Page<Image>(request, response), image); 
+	public String list(ProductImage image, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<ProductImage> page = productImageService.findPage(new Page<ProductImage>(request, response), image);
 		model.addAttribute("page", page);
 		return "modules/ftc/product/imageList";
 	}
 
 	@RequiresPermissions("ftc:product:image:view")
 	@RequestMapping(value = "form")
-	public String form(Image image, Model model) {
+	public String form(ProductImage image, Model model) {
 		model.addAttribute("image", image);
 		return "modules/ftc/product/imageForm";
 	}
 
 	@RequiresPermissions("ftc:product:image:edit")
 	@RequestMapping(value = "save")
-	public String save(Image image, Model model, RedirectAttributes redirectAttributes) {
+	public String save(ProductImage image, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, image)){
 			return form(image, model);
 		}
-		imageService.save(image);
+		productImageService.save(image);
 		addMessage(redirectAttributes, "保存图片成功");
 		return "redirect:"+Global.getAdminPath()+"/ftc/product/image/?repage";
 	}
 	
 	@RequiresPermissions("ftc:product:image:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Image image, RedirectAttributes redirectAttributes) {
-		imageService.delete(image);
+	public String delete(ProductImage image, RedirectAttributes redirectAttributes) {
+		productImageService.delete(image);
 		addMessage(redirectAttributes, "删除图片成功");
 		return "redirect:"+Global.getAdminPath()+"/ftc/product/image/?repage";
 	}

@@ -43,7 +43,7 @@ public class ModelDto extends BaseDto<ModelDto> {
         this.showImg = showImg;
     }
 
-    List<ImageDto> textures;//图片
+    List<ProductImageDto> textures;//图片
     private List<PositionDto> sprites;
     private List<ProductSpecDto>  attrs;
 
@@ -95,11 +95,11 @@ public class ModelDto extends BaseDto<ModelDto> {
         this.open = open;
     }
 
-    public List<ImageDto> getTextures() {
+    public List<ProductImageDto> getTextures() {
         return textures;
     }
 
-    public void setTextures(List<ImageDto> textures) {
+    public void setTextures(List<ProductImageDto> textures) {
         this.textures = textures;
     }
 

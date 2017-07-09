@@ -5,7 +5,7 @@
 	<sql id="productSpecColumns">
 		a.id AS "id",
 		a.product_spec_number AS "productSpecNumber",
-		a.product_id AS "productId",
+		a.product_id AS "product.id",
 		a.spec_id AS "spec.id",
 		a.spec_name AS "spec.name",
 		a.stock AS "stock",
@@ -20,7 +20,9 @@
 		a.update_by AS "updateBy.id",
 		a.pic_img AS "picImg"
 	</sql>
-	
+
+
+
 	<sql id="productSpecJoins">
 	</sql>
     
@@ -51,7 +53,58 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<select id="findForRest" resultType="ProductSpec">
+		SELECT
+		max(a.id) AS "id",
+		a.product_spec_number AS "productSpecNumber",
+		a.spec_id AS "spec.id",
+		a.spec_name AS "spec.name",
+		a.stock AS "stock",
+		a.sales_volume AS "salesVolume",
+		a.price AS "price",
+		a.score AS "score",
+		a.default_status AS "defaultStatus",
+		a. STATUS AS "status",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.pic_img AS "picImg",
+		b. NAME AS "product.name",
+		b.introduce AS "product.introduce",
+		b.design_by AS "product.designBy.id",
+		c.user_name AS "product.designBy.userName"
+		FROM
+		os_product_specification a
+		LEFT JOIN os_product b ON a.product_id = b.id
+		LEFT JOIN os_customer c ON b.design_by = c.id
+		<where>
+
+			<if test="productSpecNumber != null and productSpecNumber != ''">
+				AND a.product_spec_number = #{productSpecNumber}
+			</if>
+
+			<if test="product.designBy != null and product.designBy.id != null and product.designBy.id != ''">
+				AND b.designBy = #{product.designBy.id}
+			</if>
+
+
+			<if test="product.category != null and product.category != '' and product.category.id != null and product.category.id != ''">
+				AND b.category_id = #{product.category.id}
+			</if>
+		</where>
+		GROUP BY
+		a.product_id
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 	<select id="findAllList" resultType="ProductSpec">
 		SELECT 
 			<include refid="productSpecColumns"/>
@@ -91,7 +144,7 @@
 		) VALUES (
 			#{id},
 			#{productSpecNumber},
-			#{productId},
+			#{product.id},
 			#{spec.id},
 			#{spec.name},
 			#{stock},
@@ -111,7 +164,7 @@
 	<update id="update">
 		UPDATE os_product_specification SET 	
 			product_spec_number = #{productSpecNumber},
-			product_id = #{productId},
+			product_id = #{product.id},
 			spec_id = #{spec.id},
 			spec_name = #{spec.name},
 			stock = #{stock},

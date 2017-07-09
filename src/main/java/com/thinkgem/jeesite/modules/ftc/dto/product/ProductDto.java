@@ -2,12 +2,8 @@ package com.thinkgem.jeesite.modules.ftc.dto.product;
 
 import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
-import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,19 +21,49 @@ public class ProductDto extends BaseDto<ProductDto>{
 
     private boolean open;//是否开放
     private BigDecimal designPrice;
-    private CustomerDto designBy;
-    private String picImg;//产品主图
-    private Date date;
 
-    List<ImageDto> textures;//图片
+    private String picImg;//产品主图
+
+    List<ProductImageDto> textures;//图片
     List<ProductSpecDto> attrs;//规格
 
-    public Date getDate() {
-        return date;
+
+    private Integer priaseCount;//点赞数量
+    private Integer favouritCount;//收藏数量
+    private boolean priased;
+    private boolean favourited;
+
+
+    public Integer getPriaseCount() {
+        return priaseCount;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setPriaseCount(Integer priaseCount) {
+        this.priaseCount = priaseCount;
+    }
+
+    public Integer getFavouritCount() {
+        return favouritCount;
+    }
+
+    public void setFavouritCount(Integer favouritCount) {
+        this.favouritCount = favouritCount;
+    }
+
+    public boolean isPriased() {
+        return priased;
+    }
+
+    public void setPriased(boolean priased) {
+        this.priased = priased;
+    }
+
+    public boolean isFavourited() {
+        return favourited;
+    }
+
+    public void setFavourited(boolean favourited) {
+        this.favourited = favourited;
     }
 
     public String getCategoryId() {
@@ -56,13 +82,6 @@ public class ProductDto extends BaseDto<ProductDto>{
         this.picImg = picImg;
     }
 
-    public CustomerDto getDesignBy() {
-        return designBy;
-    }
-
-    public void setDesignBy(CustomerDto designBy) {
-        this.designBy = designBy;
-    }
 
     public BigDecimal getDesignPrice() {
         return designPrice;
@@ -128,11 +147,11 @@ public class ProductDto extends BaseDto<ProductDto>{
         this.open = open;
     }
 
-    public List<ImageDto> getTextures() {
+    public List<ProductImageDto> getTextures() {
         return textures;
     }
 
-    public void setTextures(List<ImageDto> textures) {
+    public void setTextures(List<ProductImageDto> textures) {
         this.textures = textures;
     }
 

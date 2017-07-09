@@ -379,17 +379,5 @@ public class CustomerRestController extends BaseRestController {
         }
     }
 
-    @ApiOperation(value = "获取潮店信息", notes = "获取潮店信息")
-    @RequestMapping(value = {"hotShop"}, method = {RequestMethod.POST})
-    public RestResult shopInfo(@RequestParam("token") String token, @RequestParam("shopId") String shopId) {
-        Customer customer = findCustomerByToken(token);
-        if (customer == null) {
-            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
-        } else {
-            Customer shop = customerService.get(shopId);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertModelToDto(shop));
-        }
-    }
-
 }
 

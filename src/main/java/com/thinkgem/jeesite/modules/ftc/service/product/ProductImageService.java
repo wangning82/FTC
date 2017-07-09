@@ -3,15 +3,15 @@
  */
 package com.thinkgem.jeesite.modules.ftc.service.product;
 
-import java.util.List;
-
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
-import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
+import java.util.List;
 
 /**
  * 图片Service
@@ -20,27 +20,27 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
  */
 @Service
 @Transactional(readOnly = true)
-public class ImageService extends CrudService<ImageDao, Image> {
+public class ProductImageService extends CrudService<ProductImageDao, ProductImage> {
 
-	public Image get(String id) {
+	public ProductImage get(String id) {
 		return super.get(id);
 	}
 	
-	public List<Image> findList(Image image) {
+	public List<ProductImage> findList(ProductImage image) {
 		return super.findList(image);
 	}
 	
-	public Page<Image> findPage(Page<Image> page, Image image) {
+	public Page<ProductImage> findPage(Page<ProductImage> page, ProductImage image) {
 		return super.findPage(page, image);
 	}
 	
 	@Transactional(readOnly = false)
-	public void save(Image image) {
+	public void save(ProductImage image) {
 		super.save(image);
 	}
 	
 	@Transactional(readOnly = false)
-	public void delete(Image image) {
+	public void delete(ProductImage image) {
 		super.delete(image);
 	}
 	

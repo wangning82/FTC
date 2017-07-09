@@ -8,7 +8,7 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
-import com.thinkgem.jeesite.modules.ftc.dao.product.ImageDao;
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao;
 import com.thinkgem.jeesite.modules.ftc.entity.product.*;
@@ -30,7 +30,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	@Autowired
 	private ProductSpecDao productSpecDao;
 	@Autowired
-	private ImageDao imageDao;
+	private ProductImageDao productImageDao;
 	@Autowired
 	private DesignDao designDao;
 	public Product get(String id) {
@@ -70,7 +70,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
 				}
 				if (SpecAttribute.DEL_FLAG_NORMAL.equals(productSpec.getDelFlag())){
 					if (StringUtils.isBlank(productSpec.getId())){
-						productSpec.setProductId(product.getId());
+						productSpec.setProduct(product);
 						productSpec.setProductSpecNumber(ProductNoGenerator.INSTANCE.nextId());
 						productSpec.preInsert();
 						productSpecDao.insert(productSpec);
@@ -86,7 +86,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
 
 		//保存图片
 		if(product.getImages()!=null&&product.getImages().size()>0){
-			for (Image  image : product.getImages()){
+			for (ProductImage  image : product.getImages()){
 				if (image.getId() == null){
 					continue;
 				}
@@ -94,13 +94,13 @@ public class ProductService extends CrudService<ProductDao, Product> {
 					if (StringUtils.isBlank(image.getId())){
 						image.setProduct(product);
 						image.preInsert();
-						imageDao.insert(image);
+						productImageDao.insert(image);
 					}else{
 						image.preUpdate();
-						imageDao.update(image);
+						productImageDao.update(image);
 					}
 				}else{
-					imageDao.delete(image);
+					productImageDao.delete(image);
 				}
 			}
 		}

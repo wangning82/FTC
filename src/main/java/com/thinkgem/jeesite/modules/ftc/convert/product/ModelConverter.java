@@ -1,7 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.convert.product;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
-import com.thinkgem.jeesite.modules.ftc.dto.product.ImageDto;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Category;
@@ -20,7 +20,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
     @Autowired
     private ProductSpecConverter productSpecConverter;
     @Autowired
-    private ImageConverter imageConverter;
+    private ProductImageConverter productImageConverter;
     @Override
     public ModelDto convertModelToDto(Product model) {
         ModelDto d = new ModelDto();
@@ -31,7 +31,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
         d.setPrice(model.getShowPrice());
         d.setShowImg(model.getPicImg());
         d.setCategoryId(model.getCategory().getId());
-        List<ImageDto> textures=imageConverter.convertListFromModelToDto(model.getImages());
+        List<ProductImageDto> textures= productImageConverter.convertListFromModelToDto(model.getImages());
         d.setTextures(textures);
 
         List<ProductSpecDto> specDtos=

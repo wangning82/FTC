@@ -16,7 +16,7 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	
 	private static final long serialVersionUID = 1L;
 	private String productSpecNumber;		// 商品规格编号
-	private String productId;		// 商品ID
+	private Product  product;		// 商品ID
 	private SpecAttribute spec;		// 规格
 	private Double stock;		// 库存
 	private Double salesVolume;		// 销售量
@@ -50,7 +50,7 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 		super(id);
 	}
 	public ProductSpec(Product product){
-		this.setProductId(product.getId());
+		this.product=product;
 	}
 
 	@Length(min=0, max=64, message="商品规格编号长度必须介于 0 和 64 之间")
@@ -61,16 +61,14 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	public void setProductSpecNumber(String productSpecNumber) {
 		this.productSpecNumber = productSpecNumber;
 	}
-	
-	@Length(min=0, max=64, message="商品ID长度必须介于 0 和 64 之间")
-	public String getProductId() {
-		return productId;
+
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setProductId(String productId) {
-		this.productId = productId;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
-	
 
 	@Length(min=0, max=11, message="库存长度必须介于 0 和 11 之间")
 	public Double getStock() {

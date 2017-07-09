@@ -6,7 +6,7 @@ package com.thinkgem.jeesite.modules.ftc.dto.product;
 public class MeshDto {
     private String id;//位置id
     private String name;//位置
-    private ImageDto texture;//图片
+    private ProductImageDto texture;//图片
     private Double x;
     private Double y;
     private Double rotation;
@@ -28,11 +28,11 @@ public class MeshDto {
         this.name = name;
     }
 
-    public ImageDto getTexture() {
+    public ProductImageDto getTexture() {
         return texture;
     }
 
-    public void setTexture(ImageDto texture) {
+    public void setTexture(ProductImageDto texture) {
         this.texture = texture;
     }
 

@@ -43,5 +43,9 @@ public class ProductSpecService extends CrudService<ProductSpecDao, ProductSpec>
 	public void delete(ProductSpec productSpec) {
 		super.delete(productSpec);
 	}
+
+	public List<ProductSpec> findForRest(Page<ProductSpec> page, ProductSpec productSpec) {
+		return dao.findForRest(productSpec);
+	}
 	
 }
