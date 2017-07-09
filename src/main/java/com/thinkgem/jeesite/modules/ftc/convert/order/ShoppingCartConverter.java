@@ -22,7 +22,7 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         shoppingCart.setId(dto.getId());
         shoppingCart.setBuyNumber(dto.getBuyNumber());
         shoppingCart.setCheckStatus(dto.getSelected());
-        shoppingCart.setProduct(productConverter.convertDtoToModel(dto.getProductDto()));
+        shoppingCart.setProduct(productConverter.convertDtoToModel(dto.getGood()));
         return shoppingCart;
     }
 
@@ -32,7 +32,7 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         shoppingCartDto.setId(model.getId());
         shoppingCartDto.setBuyNumber(model.getBuyNumber());
         shoppingCartDto.setSelected(model.getCheckStatus());
-        shoppingCartDto.setProductDto(productConverter.convertModelToDto(model.getProduct()));
+        shoppingCartDto.setGood(productConverter.convertModelToDto(model.getProduct()));
         return shoppingCartDto;
     }
 }

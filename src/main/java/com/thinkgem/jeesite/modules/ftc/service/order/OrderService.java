@@ -126,10 +126,10 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * 创建订单
      *
      * @param customer
-     * @param shoppingCartIds
+     * @param shoppingCarts
      */
     @Transactional(readOnly = false)
-    public Order createOrder(Customer customer, String[] shoppingCartIds) {
+    public Order createOrder(Customer customer, List<ShoppingCart> shoppingCarts) {
         Order order = new Order();
         order.setOrderNo(OrderNoGenerator.INSTANCE.nextId());
         order.setCustomer(customer);
@@ -139,8 +139,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
         List<OrderProduct> orderProductList = new ArrayList<>();
 
         // 订单明细
-        for (String shoppingCartId : shoppingCartIds) {
-            ShoppingCart shoppingCart = shoppingCartService.get(shoppingCartId);
+        for (ShoppingCart shoppingCart : shoppingCarts) {
             OrderProduct orderProduct = cart2OrderProduct(order, shoppingCart);
             orderProduct.preInsert();
             orderProductDao.insert(orderProduct);
