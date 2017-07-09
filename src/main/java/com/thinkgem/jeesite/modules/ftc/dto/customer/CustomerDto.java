@@ -15,6 +15,8 @@ public class CustomerDto extends BaseDto<CustomerDto> {
     private int designCount;//设计数量
     private int favouriteCount;//收藏数量
 
+    private String accessToken;
+
     public String getId() {
         return id;
     }
@@ -77,5 +79,13 @@ public class CustomerDto extends BaseDto<CustomerDto> {
 
     public void setFavouriteCount(int favouriteCount) {
         this.favouriteCount = favouriteCount;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }

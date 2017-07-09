@@ -17,9 +17,13 @@ import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderProduct;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderShipment;
 import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerBillService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +60,12 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
     @Autowired
     private CustomerBillService customerBillService;
+
+    @Autowired
+    private ProductSpecService productSpecService;
+
+    @Autowired
+    private ProductService productService;
 
     public Order get(String id) {
         Order order = super.get(id);
@@ -131,22 +141,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
         // 订单明细
         for (String shoppingCartId : shoppingCartIds) {
             ShoppingCart shoppingCart = shoppingCartService.get(shoppingCartId);
-
-            OrderProduct orderProduct = new OrderProduct();
-            orderProduct.setOrder(order);
-            orderProduct.setProductNumber(shoppingCart.getProduct().getNumber());
-            orderProduct.setName(shoppingCart.getProduct().getName());
-            orderProduct.setPicImg(shoppingCart.getProduct().getPicImg());
-            orderProduct.setProductSpecNumber(shoppingCart.getProductSpec().getProductSpecNumber());
-            orderProduct.setProductSpecName(shoppingCart.getProductSpec().getSpec().getName());
-            orderProduct.setProductPrice(new BigDecimal(shoppingCart.getProductSpec().getPrice()));
-            orderProduct.setBuyNumber(shoppingCart.getBuyNumber());
-            orderProduct.setProductAmount(new BigDecimal(shoppingCart.getProductSpec().getPrice()).multiply(shoppingCart.getBuyNumber()));
-            orderProduct.setDesignBy(shoppingCart.getProduct().getDesignBy());
-            orderProduct.setDesignPrice(shoppingCart.getProduct().getDesignPrice());
-            orderProduct.setDesignAmount(shoppingCart.getProduct().getDesignPrice().multiply(shoppingCart.getBuyNumber()));
-            orderProduct.setPrice(orderProduct.getProductAmount().add(orderProduct.getDesignAmount()));
-            orderProduct.setCommentStatus(FlagEnum.Flag_NO.getValue());
+            OrderProduct orderProduct = cart2OrderProduct(order, shoppingCart);
             orderProduct.preInsert();
             orderProductDao.insert(orderProduct);
             orderProductList.add(orderProduct);
@@ -157,6 +152,58 @@ public class OrderService extends CrudService<OrderDao, Order> {
         order.setOrderProductList(orderProductList);
         return order;
 
+    }
+
+    /**
+     * 购物车转订单
+     * @param order
+     * @param shoppingCart
+     * @return
+     */
+    public OrderProduct cart2OrderProduct(Order order, ShoppingCart shoppingCart){
+        OrderProduct orderProduct = new OrderProduct();
+        orderProduct.setOrder(order);
+        orderProduct.setProductNumber(shoppingCart.getProduct().getNumber());
+        orderProduct.setName(shoppingCart.getProduct().getName());
+        orderProduct.setPicImg(shoppingCart.getProduct().getPicImg());
+        orderProduct.setProductSpecNumber(shoppingCart.getProductSpec().getProductSpecNumber());
+        orderProduct.setProductSpecName(shoppingCart.getProductSpec().getSpec().getName());
+        orderProduct.setProductPrice(new BigDecimal(shoppingCart.getProductSpec().getPrice()));
+        orderProduct.setBuyNumber(shoppingCart.getBuyNumber());
+        orderProduct.setProductAmount(new BigDecimal(shoppingCart.getProductSpec().getPrice()).multiply(shoppingCart.getBuyNumber()));
+        orderProduct.setDesignBy(shoppingCart.getProduct().getDesignBy());
+        orderProduct.setDesignPrice(shoppingCart.getProduct().getDesignPrice());
+        orderProduct.setDesignAmount(shoppingCart.getProduct().getDesignPrice().multiply(shoppingCart.getBuyNumber()));
+        orderProduct.setPrice(orderProduct.getProductAmount().add(orderProduct.getDesignAmount()));
+        orderProduct.setCommentStatus(FlagEnum.Flag_NO.getValue());
+        return orderProduct;
+    }
+
+    /**
+     * 订单转购物车
+     * @param orderProduct
+     * @return
+     */
+    public ShoppingCart orderProduct2Cart(OrderProduct orderProduct){
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setCustomer(orderProduct.getOrder().getCustomer());
+        shoppingCart.setBuyNumber(orderProduct.getBuyNumber());
+
+        Product productParam = new Product();
+        productParam.setNumber(orderProduct.getProductNumber());
+        List<Product> productList = productService.findList(productParam);
+        if(CollectionUtils.isNotEmpty(productList)){
+            shoppingCart.setProduct(productList.get(0));
+        }
+
+        ProductSpec productSpecParam = new ProductSpec();
+        productSpecParam.setProductSpecNumber(orderProduct.getProductSpecNumber());
+        List<ProductSpec> productSpecList = productSpecService.findList(productSpecParam);
+        if(CollectionUtils.isNotEmpty(productSpecList)){
+            shoppingCart.setProductSpec(productSpecList.get(0));
+        }
+
+        return shoppingCart;
     }
 
     /**

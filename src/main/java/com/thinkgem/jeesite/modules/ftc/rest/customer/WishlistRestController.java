@@ -91,18 +91,18 @@ public class WishlistRestController extends BaseRestController {
     }
 
     /**
-     * 加入收藏
+     * 取消收藏
      *
      * @param
      * @return
      */
-    @ApiOperation(value = "删除收藏", notes = "删除收藏")
+    @ApiOperation(value = "取消收藏", notes = "取消收藏")
     @RequestMapping(value = {"delete"}, method = {RequestMethod.POST})
     public RestResult delete(@RequestParam("token") String token, @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             wishlistService.delete(new Wishlist(id));
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");
         }

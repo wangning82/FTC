@@ -18,11 +18,12 @@ public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
         dto.setId(model.getId());
         dto.setName(model.getUserName());
         dto.setDesc(model.getSignature());
-        dto.setFollowerCount(100);
-        dto.setFollowingCount(100);
-        dto.setFavouriteCount(100);
+        dto.setFollowerCount(model.getWishlistNumber());
+        dto.setFollowingCount(model.getWishlistNumber());
+        dto.setFavouriteCount(model.getWishlistNumber());
         dto.setDesignCount(100);
         dto.setImgUrl(model.getPicImg());
+        dto.setAccessToken(model.getAccessToken());
         return dto;
     }
 

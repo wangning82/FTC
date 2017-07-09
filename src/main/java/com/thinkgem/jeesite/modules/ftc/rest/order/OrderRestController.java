@@ -2,6 +2,8 @@ package com.thinkgem.jeesite.modules.ftc.rest.order;
 
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
+import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.order.ShoppingCartConverter;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderWaybill;
@@ -39,6 +41,12 @@ public class OrderRestController extends BaseRestController {
     @Autowired
     private ShoppingCartService cartService;
 
+    @Autowired
+    private OrderConverter orderConverter;
+
+    @Autowired
+    private ShoppingCartConverter shoppingCartConverter;
+
     /**
      * 添加购物车
      *
@@ -48,8 +56,10 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "添加商品到购物车", notes = "添加商品到购物车")
-    @RequestMapping(value = {"addToCart"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public RestResult addToCart(@RequestParam("token") String token, @RequestParam("productSpecNumber") String productSpecNumber, @RequestParam("buyNumber") int buyNumber) {
+    @RequestMapping(value = {"addToCart"}, method = {RequestMethod.POST})
+    public RestResult addToCart(@RequestParam("token") String token,
+                                @RequestParam("productSpecNumber") String productSpecNumber,
+                                @RequestParam("buyNumber") int buyNumber) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             ShoppingCart shoppingCart = new ShoppingCart();
@@ -73,14 +83,14 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "查看购物车商品", notes = "查看购物车商品")
-    @RequestMapping(value = {"productSpecInCart"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"productSpecInCart"}, method = {RequestMethod.POST})
     public RestResult productSpecInCart(@RequestParam("token") String token) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             ShoppingCart param = new ShoppingCart();
             param.setCustomer(customer);
             List<ShoppingCart> result = cartService.findList(param);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, result);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shoppingCartConverter.convertListFromModelToDto(result));
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }

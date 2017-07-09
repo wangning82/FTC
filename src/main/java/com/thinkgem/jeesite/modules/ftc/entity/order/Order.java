@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.ftc.entity.order;
 
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import org.hibernate.validator.constraints.Length;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import java.math.BigDecimal;
@@ -33,6 +34,8 @@ public class Order extends DataEntity<Order> {
 	private BigDecimal payAmount;		// 支付金额
 	private BigDecimal buyNumber;		// 商品总数量
 	private List<OrderProduct> orderProductList = Lists.newArrayList();		// 子表列表
+
+	private Address address;
 	
 	public Order() {
 		super();
@@ -159,5 +162,13 @@ public class Order extends DataEntity<Order> {
 
 	public void setOrderProductList(List<OrderProduct> orderProductList) {
 		this.orderProductList = orderProductList;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 }
