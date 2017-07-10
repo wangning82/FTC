@@ -30,6 +30,14 @@ public class Product extends DataEntity<Product> {
 	private Double showPrice;		// 显示价格
 	private String introduce;		// 商品简介
 	private String picImg;		// 展示图片
+	private String modelFlag;//是否为模型
+	private Customer designBy;//设计者
+	private BigDecimal designPrice;//设计费
+	private Integer hotNum;//热度
+	private Integer priaseCount;//点赞数量
+	private Integer favouritCount;//收藏数量
+	private List<ProductImage>images;
+	private Category category;
 	private String showInTop;		// 是否置顶 1=置顶/0=默认
 	private String showInNav;		// 是否导航栏 1=显示/0=隐藏
 	private String showInHot;		// 是否热门 1=热门/0=默认
@@ -40,12 +48,7 @@ public class Product extends DataEntity<Product> {
 	private String pageTitle;		// 页面标题
 	private String pageDescription;		// 页面描述
 	private String pageKeyword;		// 页面关键词
-	private String modelFlag;//是否为模型
-	private Customer designBy;//设计者
-	private BigDecimal designPrice;//设计费
-	private Integer hotNum;//热度
-	private Integer priaseCount;//点赞数量
-	private Integer favouritCount;//收藏数量
+	private List<ProductSpec> specs;//商品规格
 
 	public void setHotNum(Integer hotNum) {
 		this.hotNum = hotNum;
@@ -92,7 +95,7 @@ public class Product extends DataEntity<Product> {
 		this.designBy = designBy;
 	}
 
-	private List<ProductImage>images;
+
 
 	public List<ProductImage> getImages() {
 		return images;
@@ -102,7 +105,7 @@ public class Product extends DataEntity<Product> {
 		this.images = images;
 	}
 
-	private Category category;
+
 
 	public Category getCategory() {
 		return category;
@@ -112,7 +115,7 @@ public class Product extends DataEntity<Product> {
 		this.category = category;
 	}
 
-	private List<ProductSpec> specs;//商品规格
+
 
 	public List<ProductSpec> getSpecs() {
 		return specs;

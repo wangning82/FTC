@@ -1,19 +1,22 @@
 
-package com.thinkgem.jeesite.modules.pay.controller;
+package com.thinkgem.jeesite.modules.ftc.rest.order;
 
 
 import com.egzosn.pay.common.api.Callback;
+import com.egzosn.pay.common.api.PayConfigStorage;
 import com.egzosn.pay.common.bean.*;
 import com.egzosn.pay.common.util.str.StringUtils;
 import com.thinkgem.jeesite.modules.pay.entity.ApyAccount;
+import com.thinkgem.jeesite.modules.pay.entity.PayType;
 import com.thinkgem.jeesite.modules.pay.request.QueryOrder;
 import com.thinkgem.jeesite.modules.pay.service.ApyAccountService;
 import com.thinkgem.jeesite.modules.pay.service.PayResponse;
-import com.thinkgem.jeesite.modules.pay.entity.PayType;
-import com.egzosn.pay.common.api.PayConfigStorage;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
@@ -35,9 +38,10 @@ import static com.thinkgem.jeesite.modules.pay.dao.ApyAccountRepository.apyAccou
  * @email egzosn@gmail.com
  * @date 2016/11/18 0:25
  */
-//@RestController
-//@RequestMapping(value = "/rest/ftc/pay/")
-public class PayController {
+@RestController
+@Api(value = "支付", description = "支付")
+@RequestMapping(value = "/rest/ftc/pay/")
+public class PayRestController {
 
     @Autowired
     private ApyAccountService apyAccountService;
@@ -68,7 +72,8 @@ public class PayController {
      * @param bankType        针对刷卡支付，卡的类型，类型值
      * @return 跳到支付页面
      */
-    @RequestMapping(value = "toPay", produces = "text/html;charset=UTF-8")
+    @RequestMapping(value = "toPay", produces = "text/html;charset=UTF-8",method = {RequestMethod.GET})
+    @ApiOperation(value = "支付", notes = "添加商品到购物车")
     public String toPay(Integer payId, String transactionType, String bankType, BigDecimal price) {
         //获取对应的支付账户操作工具（可根据账户id）
         PayResponse payResponse = apyAccountService.getPayResponse(payId);
@@ -82,7 +87,25 @@ public class PayController {
         Map orderInfo = payResponse.getService().orderInfo(order);
         return payResponse.getService().buildRequest(orderInfo, MethodType.POST);
     }
+    /**
+     * 第三方app調用支付
+     *
+     *
+     * @param payId           账户id
+     * @return 跳到支付页面
+     */
+    @RequestMapping(value = "app",method = {RequestMethod.GET} )
+    public Map toPay(Integer payId, BigDecimal price) {
+        //获取对应的支付账户操作工具（可根据账户id）
+        PayResponse payResponse = apyAccountService.getPayResponse(payId);
 
+        PayOrder order = new PayOrder("订单title", "摘要", null == price ? new BigDecimal(0.01) : price, UUID.randomUUID().toString().replace("-", ""), PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType("APP"));
+
+        Map orderInfo = payResponse.getService().orderInfo(order);
+        orderInfo.put("code", 0);
+
+        return orderInfo;
+    }
 
     /**
      * 公众号支付
@@ -92,7 +115,7 @@ public class PayController {
      * @param openid openid
      * @return 跳到支付页面
      */
-    @RequestMapping(value = "jsapi" )
+    @RequestMapping(value = "jsapi",method = {RequestMethod.GET} )
     public Map toPay(Integer payId, String openid, BigDecimal price) {
         //获取对应的支付账户操作工具（可根据账户id）
         PayResponse payResponse = apyAccountService.getPayResponse(payId);
@@ -112,7 +135,7 @@ public class PayController {
      *
      * @return 支付结果
      */
-    @RequestMapping(value = "microPay")
+//    @RequestMapping(value = "microPay",method = {RequestMethod.POST})
     public Map<String, Object> microPay(Integer payId, String transactionType, BigDecimal price, String authCode) throws IOException {
         //获取对应的支付账户操作工具（可根据账户id）
         PayResponse payResponse = apyAccountService.getPayResponse(payId);
@@ -139,7 +162,7 @@ public class PayController {
      *
      * @return 二维码图像
      */
-    @RequestMapping(value = "toQrPay.jpg", produces = "image/jpeg;charset=UTF-8")
+//    @RequestMapping(value = "toQrPay.jpg", produces = "image/jpeg;charset=UTF-8",method = {RequestMethod.POST})
     public byte[] toWxQrPay(Integer payId, String transactionType, BigDecimal price) throws IOException {
         //获取对应的支付账户操作工具（可根据账户id）
         PayResponse payResponse = apyAccountService.getPayResponse(payId);
@@ -157,7 +180,7 @@ public class PayController {
      * @param transactionType 交易类型
      * @return 支付预订单信息
      */
-    @RequestMapping("getOrderInfo")
+    @RequestMapping(value="getOrderInfo",method = {RequestMethod.GET})
     public Map<String, Object> getOrderInfo(Integer payId, String transactionType, BigDecimal price) {
         //获取对应的支付账户操作工具（可根据账户id）
         PayResponse payResponse = apyAccountService.getPayResponse(payId);
@@ -175,7 +198,7 @@ public class PayController {
      * @param request
      * @return 支付是否成功
      */
-    @RequestMapping(value = "payBack{payId}.json")
+    @RequestMapping(value = "payBack{payId}.json",method = {RequestMethod.GET})
     public String payBack(HttpServletRequest request, @PathVariable Integer payId) throws IOException {
         //根据账户id，获取对应的支付账户操作工具
         PayResponse payResponse = apyAccountService.getPayResponse(payId);
@@ -202,7 +225,7 @@ public class PayController {
      * @param order 订单的请求体
      * @return 返回查询回来的结果集，支付方原值返回
      */
-    @RequestMapping("query")
+    @RequestMapping(value="query",method = {RequestMethod.GET})
     public Map<String, Object> query(QueryOrder order) {
         PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         return payResponse.getService().query(order.getTradeNo(), order.getOutTradeNo());
@@ -214,7 +237,7 @@ public class PayController {
      * @param order 订单的请求体
      * @return 返回支付方交易关闭后的结果
      */
-    @RequestMapping("close")
+    @RequestMapping(value="close",method = {RequestMethod.GET})
     public Map<String, Object> close(QueryOrder order) {
         PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         return payResponse.getService().close(order.getTradeNo(), order.getOutTradeNo());
@@ -226,7 +249,7 @@ public class PayController {
      * @param order 订单的请求体
      * @return 返回支付方申请退款后的结果
      */
-    @RequestMapping("refund")
+    @RequestMapping(value="refund",method = {RequestMethod.POST})
     public Map<String, Object> refund(QueryOrder order) {
         PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
 
@@ -240,7 +263,7 @@ public class PayController {
      * @param order 订单的请求体
      * @return 返回支付方查询退款后的结果
      */
-    @RequestMapping("refundquery")
+    @RequestMapping(value="refundquery",method = {RequestMethod.POST})
     public Map<String, Object> refundquery(QueryOrder order) {
         PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         return payResponse.getService().refundquery(order.getTradeNo(), order.getOutTradeNo());
@@ -252,7 +275,7 @@ public class PayController {
      * @param order 订单的请求体
      * @return 返回支付方下载对账单的结果
      */
-    @RequestMapping("downloadbill")
+    @RequestMapping(value="downloadbill",method = {RequestMethod.POST})
     public Object downloadbill(QueryOrder order) {
         PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
 
@@ -266,7 +289,7 @@ public class PayController {
      * @param order 订单的请求体
      * @return 返回支付方对应接口的结果
      */
-    @RequestMapping("secondaryInterface")
+    @RequestMapping(value="secondaryInterface",method = {RequestMethod.POST})
     public Map<String, Object> secondaryInterface(QueryOrder order) {
         PayResponse payResponse = apyAccountService.getPayResponse(order.getPayId());
         TransactionType type = PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType(order.getTransactionType());
