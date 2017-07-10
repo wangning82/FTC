@@ -13,6 +13,8 @@ public class OrderDto extends BaseDto<OrderDto> {
     private String type;
     private List<ShoppingCartDto> bags;
     private AddressDto address;
+    private String receipt; // 发票信息
+    private String addition; // 备注信息
 
     public String getId() {
         return id;
@@ -44,5 +46,21 @@ public class OrderDto extends BaseDto<OrderDto> {
 
     public void setAddress(AddressDto address) {
         this.address = address;
+    }
+
+    public String getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(String receipt) {
+        this.receipt = receipt;
+    }
+
+    public String getAddition() {
+        return addition;
+    }
+
+    public void setAddition(String addition) {
+        this.addition = addition;
     }
 }
