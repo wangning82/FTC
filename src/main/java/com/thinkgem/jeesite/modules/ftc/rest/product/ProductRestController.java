@@ -174,10 +174,10 @@ public class ProductRestController extends BaseRestController {
             ShopDto shop = new ShopDto();
             shop.setId(designer.getId());
 
-            shop.setCustomerDto(customerConverter.convertModelToDto(designer));
+            shop.setUser(customerConverter.convertModelToDto(designer));
             shop.setName(designer.getShopName());
             shop.setDesc(designer.getSignature());
-            shop.setProductDtoList(goods);
+            shop.setGoods(goods);
             productDetail.put("good",goods.get(0));
             productDetail.put("shop",shop);
             return new RestResult(CODE_SUCCESS,
