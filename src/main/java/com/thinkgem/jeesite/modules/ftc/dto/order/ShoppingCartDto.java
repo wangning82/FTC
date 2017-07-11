@@ -12,8 +12,8 @@ public class ShoppingCartDto extends BaseDto<ShoppingCartDto> {
 
     private String id;
     private ProductDto good;
-    private BigDecimal buyNumber;
-    private String selected;
+    private String selected; // 是否选中
+    private BigDecimal count; // 购买数量
 
     public String getId() {
         return id;
@@ -39,11 +39,11 @@ public class ShoppingCartDto extends BaseDto<ShoppingCartDto> {
         this.selected = selected;
     }
 
-    public BigDecimal getBuyNumber() {
-        return buyNumber;
+    public BigDecimal getCount() {
+        return count;
     }
 
-    public void setBuyNumber(BigDecimal buyNumber) {
-        this.buyNumber = buyNumber;
+    public void setCount(BigDecimal count) {
+        this.count = count;
     }
 }

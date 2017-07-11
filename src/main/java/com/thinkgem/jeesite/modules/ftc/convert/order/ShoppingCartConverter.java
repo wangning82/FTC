@@ -20,7 +20,7 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
     public ShoppingCart convertDtoToModel(ShoppingCartDto dto) {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(dto.getId());
-        shoppingCart.setBuyNumber(dto.getBuyNumber());
+        shoppingCart.setBuyNumber(dto.getCount());
         shoppingCart.setCheckStatus(dto.getSelected());
         shoppingCart.setProduct(productConverter.convertDtoToModel(dto.getGood()));
         return shoppingCart;
@@ -30,7 +30,7 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
     public ShoppingCartDto convertModelToDto(ShoppingCart model) {
         ShoppingCartDto shoppingCartDto = new ShoppingCartDto();
         shoppingCartDto.setId(model.getId());
-        shoppingCartDto.setBuyNumber(model.getBuyNumber());
+        shoppingCartDto.setCount(model.getBuyNumber());
         shoppingCartDto.setSelected(model.getCheckStatus());
         shoppingCartDto.setGood(productConverter.convertModelToDto(model.getProduct()));
         return shoppingCartDto;

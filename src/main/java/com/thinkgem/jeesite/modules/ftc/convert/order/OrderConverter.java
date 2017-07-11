@@ -34,7 +34,10 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
         Order order = new Order();
         order.setId(dto.getId());
         order.setOrderStatus(dto.getType());
+        order.setInvoiceTitle(dto.getReceipt());
+        order.setRemarks(dto.getAddition());
         order.setAddress(addressConverter.convertDtoToModel(dto.getAddress()));
+
         List<OrderProduct> orderProductList = new ArrayList<OrderProduct>();
         for(ShoppingCartDto shoppingCartDto : dto.getBags()){
             ShoppingCart shoppingCart = shoppingCartConverter.convertDtoToModel(shoppingCartDto);
@@ -50,6 +53,8 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(model.getId());
         orderDto.setType(model.getOrderStatus());
+        orderDto.setReceipt(model.getInvoiceTitle());
+        orderDto.setAddition(model.getRemarks());
         orderDto.setAddress(addressConverter.convertModelToDto(model.getAddress()));
 
         List<ShoppingCartDto> shoppingCartDtoList = new ArrayList<ShoppingCartDto>();
