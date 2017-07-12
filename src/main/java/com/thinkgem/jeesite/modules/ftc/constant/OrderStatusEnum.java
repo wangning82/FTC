@@ -9,7 +9,8 @@ public enum OrderStatusEnum {
     ORDER_STATUS_FORDELIVERYED("2", "待发货"),
     ORDER_STATUS_FORRECEIVED("3", "待收货"),
     ORDER_STATUS_FORCOMMENTED("4", "待评价"),
-    ORDER_STATUS_CANCELED("5", "已取消");
+    ORDER_STATUS_COMPLETE("5", "已完成"),
+    ORDER_STATUS_CANCELED("6", "已取消");
 
     private String value;
 
