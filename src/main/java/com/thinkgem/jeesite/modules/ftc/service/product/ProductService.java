@@ -123,5 +123,17 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	public void addHot(Product product){
 		dao.addHot(product);
 	}
+
+	/**
+	 * 卖出产品列表
+	 * @param page
+	 * @param product
+	 * @return
+	 */
+	public Page<Product> findSoldPage(Page<Product> page, Product product){
+		product.setPage(page);
+		page.setList(dao.findSoldList(product));
+		return page;
+	}
 	
 }

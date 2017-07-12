@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 
+import java.util.List;
+
 /**
  * 商品DAO接口
  * @author wangqingxiang
@@ -17,4 +19,11 @@ public interface ProductDao extends CrudDao<Product> {
     public void upShelve(Product product);
     public void downShelve(Product product);
     public void addHot(Product product);
+
+    /**
+     * 卖出产品列表
+     * @param entity
+     * @return
+     */
+    List<Product> findSoldList(Product entity);
 }
