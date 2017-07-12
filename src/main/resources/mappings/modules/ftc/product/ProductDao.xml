@@ -34,7 +34,9 @@
 		a.del_flag as "delFlag",
 		a.design_by As "designBy.id",
 		d.user_name As "designBy.userName",
-		a.design_price As "designPrice"
+		a.design_price As "designPrice",
+		a.praise_count As "praiseCount",
+		a.favourite_count AS "favouriteCount"
 
 	</sql>
 	
@@ -136,7 +138,9 @@
 			model_flag,
 			hot_num,
 			design_by,
-			design_price
+			design_price,
+			praise_count,
+			favourite_count
 
 		) VALUES (
 			#{id},
@@ -166,7 +170,9 @@
 			#{modelFlag},
 			#{hotNum},
 			#{designBy.id},
-			#{designPrice}
+			#{designPrice},
+			#{praiseCount},
+			#{favouriteCount}
 		)
 	</insert>
 	

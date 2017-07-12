@@ -33,7 +33,7 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
     public Product convertDtoToModel(ProductDto dto) {
         Product model = new Product();
         model.setId(dto.getId());
-        model.setCategory(new Category(dto.getCategoryId()));
+        model.setCategory(new Category(dto.getCategory()));
 
         return model;
     }
@@ -46,18 +46,28 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
         dto.setName(model.getName());
         dto.setDesc(model.getIntroduce());
         dto.setOpen(false);
-        dto.setPicImg(model.getPicImg());
-        dto.setPrice(model.getShowPrice());
+
+
+        dto.setShowPrice(model.getShowPrice());
         dto.setDesignPrice(model.getDesignPrice());
-        dto.setCategoryId(model.getCategory().getId());
+        dto.setCategory(model.getCategory().getId());
+        dto.setPriaseCount(model.getPriaseCount());
+        dto.setFavouriteCount(model.getFavouriteCount());
         Customer customer=model.getDesignBy();
         CustomerDto customerDto=customerConverter.convertModelToDto(customer);
 
-        List<ProductImageDto> textures= productImageConverter.convertListFromModelToDto(model.getImages());
-        dto.setTextures(textures);
         List<ProductSpecDto> attrs=
                 productSpecConverter.convertListFromModelToDto(model.getSpecs());
-        dto.setAttrs(attrs);
+        dto.setOthersAttributeGroup(attrs);
+        if(attrs!=null&&attrs.size()>0){
+            for(int i=0;i<attrs.size();i++){
+                if(attrs.get(i).isDefaultFlag()){
+                    dto.setShowAttibuteGroup(attrs.get(i));
+                }
+            }
+
+        }
+
 
         return dto;
     }

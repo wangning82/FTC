@@ -35,7 +35,7 @@ public class Product extends DataEntity<Product> {
 	private BigDecimal designPrice;//设计费
 	private Integer hotNum;//热度
 	private Integer priaseCount;//点赞数量
-	private Integer favouritCount;//收藏数量
+	private Integer favouriteCount;//收藏数量
 	private List<ProductImage>images;
 	private Category category;
 	private String showInTop;		// 是否置顶 1=置顶/0=默认
@@ -62,12 +62,12 @@ public class Product extends DataEntity<Product> {
 		this.priaseCount = priaseCount;
 	}
 
-	public Integer getFavouritCount() {
-		return favouritCount;
+	public Integer getFavouriteCount() {
+		return favouriteCount;
 	}
 
-	public void setFavouritCount(Integer favouritCount) {
-		this.favouritCount = favouritCount;
+	public void setFavouriteCount(Integer favouritCount) {
+		this.favouriteCount = favouritCount;
 	}
 
 

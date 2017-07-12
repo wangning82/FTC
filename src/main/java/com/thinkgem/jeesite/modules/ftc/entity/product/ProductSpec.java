@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 
+import java.util.List;
+
 /**
  * 商品规格Entity
  * @author wangqignxiang
@@ -24,14 +26,15 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 	private Double score;		// 积分
 	private String defaultStatus;		// 是否默认状态：0,不默认；1,默认
 	private String status;		// 商品状态
-	private String picImg;   //图片
 
-	public String getPicImg() {
-		return picImg;
+	private List<ProductImage> images;
+
+	public List<ProductImage> getImages() {
+		return images;
 	}
 
-	public void setPicImg(String picImg) {
-		this.picImg = picImg;
+	public void setImages(List<ProductImage> images) {
+		this.images = images;
 	}
 
 	public SpecAttribute getSpec() {

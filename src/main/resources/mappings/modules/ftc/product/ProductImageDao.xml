@@ -1,135 +1,99 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao">
-    
-	<sql id="imageColumns">
+
+    <sql id="imageColumns">
 		a.id AS "id",
-		a.product_id AS "product.id",
-		a.url AS "url",
-		a.sort AS "sort",
-		a.status AS "status",
-		a.create_date AS "createDate",
-		a.create_by AS "createBy.id",
+		a.spec_id AS "productSpec.id",
 		a.position_id AS "position.id",
-		b.name AS "position.name",
-		a.design_id AS "design.id",
-		a.info AS "info",
-		a.rotation AS "rotation",
-		a.scale AS "scale",
-		a.source_url AS "sourceUrl",
-		a.position_x AS "x",
-		a.position_y As "y"
+		b.name as "position.name",
+		a.img_url AS "imgUrl",
+		a.img_nail_url AS "imgNailUrl",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+
 	</sql>
-	
-	<sql id="imageJoins">
+
+    <sql id="imageJoins">
 		left join os_position b on a.position_id=b.id
 	</sql>
-    
-	<select id="get" resultType="Image">
-		SELECT 
-			<include refid="imageColumns"/>
-		FROM os_product_image a
-		<include refid="imageJoins"/>
-		WHERE a.id = #{id}
-	</select>
-	
-	<select id="findList" resultType="Image">
-		SELECT 
-			<include refid="imageColumns"/>
-		FROM os_product_image a
-		<include refid="imageJoins"/>
-		<where>
 
-			<if test="product != null and product != '' and product.id != null and product.id != ''">
-				AND a.product_id = #{product.id}
-			</if>
-			<if test="design != null and design.id != null and design.id != ''">
-				AND a.design_id = #{design.id}
-			</if>
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
-	</select>
-	
-	<select id="findAllList" resultType="Image">
-		SELECT 
-			<include refid="imageColumns"/>
-		FROM os_product_image a
-		<include refid="imageJoins"/>
-		<where>
-			
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-			</otherwise>
-		</choose>
-	</select>
-	
-	<insert id="insert">
+    <select id="get" resultType="ProductImage">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM os_product_image a
+        <include refid="imageJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="ProductImage">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM os_product_image a
+        <include refid="imageJoins"/>
+        <where>
+
+            <if test="productSpec != null  and productSpec.id != null and productSpec.id != ''">
+                AND a.spec_id = #{productSpec.id}
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="ProductImage">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM os_product_image a
+        <include refid="imageJoins"/>
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
 		INSERT INTO os_product_image(
-			id,
-			product_id,
-			url,
-			sort,
-			status,
-			create_date,
-			create_by,
-			position_id,
-			position_name,
-			design_id,
-			info,
-			rotation,
-			scale,
-			source_url,
-			position_x,
-			position_y
+				a.id ,
+		a.spec_id ,
+		a.position_id ,
+		a.img_url ,
+		a.img_nail_url ,
+		a.create_date,
+		a.create_by
 		) VALUES (
 			#{id},
-			#{product.id},
-			#{url},
-			#{sort},
-			#{status},
-			#{createDate},
-			#{createBy.id},
+			#{productSpec.id},
 			#{position.id},
-			#{position.name},
-			#{design.id},
-			#{info},
-			#{rotation},
-			#{scale},
-			#{sourceUrl},
-			#{x},
-			#{y}
+			#{imgUrl},
+			#{imgNailUrl},
+			#{createDate},
+			#{createBy.id}
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE os_product_image SET 	
-			product_id = #{product.id},
-			url = #{url},
-			sort = #{sort},
-			status = #{status},
-			position_id = #{position.id},
-			position_name = #{position.name},
-			design_id = #{design.id},
-			info = #{info},
-			rotation = #{rotation},
-			scale = #{scale},
-			source_url = #{sourceUrl}
+
+			position_id = #{position.id}
 		WHERE id = #{id}
 	</update>
-	
-	<update id="delete">
+
+    <update id="delete">
 		DELETE FROM os_product_image
 		WHERE id = #{id}
 	</update>
-	
+
 </mapper>

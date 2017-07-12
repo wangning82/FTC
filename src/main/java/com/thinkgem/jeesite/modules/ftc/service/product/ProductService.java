@@ -84,27 +84,6 @@ public class ProductService extends CrudService<ProductDao, Product> {
 			}
 		}
 
-		//保存图片
-		if(product.getImages()!=null&&product.getImages().size()>0){
-			for (ProductImage  image : product.getImages()){
-				if (image.getId() == null){
-					continue;
-				}
-				if (SpecAttribute.DEL_FLAG_NORMAL.equals(image.getDelFlag())){
-					if (StringUtils.isBlank(image.getId())){
-						image.setProduct(product);
-						image.preInsert();
-						productImageDao.insert(image);
-					}else{
-						image.preUpdate();
-						productImageDao.update(image);
-					}
-				}else{
-					productImageDao.delete(image);
-				}
-			}
-		}
-
 	}
 	
 	@Transactional(readOnly = false)

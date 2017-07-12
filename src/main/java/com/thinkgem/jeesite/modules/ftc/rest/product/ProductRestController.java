@@ -10,11 +10,13 @@ import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
+import com.thinkgem.jeesite.modules.ftc.service.customer.WishlistService;
 import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductImageService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
@@ -47,14 +49,13 @@ public class ProductRestController extends BaseRestController {
     private ProductSpecService productSpecService;
     @Autowired
     private ProductConverter productConvert;
-    @Autowired
-    private PositionService positionService;
-    @Autowired
-    private CustomerConverter customerConverter;
+
     @Autowired
     private CustomerService customerService;
     @Autowired
     private ProductImageService productImageService;
+    @Autowired
+    private WishlistService wishlistService;
 
     /**
      * 获取商品列表，传入参数
@@ -67,8 +68,27 @@ public class ProductRestController extends BaseRestController {
         Page<Product> page = productService.
                 findPage(new Page<Product>(request, response),
                         productConvert.convertDtoToModel(goods));
+
+        List<Product>  productList=page.getList();
+        if(productList!=null||productList.size()>0){
+            for(int i=0;i<productList.size();i++){
+                Product product=productList.get(i);
+                List<ProductSpec> specs=productSpecService.findList(new ProductSpec(product));
+                for(int j=0;j<specs.size();j++){
+                    ProductSpec spec=specs.get(j);
+                    if("1".equals(spec.getDefaultStatus())){
+                        ProductImage image=new ProductImage();
+                        image.setProductSpec(spec);
+                        List<ProductImage> images=productImageService.findList(image);
+                        spec.setImages(images);
+                    }
+                }
+                product.setSpecs(specs);
+            }
+        }
+
         List<ProductDto> productDtoList=
-                productConvert.convertListFromModelToDto(page.getList());
+                productConvert.convertListFromModelToDto(productList);
 
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
     }
@@ -133,55 +153,36 @@ public class ProductRestController extends BaseRestController {
 
             //获取规格信息
             List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
-            Map<String, Object> productDetail = new HashMap<String, Object>();
+            //获取规格图片信息
+            for(int i=0;i<specs.size();i++){
+                ProductImage image=new ProductImage();
+                image.setProductSpec(specs.get(i));
+                List<ProductImage> images=productImageService.findList(image);
+                specs.get(i).setImages(images);
+            }
+            product.setSpecs(specs);
+            //获取客户信息
+            Customer designer=customerService.get(product.getDesignBy().getId());
 
-            List<ProductDto> goods = new ArrayList<>();
-            for (ProductSpec spec : specs) {
-                ProductDto dto = new ProductDto();
-                dto.setId(product.getId());
-                dto.setName(product.getName());
-                dto.setDesc(product.getIntroduce());
-                dto.setOpen(true);
-                dto.setPicImg(product.getPicImg());
-                dto.setPrice(spec.getPrice());
-                dto.setDesignPrice(product.getDesignPrice());
-                dto.setCategoryId(product.getCategory().getId());
-                dto.setPriaseCount(product.getPriaseCount());
-                dto.setFavouritCount(product.getFavouritCount());
-                String s = spec.getSpec().getName();
-                String[] attrs = s.split(",");
-                List<ProductSpecDto> att = new ArrayList<>();
-                for (String a : attrs) {
-                    String[] as = a.split(":");
-                    ProductSpecDto specDto = new ProductSpecDto(as[0], as[1]);
-                    att.add(specDto);
-                }
-                dto.setAttrs(att);
-                List<ProductImageDto> imageDtos = new ArrayList<>();
-                String[] images = spec.getPicImg().split(",");
-                for (int i = 0; i < images.length; i++) {
-                    ProductImageDto imageDto = new ProductImageDto();
-                    imageDto.setId("");
-                    imageDto.setImgNailUrl(images[i]);
-                    imageDto.setImgUrl(images[i]);
-                    imageDtos.add(imageDto);
-                }
-                dto.setTextures(imageDtos);
-                goods.add(dto);
+
+            ProductDto dto=productConvert.convertModelToDto(product);
+
+            product.setDesignBy(designer);
+            //获取客户点赞和关注信息
+            Wishlist wishlist=new Wishlist();
+            wishlist.setCustomer(customer);
+            wishlist.setProduct(product);
+            wishlist=wishlistService.get(wishlist);
+            if(wishlist==null){
+                dto.setFavourited(false);
+            }else{
+                dto.setFavourited(true);
             }
 
-            Customer designer=customerService.get(product.getDesignBy().getId());
-            ShopDto shop = new ShopDto();
-            shop.setId(designer.getId());
 
-            shop.setUser(customerConverter.convertModelToDto(designer));
-            shop.setName(designer.getShopName());
-            shop.setDesc(designer.getSignature());
-            shop.setGoods(goods);
-            productDetail.put("good",goods.get(0));
-            productDetail.put("shop",shop);
+
             return new RestResult(CODE_SUCCESS,
-                    MSG_SUCCESS,productDetail);
+                    MSG_SUCCESS,dto);
         }
 
 

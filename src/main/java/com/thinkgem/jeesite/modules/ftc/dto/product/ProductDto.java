@@ -15,19 +15,29 @@ public class ProductDto extends BaseDto<ProductDto> {
     private String did;//设计id
     private String name;//名称
     private String desc;//描述
-    private Double price;//价格
+    private Double showPrice;//价格
     private String category;//分类id
     private boolean open;//是否开放
     private BigDecimal designPrice;//设计费
+
 
     ProductSpecDto showAttibuteGroup;//默认的规格
     List<ProductSpecDto> othersAttributeGroup;//规格列表
 
 
     private Integer priaseCount;//点赞数量
-    private Integer favouritCount;//收藏数量
+    private Integer favouriteCount;//收藏数量
     private boolean priased;//点赞数量
     private boolean favourited;//收藏数量
+    private String attrDesc;//规格描述
+
+    public String getAttrDesc() {
+        return attrDesc;
+    }
+
+    public void setAttrDesc(String attrDesc) {
+        this.attrDesc = attrDesc;
+    }
 
     public String getId() {
         return id;
@@ -61,14 +71,13 @@ public class ProductDto extends BaseDto<ProductDto> {
         this.desc = desc;
     }
 
-    public Double getPrice() {
-        return price;
+    public void setShowPrice(Double showPrice) {
+        this.showPrice = showPrice;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public Double getShowPrice() {
+        return showPrice;
     }
-
 
     public String getCategory() {
         return category;
@@ -118,12 +127,12 @@ public class ProductDto extends BaseDto<ProductDto> {
         this.priaseCount = priaseCount;
     }
 
-    public Integer getFavouritCount() {
-        return favouritCount;
+    public Integer getFavouriteCount() {
+        return favouriteCount;
     }
 
-    public void setFavouritCount(Integer favouritCount) {
-        this.favouritCount = favouritCount;
+    public void setFavouriteCount(Integer favouriteCount) {
+        this.favouriteCount = favouriteCount;
     }
 
     public boolean isPriased() {

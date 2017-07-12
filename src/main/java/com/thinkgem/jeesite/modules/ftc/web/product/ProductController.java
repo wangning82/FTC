@@ -84,10 +84,8 @@ public class ProductController extends BaseController {
 			spec.setProduct(product);
 			List<ProductSpec> specs=productSpecService.findList(spec);
 			product.setSpecs(specs);
-			ProductImage image=new ProductImage();
-			image.setProduct(product);
-			List<ProductImage> images= productImageService.findList(image);
-			product.setImages(images);
+
+
 
 		}
 		model.addAttribute("product", product);

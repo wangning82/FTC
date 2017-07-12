@@ -6,6 +6,8 @@ import com.thinkgem.jeesite.common.rest.BaseDto;
  * Created by bingbing on 2017/6/16.
  */
 public class ProductImageDto extends BaseDto<ProductImageDto> {
+
+
     private String id;
     private String imgUrl;//原图地址
     private String imgNailUrl;//小图地址

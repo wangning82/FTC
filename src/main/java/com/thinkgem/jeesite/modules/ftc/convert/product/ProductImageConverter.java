@@ -14,17 +14,17 @@ public class ProductImageConverter extends BaseConverter<ProductImage,ProductIma
     @Override
     public ProductImageDto convertModelToDto(ProductImage model) {
         ProductImageDto dto=new ProductImageDto();
-        dto.setId(model.getId());
-        dto.setImgUrl(model.getUrl());
-
+        dto.setId(model.getPosition().getName());
+        dto.setImgUrl(model.getImgUrl());
+        dto.setImgNailUrl(model.getImgNailUrl());
         return dto;
     }
 
     @Override
     public ProductImage convertDtoToModel(ProductImageDto dto) {
-        ProductImage image=new ProductImage();
-        image.setUrl(dto.getImgUrl());
+        ProductImage model=new ProductImage();
 
-        return image;
+
+        return model;
     }
 }
