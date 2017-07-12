@@ -149,5 +149,15 @@
 			</otherwise>
 		</choose>
 	</update>
+
+	<select id="findSoldInfo" resultType="OrderProduct">
+		SELECT
+			sum(a.buy_number) as "buyNumber",
+			sum(a.design_amount) AS "designAmount",
+			sum(a.price) AS "price"
+		FROM os_order_product a
+		WHERE
+			a.product_number = #{productNumber}
+	</select>
 	
 </mapper>

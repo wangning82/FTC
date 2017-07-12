@@ -9,15 +9,13 @@ import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
-import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.customer.UserInfoConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
-import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
-import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
 import io.swagger.annotations.Api;
@@ -53,19 +51,13 @@ public class CustomerRestController extends BaseRestController {
     private AddressService addressService;
 
     @Autowired
-    private CustomerConverter customerConverter;
+    private UserInfoConverter userInfoConverter;
 
     @Autowired
     private AddressConverter addressConverter;
 
     @Autowired
     private ShopConverter shopConverter;
-
-    @Autowired
-    private ProductConverter productConverter;
-
-    @Autowired
-    private ProductService productService;
 
     /**
      * 发送短信验证码
@@ -78,6 +70,7 @@ public class CustomerRestController extends BaseRestController {
     public RestResult sendShortMessage(@RequestParam("mobile") String mobile) {
         String captcha = getShortMessageNumber();
         EhCacheUtils.put(CAPTCHA_CACHE, mobile, captcha);
+        //TODO 调用短信接口发送验证码
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, captcha);
     }
 
@@ -184,7 +177,7 @@ public class CustomerRestController extends BaseRestController {
                 customer.setAccessToken(token);
                 customer.setExpiresTime(new Date());
                 EhCacheUtils.put(TOKEN_CACHE, token, customer);
-                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerConverter.convertModelToDto(customer));
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
             } else {
                 return new RestResult(CODE_ERROR, "短信验证码不正确");
             }
@@ -195,17 +188,18 @@ public class CustomerRestController extends BaseRestController {
 
     /**
      * 微信登录
+     *
      * @param openid
      * @return
      */
-    private RestResult loginByWeChat(String openid, String accessToken) throws Exception{
+    private RestResult loginByWeChat(String openid, String accessToken) throws Exception {
         Customer param = new Customer();
         param.setWechat(openid);
         List<Customer> result = customerService.findList(param);
         Customer customer = null;
         if (CollectionUtils.isNotEmpty(result)) {
             customer = result.get(0);
-        }else {
+        } else {
             customer = ThirdPartyLoginHelper.getWxUserinfo(accessToken, openid);
             customerService.save(customer);
         }
@@ -213,7 +207,7 @@ public class CustomerRestController extends BaseRestController {
         customer.setAccessToken(token);
         customer.setExpiresTime(new Date());
         EhCacheUtils.put(TOKEN_CACHE, token, customer);
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerConverter.convertModelToDto(customer));
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
     }
 
     @ApiOperation(value = "使用令牌登录", notes = "使用令牌登录")
@@ -221,7 +215,7 @@ public class CustomerRestController extends BaseRestController {
     public RestResult loginByToken(@RequestParam("token") String token) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerConverter.convertModelToDto(customer));
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
         } else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");
         }
@@ -230,9 +224,9 @@ public class CustomerRestController extends BaseRestController {
     @ApiOperation(value = "绑定第三方平台用户", notes = "绑定第三方平台用户")
     @RequestMapping(value = {"bindUser"}, method = {RequestMethod.POST})
     public RestResult bindUser(@RequestParam("uid") String customerId, @RequestParam("pType") String platformType,
-                               @RequestParam("pUid") String openid, @RequestParam("pCode") String code){
+                               @RequestParam("pUid") String openid, @RequestParam("pCode") String code) {
         Customer customer = customerService.get(customerId);
-        if(customer != null){
+        if (customer != null) {
             if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
                 customer.setWechat(openid);
                 customerService.save(customer);
@@ -244,7 +238,7 @@ public class CustomerRestController extends BaseRestController {
             } else {
                 return new RestResult(CODE_ERROR, "不支持的绑定方式");
             }
-        }else {
+        } else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");
         }
 
@@ -253,9 +247,9 @@ public class CustomerRestController extends BaseRestController {
     @ApiOperation(value = "解绑第三方平台用户", notes = "解绑第三方平台用户")
     @RequestMapping(value = {"unBindUser"}, method = {RequestMethod.POST})
     public RestResult unBindUser(@RequestParam("uid") String customerId, @RequestParam("pType") String platformType,
-                                 @RequestParam("pUid") String openid, @RequestParam("pCode") String code){
+                                 @RequestParam("pUid") String openid, @RequestParam("pCode") String code) {
         Customer customer = customerService.get(customerId);
-        if(customer != null){
+        if (customer != null) {
             if (PlatformTypeEnum.WeChat.getValue().equals(platformType)) {
                 customer.setWechat(null);
                 customerService.save(customer);
@@ -267,7 +261,7 @@ public class CustomerRestController extends BaseRestController {
             } else {
                 return new RestResult(CODE_ERROR, "不支持的解绑方式");
             }
-        }else {
+        } else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");
         }
     }
@@ -372,7 +366,7 @@ public class CustomerRestController extends BaseRestController {
             param.setOrderBy("a.wishlist_number desc");
             Page<Customer> result = customerService.findPage(param, new Customer());
             List<Customer> shopList = result.getList();
-            for(Customer obj : shopList){
+            for (Customer obj : shopList) {
                 // TODO 查询商品
             }
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertListFromModelToDto(shopList));

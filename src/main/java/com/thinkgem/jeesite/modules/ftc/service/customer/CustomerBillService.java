@@ -3,18 +3,22 @@
  */
 package com.thinkgem.jeesite.modules.ftc.service.customer;
 
-import java.util.List;
-
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.modules.ftc.constant.BillStatusEnum;
+import com.thinkgem.jeesite.modules.ftc.constant.BillTypeEnum;
+import com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerBillDao;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
-import com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerBillDao;
+import java.util.List;
 
 /**
  * 账单Service
+ *
  * @author houyi
  * @version 2017-06-04
  */
@@ -22,26 +26,38 @@ import com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerBillDao;
 @Transactional(readOnly = true)
 public class CustomerBillService extends CrudService<CustomerBillDao, CustomerBill> {
 
-	public CustomerBill get(String id) {
-		return super.get(id);
-	}
-	
-	public List<CustomerBill> findList(CustomerBill customerBill) {
-		return super.findList(customerBill);
-	}
-	
-	public Page<CustomerBill> findPage(Page<CustomerBill> page, CustomerBill customerBill) {
-		return super.findPage(page, customerBill);
-	}
-	
-	@Transactional(readOnly = false)
-	public void save(CustomerBill customerBill) {
-		super.save(customerBill);
-	}
-	
-	@Transactional(readOnly = false)
-	public void delete(CustomerBill customerBill) {
-		super.delete(customerBill);
-	}
-	
+    @Autowired
+    private CustomerService customerService;
+
+    public CustomerBill get(String id) {
+        return super.get(id);
+    }
+
+    public List<CustomerBill> findList(CustomerBill customerBill) {
+        return super.findList(customerBill);
+    }
+
+    public Page<CustomerBill> findPage(Page<CustomerBill> page, CustomerBill customerBill) {
+        return super.findPage(page, customerBill);
+    }
+
+    @Transactional(readOnly = false)
+    public void save(CustomerBill customerBill) {
+        super.save(customerBill);
+
+        // 退款到帐扣除账户余额
+        if (BillTypeEnum.WITHDRAW.getValue().equals(customerBill.getType())
+                && BillStatusEnum.ARRIVE.getValue().equals(customerBill.getStatus())) {
+            Customer customer = customerService.get(customerBill.getCustomer().getId());
+            customer.setBillBlance(customer.getBillBlance().subtract(customerBill.getMoney()));
+            customerService.save(customer);
+        }
+
+    }
+
+    @Transactional(readOnly = false)
+    public void delete(CustomerBill customerBill) {
+        super.delete(customerBill);
+    }
+
 }

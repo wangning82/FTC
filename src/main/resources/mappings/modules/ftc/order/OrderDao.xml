@@ -140,5 +140,43 @@
 		DELETE FROM os_order
 		WHERE id = #{id}
 	</update>
-	
+
+	<select id="findIncomeToday" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			sum(op.design_amount) AS income,
+			sum(op.price) AS total
+		FROM
+			os_order o,
+			os_order_product op
+		WHERE
+			o.id = op.order_id
+		AND op.design_by = #{designerId}
+		AND DATE_FORMAT(now(), '%Y%m%d') = DATE_FORMAT(o.create_date, '%Y%m%d')
+	</select>
+
+	<select id="findIncomeMonth" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			sum(op.design_amount) AS income,
+			sum(op.price) AS total
+		FROM
+			os_order o,
+			os_order_product op
+		WHERE
+			o.id = op.order_id
+		AND op.design_by = #{designerId}
+		AND DATE_FORMAT(now(), '%Y%m') = DATE_FORMAT(o.create_date, '%Y%m')
+	</select>
+
+	<select id="findIncomeAll" parameterType="java.lang.String" resultType="java.util.HashMap">
+		SELECT
+			sum(op.design_amount) AS income,
+			sum(op.price) AS total
+		FROM
+			os_order o,
+			os_order_product op
+		WHERE
+			o.id = op.order_id
+		AND op.design_by = #{designerId}
+	</select>
+
 </mapper>

@@ -23,7 +23,6 @@ public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
         dto.setFavouriteCount(model.getWishlistNumber());
         dto.setDesignCount(100);
         dto.setImgUrl(model.getPicImg());
-        dto.setAccessToken(model.getAccessToken());
         return dto;
     }
 

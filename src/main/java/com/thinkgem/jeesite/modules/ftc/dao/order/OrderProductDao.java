@@ -14,5 +14,11 @@ import com.thinkgem.jeesite.modules.ftc.entity.order.OrderProduct;
  */
 @MyBatisDao
 public interface OrderProductDao extends CrudDao<OrderProduct> {
-	
+
+    /**
+     * 销售统计
+     * @param orderProduct
+     * @return
+     */
+    OrderProduct findSoldInfo(OrderProduct orderProduct);
 }

@@ -8,8 +8,11 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.common.utils.OrderNoGenerator;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.constant.*;
+import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
 import com.thinkgem.jeesite.modules.ftc.dao.order.OrderDao;
 import com.thinkgem.jeesite.modules.ftc.dao.order.OrderProductDao;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerIncomeDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerSoldDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
@@ -32,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 订单Service
@@ -66,6 +70,9 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductConverter productConverter;
 
     public Order get(String id) {
         Order order = super.get(id);
@@ -293,8 +300,56 @@ public class OrderService extends CrudService<OrderDao, Order> {
             user.setAmount(user.getAmount().add(order.getPayAmount()));
             customerService.save(user);
 
+            // 账户余额累加
+            List<OrderProduct> orderProductList = orderProductDao.findList(new OrderProduct(order));
+            for(OrderProduct orderProduct : orderProductList){
+                Customer designer = customerService.get(orderProduct.getDesignBy().getId());
+                designer.setBillBlance(designer.getBillBlance().add(orderProduct.getDesignAmount())); // 设计费
+                customerService.save(designer);
+            }
+
         }
     }
 
+    /**
+     * 营收统计
+     * @param customer
+     * @return
+     */
+    public CustomerIncomeDto findIncomeByDesigner(Customer customer){
+        CustomerIncomeDto incomeDto = new CustomerIncomeDto();
+        Map<String, BigDecimal> today = dao.findIncomeToday(customer.getId());
+        incomeDto.setDayReal(today.get("income"));
+        incomeDto.setDayTotal(today.get("total"));
+
+        Map<String, BigDecimal> month = dao.findIncomeMonth(customer.getId());
+        incomeDto.setMonthReal(month.get("income"));
+        incomeDto.setMonthTotal(month.get("total"));
+
+        Map<String, BigDecimal> total = dao.findIncomeAll(customer.getId());
+        incomeDto.setLifeReal(total.get("income"));
+        incomeDto.setLifeTotal(total.get("total"));
+
+        return incomeDto;
+    }
+
+    /**
+     * 销售统计
+     * @return
+     */
+    public CustomerSoldDto findSoldInfo(String productId){
+        CustomerSoldDto soldDto = new CustomerSoldDto();
+        Product product = productService.get(productId);
+        soldDto.setGood(productConverter.convertModelToDto(product));
+
+        OrderProduct param = new OrderProduct();
+        param.setProductNumber(product.getNumber());
+        OrderProduct orderProduct = orderProductDao.findSoldInfo(param);
+        soldDto.setCount(orderProduct.getBuyNumber());
+        soldDto.setIncomeReal(orderProduct.getDesignAmount());
+        soldDto.setIncomeTotal(orderProduct.getPrice());
+
+        return soldDto;
+    }
 
 }
