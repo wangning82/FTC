@@ -2,27 +2,33 @@ package com.thinkgem.jeesite.modules.ftc.rest.product;
 
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
+import com.thinkgem.jeesite.common.utils.ImageUtils;
 import com.thinkgem.jeesite.modules.ftc.convert.product.DesignConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ModelConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.PositionConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.PositionDto;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.*;
-import com.thinkgem.jeesite.modules.ftc.service.product.DesignService;
-import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
-import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
-import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
+import com.thinkgem.jeesite.modules.ftc.service.product.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
+
+import static com.ckfinder.connector.ServletContextFactory.getServletContext;
 
 /**
  * Created by wangqingxiang on 2017/6/8.
@@ -46,6 +52,12 @@ public class DesignRestController extends BaseRestController {
     private PositionService positionService;
     @Autowired
     private PositionConverter positionConverter;
+    @Autowired
+    private ProductImageService productImageService;
+    @Autowired
+    private ProductConverter productConverter;
+    private static String BASE_IMAGE_DIR="";
+
     /**
      * 删除
      * @param
@@ -71,6 +83,31 @@ public class DesignRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,bestDesign);
     }
     /**
+     * 优秀设计
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "图片列表", notes = "获取图片列表")
+    @RequestMapping(value = {"imagelist"},method = { RequestMethod.POST})
+    public RestResult imagelist(@RequestParam("token") String token){
+        //
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            try{
+                String basePath=getServletContext().getRealPath("/");
+                File file=new File(basePath+"p");
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+//        List<Design> bestDesign=designService.findList(design);
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
+    }
+    /**
      * 修改设计
      * @param
      * @return
@@ -89,6 +126,8 @@ public class DesignRestController extends BaseRestController {
     }
 
 
+
+
     /**
      * 设计明细
      * @param
@@ -100,7 +139,44 @@ public class DesignRestController extends BaseRestController {
 
         Design design=designService.get(id);
 
+        //获取模型信息
+        Product product=productService.get(design.getModel().getId());
+
+        //获取规格信息
+        List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
+        //获取规格图片信息
+        for (int i = 0; i < specs.size(); i++) {
+            ProductImage image = new ProductImage();
+            image.setProductSpec(specs.get(i));
+            List<ProductImage> images = productImageService.findList(image);
+            specs.get(i).setImages(images);
+        }
+        product.setSpecs(specs);
+        ProductDto good = productConverter.convertModelToDto(product);
+
+
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,designConverter.convertModelToDto(design));
+    }
+
+
+
+    /**
+     * 保存设计
+     * @param
+     * @return
+     */
+    @ApiOperation(value = "上传图片", notes = "上传图片" +
+            "")
+    @RequestMapping(value = {"uploadImg"},method = { RequestMethod.POST})
+    public RestResult uploadImg(String img,@RequestParam("token") String token){
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            ImageUtils.generateImg(img,customer.getId(),0);
+            return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
+        }
+
     }
 
     /**
