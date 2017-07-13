@@ -34,6 +34,7 @@
 		a.del_flag as "delFlag",
 		a.design_by As "designBy.id",
 		d.user_name As "designBy.userName",
+		d.pic_img as "designBy.picImg",
 		a.design_price As "designPrice",
 		a.praise_count As "praiseCount",
 		a.favourite_count AS "favouriteCount"

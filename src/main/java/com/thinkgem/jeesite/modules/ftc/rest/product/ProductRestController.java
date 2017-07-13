@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.modules.ftc.rest.product;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
@@ -56,90 +57,135 @@ public class ProductRestController extends BaseRestController {
     private ProductImageService productImageService;
     @Autowired
     private WishlistService wishlistService;
+    @Autowired
+    private ShopConverter shopConverter;
 
     /**
      * 获取商品列表，传入参数
      * 可以根据分类获取商品或模型
+     *
      * @return
      */
     @ApiOperation(value = "商品列表", notes = "获取商品列表")
-    @RequestMapping(value = {"list", ""},method = { RequestMethod.GET})
-    public RestResult list(ProductDto goods, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = {"list", ""}, method = {RequestMethod.POST})
+    public RestResult list(ProductDto good, HttpServletRequest request, HttpServletResponse response) {
         Page<Product> page = productService.
                 findPage(new Page<Product>(request, response),
-                        productConvert.convertDtoToModel(goods));
+                        productConvert.convertDtoToModel(good));
 
-        List<Product>  productList=page.getList();
-        if(productList!=null||productList.size()>0){
-            for(int i=0;i<productList.size();i++){
-                Product product=productList.get(i);
-                List<ProductSpec> specs=productSpecService.findList(new ProductSpec(product));
-                for(int j=0;j<specs.size();j++){
-                    ProductSpec spec=specs.get(j);
-                    if("1".equals(spec.getDefaultStatus())){
-                        ProductImage image=new ProductImage();
-                        image.setProductSpec(spec);
-                        List<ProductImage> images=productImageService.findList(image);
-                        spec.setImages(images);
-                    }
+        List<Product> productList = page.getList();
+        List<ShopDto> shopDtoList = new ArrayList<>();
+        for (int i = 0; i < productList.size(); i++) {
+            Product product = productList.get(i);
+            List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
+            for (int j = 0; j < specs.size(); j++) {
+                ProductSpec spec = specs.get(j);
+                if ("1".equals(spec.getDefaultStatus())) {
+                    ProductImage image = new ProductImage();
+                    image.setProductSpec(spec);
+                    List<ProductImage> images = productImageService.findList(image);
+                    spec.setImages(images);
                 }
-                product.setSpecs(specs);
             }
+            product.setSpecs(specs);
+
+            ShopDto shop = shopConverter.convertModelToDto(product.getDesignBy());
+            ProductDto resultGood = productConvert.convertModelToDto(product);
+            List<ProductDto> goods = new ArrayList<>();
+            goods.add(resultGood);
+            shop.setGoods(goods);
+            shopDtoList.add(shop);
         }
-
-        List<ProductDto> productDtoList=
-                productConvert.convertListFromModelToDto(productList);
-
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopDtoList);
     }
+
     /**
      * 获取商品列表，传入参数
      * 可以根据分类获取商品或模型
+     *
      * @return
      */
     @ApiOperation(value = "推荐列表", notes = "获取推荐商品列表")
-    @RequestMapping(value = {"recommend", ""},method = { RequestMethod.GET})
-    public RestResult  recommend(ProductDto goods, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = {"recommend", ""}, method = {RequestMethod.POST})
+    public RestResult recommend(ProductDto good, HttpServletRequest request, HttpServletResponse response) {
         Page<Product> page = productService.
                 findPage(new Page<Product>(request, response),
-                        productConvert.convertDtoToModel(goods));
-        List<ProductDto> productDtoList=
-                productConvert.convertListFromModelToDto(page.getList());
+                        productConvert.convertDtoToModel(good));
 
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
+        List<Product> productList = page.getList();
+        List<ShopDto> shopDtoList = new ArrayList<>();
+        for (int i = 0; i < productList.size(); i++) {
+            Product product = productList.get(i);
+            List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
+            for (int j = 0; j < specs.size(); j++) {
+                ProductSpec spec = specs.get(j);
+                if ("1".equals(spec.getDefaultStatus())) {
+                    ProductImage image = new ProductImage();
+                    image.setProductSpec(spec);
+                    List<ProductImage> images = productImageService.findList(image);
+                    spec.setImages(images);
+                }
+            }
+            product.setSpecs(specs);
+
+            ShopDto shop = shopConverter.convertModelToDto(product.getDesignBy());
+            ProductDto resultGood = productConvert.convertModelToDto(product);
+            List<ProductDto> goods = new ArrayList<>();
+            goods.add(resultGood);
+            shop.setGoods(goods);
+            shopDtoList.add(shop);
+        }
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopDtoList);
     }
+
     /**
      * 潮人馆商品列表
      *
      * @return
      */
     @ApiOperation(value = "潮人馆商品列表", notes = "获取设计者的商品")
-    @RequestMapping(value = {"findByUser", ""},method = { RequestMethod.GET})
+    @RequestMapping(value = {"findByUser", ""}, method = {RequestMethod.POST})
     public RestResult findByUser(CustomerDto user, HttpServletRequest request, HttpServletResponse response) {
 
-        Customer customer=customerService.get(user.getId());
-        Product product=new Product();
+        Customer customer = customerService.get(user.getId());
+        Product product = new Product();
         product.setDesignBy(customer);
 
         Page<Product> page = productService.
                 findPage(new Page<Product>(request, response),
                         product);
-        List<ProductDto> productDtoList=
-                productConvert.convertListFromModelToDto(page.getList());
 
-
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,productDtoList);
+        List<Product> productList = page.getList();
+        List<ProductDto> goodList = new ArrayList<>();
+        for (int i = 0; i < productList.size(); i++) {
+            product = productList.get(i);
+            List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
+            for (int j = 0; j < specs.size(); j++) {
+                ProductSpec spec = specs.get(j);
+                if ("1".equals(spec.getDefaultStatus())) {
+                    ProductImage image = new ProductImage();
+                    image.setProductSpec(spec);
+                    List<ProductImage> images = productImageService.findList(image);
+                    spec.setImages(images);
+                }
+            }
+            product.setSpecs(specs);
+            ProductDto good = productConvert.convertModelToDto(product);
+            goodList.add(good);
+        }
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, goodList);
     }
 
 
     /**
      * 获取商品信息
+     *
      * @param id
      * @return
      */
-    @RequestMapping(value = {"info"},method = { RequestMethod.GET})
+    @RequestMapping(value = {"info"}, method = {RequestMethod.POST})
     @ApiOperation(value = "商品详情", notes = "获取商品详细信息")
-    public RestResult info(@RequestParam("token") String token,@RequestParam ("id")String  id){
+    public RestResult info(@RequestParam("token") String token, @RequestParam("id") String id) {
 
 
         Customer customer = findCustomerByToken(token);
@@ -154,35 +200,37 @@ public class ProductRestController extends BaseRestController {
             //获取规格信息
             List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
             //获取规格图片信息
-            for(int i=0;i<specs.size();i++){
-                ProductImage image=new ProductImage();
+            for (int i = 0; i < specs.size(); i++) {
+                ProductImage image = new ProductImage();
                 image.setProductSpec(specs.get(i));
-                List<ProductImage> images=productImageService.findList(image);
+                List<ProductImage> images = productImageService.findList(image);
                 specs.get(i).setImages(images);
             }
             product.setSpecs(specs);
-            //获取客户信息
-            Customer designer=customerService.get(product.getDesignBy().getId());
+            //获取店铺信息
+            Customer designer = customerService.get(product.getDesignBy().getId());
+            ShopDto shop = shopConverter.convertModelToDto(designer);
 
-
-            ProductDto dto=productConvert.convertModelToDto(product);
-
+            ProductDto good = productConvert.convertModelToDto(product);
             product.setDesignBy(designer);
+
             //获取客户点赞和关注信息
-            Wishlist wishlist=new Wishlist();
+            Wishlist wishlist = new Wishlist();
             wishlist.setCustomer(customer);
             wishlist.setProduct(product);
-            wishlist=wishlistService.get(wishlist);
-            if(wishlist==null){
-                dto.setFavourited(false);
-            }else{
-                dto.setFavourited(true);
+            wishlist = wishlistService.get(wishlist);
+            if (wishlist == null) {
+                good.setFavourited(false);
+            } else {
+                good.setFavourited(true);
             }
-
+            Map<String, Object> result = new HashMap<>();
+            result.put("shop", shop);
+            result.put("good", good);
 
 
             return new RestResult(CODE_SUCCESS,
-                    MSG_SUCCESS,dto);
+                    MSG_SUCCESS, result);
         }
 
 
@@ -191,29 +239,30 @@ public class ProductRestController extends BaseRestController {
 
     /**
      * 保存
+     *
      * @param productDto
      * @return
      */
-    @RequestMapping(value = {"save"},method = { RequestMethod.POST})
-    @ApiOperation(value ="保存商品", notes = "保存商品")
-    public RestResult save(ProductDto  productDto){
+    @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
+    @ApiOperation(value = "保存商品", notes = "保存商品")
+    public RestResult save(ProductDto productDto) {
         productService.save(productConvert.convertDtoToModel(productDto));
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
     /**
      * 删除
+     *
      * @param productDto
      * @return
      */
-    @RequestMapping(value = {"delete"},method = { RequestMethod.GET})
-    @ApiOperation(value ="删除商品", notes = "删除商品信息")
-    public RestResult delete(ProductDto  productDto){
+    @RequestMapping(value = {"delete"}, method = {RequestMethod.POST})
+    @ApiOperation(value = "删除商品", notes = "删除商品信息")
+    public RestResult delete(ProductDto productDto) {
         //删除设计，产品下架，系统定时检查已下架并且设计已删除的商品，检查是否有未结束的订单，删除商品
         productService.downShelve(productConvert.convertDtoToModel(productDto));
-        return new RestResult(CODE_SUCCESS,MSG_SUCCESS);
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
     }
-
 
 
 }

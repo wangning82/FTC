@@ -174,9 +174,10 @@ public class CustomerRestController extends BaseRestController {
             String captchaCache = (String) EhCacheUtils.get(CAPTCHA_CACHE, mobile);
             if (captchaCache.equals(captcha)) {
                 String token = UUID.randomUUID().toString();
-                customer.setAccessToken(token);
+                customer.setAccessToken("<<<<<<<<<<<<<<<<<<<"+token);
                 customer.setExpiresTime(new Date());
                 EhCacheUtils.put(TOKEN_CACHE, token, customer);
+                System.out.println(token);
                 return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
             } else {
                 return new RestResult(CODE_ERROR, "短信验证码不正确");

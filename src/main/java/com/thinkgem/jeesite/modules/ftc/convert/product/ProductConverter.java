@@ -48,14 +48,11 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
         dto.setOpen(false);
 
 
-        dto.setShowPrice(model.getShowPrice());
+//        dto.setShowPrice(model.getShowPrice());
         dto.setDesignPrice(model.getDesignPrice());
         dto.setCategory(model.getCategory().getId());
         dto.setPriaseCount(model.getPriaseCount());
         dto.setFavouriteCount(model.getFavouriteCount());
-        Customer customer=model.getDesignBy();
-        CustomerDto customerDto=customerConverter.convertModelToDto(customer);
-
         List<ProductSpecDto> attrs=
                 productSpecConverter.convertListFromModelToDto(model.getSpecs());
         dto.setOthersAttributeGroup(attrs);
@@ -67,8 +64,6 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
             }
 
         }
-
-
         return dto;
     }
 

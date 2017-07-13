@@ -15,7 +15,7 @@ public class ProductDto extends BaseDto<ProductDto> {
     private String did;//设计id
     private String name;//名称
     private String desc;//描述
-    private Double showPrice;//价格
+//    private Double showPrice;//价格
     private String category;//分类id
     private boolean open;//是否开放
     private BigDecimal designPrice;//设计费
@@ -71,13 +71,13 @@ public class ProductDto extends BaseDto<ProductDto> {
         this.desc = desc;
     }
 
-    public void setShowPrice(Double showPrice) {
-        this.showPrice = showPrice;
-    }
-
-    public Double getShowPrice() {
-        return showPrice;
-    }
+//    public void setShowPrice(Double showPrice) {
+//        this.showPrice = showPrice;
+//    }
+//
+//    public Double getShowPrice() {
+//        return showPrice;
+//    }
 
     public String getCategory() {
         return category;

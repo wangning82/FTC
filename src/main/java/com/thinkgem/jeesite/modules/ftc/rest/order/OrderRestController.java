@@ -1,5 +1,9 @@
 package com.thinkgem.jeesite.modules.ftc.rest.order;
 
+import com.egzosn.pay.common.api.PayConfigStorage;
+import com.egzosn.pay.common.bean.PayMessage;
+import com.egzosn.pay.common.bean.PayOrder;
+import com.egzosn.pay.common.bean.TransactionType;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
@@ -13,17 +17,21 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderWaybillService;
 import com.thinkgem.jeesite.modules.ftc.service.order.ShoppingCartService;
+import com.thinkgem.jeesite.modules.pay.entity.PayType;
+import com.thinkgem.jeesite.modules.pay.service.ApyAccountService;
+import com.thinkgem.jeesite.modules.pay.service.PayResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by houyi on 2017/6/17 0017.
@@ -134,6 +142,8 @@ public class OrderRestController extends BaseRestController {
 
     }
 
+
+
     /**
      * 订单列表
      *
@@ -201,7 +211,8 @@ public class OrderRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
     }
-
+    @Autowired
+    private ApyAccountService apyAccountService;
     /**
      * 支付订单
      *
@@ -211,20 +222,64 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "支付订单", notes = "支付订单")
-    @RequestMapping(value = {"orderPay"}, method = {RequestMethod.POST})
-    public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderNo,
+    @RequestMapping(value = {"payOrder"}, method = {RequestMethod.POST})
+    public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderId,
                                @RequestParam("pType") String payType) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             // TODO 第三方支付
-            orderService.payOrder(customer, orderNo, payType);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+
+            //获取对应的支付账户操作工具（可根据账户id）
+            PayResponse payResponse = apyAccountService.getPayResponse(4);
+            Order order=orderService.get(orderId);
+            PayOrder payOrder = new PayOrder();
+            payOrder.setOutTradeNo(order.getOrderNo());
+            payOrder.setSubject("订单");
+            payOrder.setPrice(order.getPayAmount());
+            payOrder.setTransactionType(PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType("APP"));
+
+            Map orderInfo = payResponse.getService().orderInfo(payOrder);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS,orderInfo);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
     }
+    /**
+     * 支付回调地址
+     *
+     * @param request
+     * @return 支付是否成功
+     */
+    @ApiOperation(value = "支付回调", notes = "回调接口")
+    @RequestMapping(value = "payBack.json",method = {RequestMethod.GET})
+    public String payBack(HttpServletRequest request) throws IOException {
+        //根据账户id，获取对应的支付账户操作工具
+        PayResponse payResponse = apyAccountService.getPayResponse(4);
+        PayConfigStorage storage = payResponse.getStorage();
+        //获取支付方返回的对应参数
+        Map<String, Object> params = payResponse.getService().getParameter2Map(request.getParameterMap(), request.getInputStream());
+        if (null == params) {
+            return payResponse.getService().getPayOutMessage("fail", "失败").toMessage();
+        }
 
+        //校验
+        if (payResponse.getService().verify(params)) {
+
+            PayMessage message = new PayMessage(params, storage.getPayType(), storage.getMsgType().name());
+
+            //交易状态
+            if ("SUCCESS".equals(message.getPayMessage().get("result_code"))){
+                /////这里进行成功的处理
+                orderService.payOrder((String)message.getPayMessage().get("out_trade_no"),"1");
+                return  payResponse.getService().getPayOutMessage("SUCCESS", "OK").toMessage();
+            }
+
+
+        }
+
+        return payResponse.getService().getPayOutMessage("fail", "失败").toMessage();
+    }
     /**
      * 运单信息
      *

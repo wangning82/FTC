@@ -39,7 +39,7 @@ public class ModelRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "模型列表", notes = "获取模型列表")
-    @RequestMapping(value = {"list"},method = { RequestMethod.GET})
+    @RequestMapping(value = {"list"},method = { RequestMethod.POST})
     public RestResult model(ModelDto modelDto, HttpServletRequest request, HttpServletResponse response) {
         //只查询是模型的数据
         Product product=modelConverter.convertDtoToModel(modelDto);

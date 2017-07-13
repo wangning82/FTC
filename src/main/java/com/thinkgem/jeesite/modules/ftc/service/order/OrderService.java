@@ -270,12 +270,11 @@ public class OrderService extends CrudService<OrderDao, Order> {
     /**
      * 订单支付后回调
      *
-     * @param customer
      * @param orderNo
      * @param payType
      */
     @Transactional(readOnly = false)
-    public void payOrder(Customer customer, String orderNo, String payType) {
+    public void payOrder( String orderNo, String payType) {
         Order param = new Order();
         param.setOrderNo(orderNo);
         List<Order> result = this.findList(param);
@@ -288,7 +287,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
             // 生成账单
             CustomerBill customerBill = new CustomerBill();
-            customerBill.setCustomer(customer);
+            customerBill.setCustomer(order.getCustomer());
             customerBill.setOrder(order);
             customerBill.setMoney(order.getPayAmount());
             customerBill.setType(BillTypeEnum.CONSUME.getValue());
@@ -296,7 +295,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
             customerBillService.save(customerBill);
 
             // 消费额累加
-            Customer user = customerService.get(customer.getId());
+            Customer user = customerService.get(order.getCustomer().getId());
             user.setAmount(user.getAmount().add(order.getPayAmount()));
             customerService.save(user);
 

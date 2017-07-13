@@ -52,7 +52,7 @@ public class DesignRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "删除设计", notes = "删除设计")
-    @RequestMapping(value = {"delete"},method = { RequestMethod.GET})
+    @RequestMapping(value = {"delete"},method = { RequestMethod.POST})
     public RestResult delete(Design design){
         //删除设计
         designService.delete(design);
@@ -64,7 +64,7 @@ public class DesignRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "设计列表", notes = "获取设计列表")
-    @RequestMapping(value = {"list"},method = { RequestMethod.GET})
+    @RequestMapping(value = {"list"},method = { RequestMethod.POST})
     public RestResult list(Design design){
         //
         List<Design> bestDesign=designService.findList(design);
@@ -95,7 +95,7 @@ public class DesignRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "设计明细", notes = "获取设计的详情")
-    @RequestMapping(value = {"info"},method = { RequestMethod.GET})
+    @RequestMapping(value = {"info"},method = { RequestMethod.POST})
     public RestResult info(String  id){
 
         Design design=designService.get(id);
@@ -111,7 +111,6 @@ public class DesignRestController extends BaseRestController {
     @ApiOperation(value = "保存设计", notes = "获取设计的详情")
     @RequestMapping(value = {"save"},method = { RequestMethod.POST})
     public RestResult save(DesignDto design,@RequestParam("token") String token){
-
         Design model=designConverter.convertDtoToModel(design);
         designService.saveForRest(model);
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,null);
@@ -123,7 +122,7 @@ public class DesignRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "我要设计", notes = "我要设计，获取模型信息")
-    @RequestMapping(value = {"iwant"},method = { RequestMethod.GET})
+    @RequestMapping(value = {"iwant"},method = { RequestMethod.POST})
     public RestResult iWant(){
         //我要设计，默认取第一个模型
         Product product=productService.get("c66595288aff4fee98533f9e949b9b1f");

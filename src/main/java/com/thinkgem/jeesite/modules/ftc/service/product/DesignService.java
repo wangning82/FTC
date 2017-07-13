@@ -61,7 +61,7 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	public void saveForRest(Design design){
 		super.save(design);
 		List<DesignDetail> designDetails=design.getDetails();
-		//保存商品图片
+		//保存设计明细
 		for(DesignDetail detail:designDetails){
 			if(detail.getIsNewRecord()){
 				detail.setId(IdGen.uuid());
@@ -74,46 +74,5 @@ public class DesignService extends CrudService<DesignDao, Design> {
 			}
 
 		}
-//		List<ProductSpec> specs=design.getModel().getSpecs();
-
-//		//获取modelid,复制model信息为新的商品
-//		String modelId=design.getModel().getId();
-//		//复制product
-//		Product product=productDao.get(modelId);
-//		product.setId(IdGen.uuid());
-//		product.setNumber(ProductNoGenerator.INSTANCE.nextId());
-//		productDao.insert(product);
-//
-//		design.setCode(ProductNoGenerator.INSTANCE.nextId());
-//		design.setDesignStatus("0");
-//		//保存设计
-//		super.save(design);
-//
-//		//保存商品图片
-//		for(Image image:images){
-//			image.setId(IdGen.uuid());
-//			image.setProduct(product);
-//			image.setCreateBy(null);
-//			image.setCreateDate(new Date());
-//			image.setDesign(design);
-//			imageDao.insert(image);
-//		}
-//
-//
-//		//保存图片到规格小图
-//		for(ProductSpec spec:specs){
-//			ProductSpec modelSpec=productSpecDao.get(spec.getId());
-//			ProductSpec productSpec=new ProductSpec();
-//			productSpec.setProductId(product.getId());
-//			productSpec.setSpec(modelSpec.getSpec());
-//			productSpec.setProductSpecNumber(ProductNoGenerator.INSTANCE.nextId());
-//			productSpec.setPrice(modelSpec.getPrice());
-//			productSpec.setPicImg(spec.getPicImg());
-//			productSpec.setScore(modelSpec.getScore());
-//			productSpec.setStock(modelSpec.getStock());
-//			productSpec.setId(IdGen.uuid());
-//			productSpecDao.insert(productSpec);
-//		}
-
 	}
 }
