@@ -211,7 +211,7 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "支付订单", notes = "支付订单")
-    @RequestMapping(value = {"orderList"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"orderPay"}, method = {RequestMethod.POST})
     public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderNo,
                                @RequestParam("pType") String payType) {
         Customer customer = findCustomerByToken(token);

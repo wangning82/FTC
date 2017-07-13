@@ -356,8 +356,8 @@ public class CustomerRestController extends BaseRestController {
     }
 
     @ApiOperation(value = "潮店推荐列表", notes = "根据店铺收藏量倒序排列")
-    @RequestMapping(value = {"hotShop"}, method = {RequestMethod.POST})
-    public RestResult hotShop(@RequestParam("token") String token, HttpServletRequest request, HttpServletResponse response) {
+    @RequestMapping(value = {"hotShopList"}, method = {RequestMethod.POST})
+    public RestResult hotShopList(@RequestParam("token") String token, HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
@@ -370,6 +370,18 @@ public class CustomerRestController extends BaseRestController {
                 // TODO 查询商品
             }
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertListFromModelToDto(shopList));
+        }
+    }
+
+    @ApiOperation(value = "获取潮店信息", notes = "获取潮店信息")
+    @RequestMapping(value = {"hotShop"}, method = {RequestMethod.POST})
+    public RestResult hotShop(@RequestParam("token") String token, @RequestParam("sid") String customerId) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Customer result = customerService.get(customerId);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertModelToDto(result));
         }
     }
 
