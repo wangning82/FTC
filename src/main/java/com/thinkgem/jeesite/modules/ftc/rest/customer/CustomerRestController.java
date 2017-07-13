@@ -174,10 +174,9 @@ public class CustomerRestController extends BaseRestController {
             String captchaCache = (String) EhCacheUtils.get(CAPTCHA_CACHE, mobile);
             if (captchaCache.equals(captcha)) {
                 String token = UUID.randomUUID().toString();
-                customer.setAccessToken("<<<<<<<<<<<<<<<<<<<"+token);
+                customer.setAccessToken(token);
                 customer.setExpiresTime(new Date());
                 EhCacheUtils.put(TOKEN_CACHE, token, customer);
-                System.out.println(token);
                 return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
             } else {
                 return new RestResult(CODE_ERROR, "短信验证码不正确");
@@ -277,15 +276,15 @@ public class CustomerRestController extends BaseRestController {
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
     @RequestMapping(value = {"updateCustomer"}, method = {RequestMethod.POST})
     public RestResult updateCustomer(@RequestParam("token") String token, CustomerDto customerDto) {
-        Customer loginCustomer = findCustomerByToken(token);
-        if (loginCustomer == null) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            loginCustomer.setUserName(customerDto.getName());
-            loginCustomer.setSignature(customerDto.getDesc());
-            loginCustomer.setPicImg(customerDto.getImgUrl()); // TODO 更新图片
-            customerService.save(loginCustomer);
-            EhCacheUtils.put(TOKEN_CACHE, token, loginCustomer);
+            customer.setUserName(customerDto.getName());
+            customer.setSignature(customerDto.getDesc());
+            customer.setPicImg(customerDto.getImgUrl()); // TODO 更新图片
+            customerService.save(customer);
+            EhCacheUtils.put(TOKEN_CACHE, token, userInfoConverter.convertModelToDto(customer));
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }

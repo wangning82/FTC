@@ -45,6 +45,6 @@ public class UserInfoConverter extends BaseConverter<Customer, UserInfoDto> {
 
         userInfoDto.setPlatforms(platformDtoList);
 
-        return super.convertModelToDto(model);
+        return userInfoDto;
     }
 }
