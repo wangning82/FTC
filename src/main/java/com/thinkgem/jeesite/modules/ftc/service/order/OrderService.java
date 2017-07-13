@@ -218,21 +218,17 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param customer
      * @param orderNo      订单号
      * @param addressId    收货地址标识
-     * @param invoiceType  发票类型
      * @param invoiceTitle 发票抬头
-     * @param shipmentTime 配送时间
-     * @param shipmentType 配送方式
      */
     @Transactional(readOnly = false)
-    public void confirmOrder(Customer customer, String orderNo, String addressId, String invoiceType,
-                             String invoiceTitle, String shipmentTime, String shipmentType) {
+    public void confirmOrder(Customer customer, String orderNo, String addressId, String invoiceTitle) {
         Order param = new Order();
         param.setCustomer(customer);
         param.setOrderNo(orderNo);
         List<Order> result = this.findList(param);
         if (CollectionUtils.isNotEmpty(result)) {
             Order order = result.get(0);
-            BigDecimal orderAmount = BigDecimal.ZERO;
+            BigDecimal orderAmount = BigDecimal.ZERO; // 商品总价
             BigDecimal buyNumber = BigDecimal.ZERO;
             OrderProduct orderProductParam = new OrderProduct();
             orderProductParam.setOrder(order);
@@ -242,11 +238,11 @@ public class OrderService extends CrudService<OrderDao, Order> {
                 buyNumber = buyNumber.add(orderProduct.getBuyNumber());
             }
             order.setBuyNumber(buyNumber);
-            order.setInvoiceType(invoiceType);
+            // order.setInvoiceType(invoiceType);
             order.setInvoiceTitle(invoiceTitle);
-            order.setShipmentTime(shipmentTime);
-            order.setShipmentType(shipmentType);
-            order.setOrderAmount(orderAmount.add(ShipmentAmountEnum.INSTANCE.getAmount(shipmentType)));
+            // order.setShipmentTime(shipmentTime);
+            // order.setShipmentType(shipmentType);
+            // order.setOrderAmount(orderAmount.add(ShipmentAmountEnum.INSTANCE.getAmount(shipmentType))); // 订单金额 = 商品总价 + 物流费
             super.save(order);
 
             // 生成订单配送记录
@@ -274,7 +270,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param payType
      */
     @Transactional(readOnly = false)
-    public void payOrder( String orderNo, String payType) {
+    public void payOrder(String orderNo, String payType) {
         Order param = new Order();
         param.setOrderNo(orderNo);
         List<Order> result = this.findList(param);

@@ -33,6 +33,7 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
     public Order convertDtoToModel(OrderDto dto) {
         Order order = new Order();
         order.setId(dto.getId());
+        order.setOrderNo(dto.getOrder());
         order.setOrderStatus(dto.getType());
         order.setInvoiceTitle(dto.getReceipt());
         order.setRemarks(dto.getAddition());
@@ -52,6 +53,7 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
     public OrderDto convertModelToDto(Order model) {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(model.getId());
+        orderDto.setOrder(model.getOrderNo());
         orderDto.setType(model.getOrderStatus());
         orderDto.setReceipt(model.getInvoiceTitle());
         orderDto.setAddition(model.getRemarks());

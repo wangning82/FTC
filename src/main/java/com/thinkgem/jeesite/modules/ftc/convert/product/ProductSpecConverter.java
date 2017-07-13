@@ -49,6 +49,7 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec,ProductSpecD
     public ProductSpec convertDtoToModel(ProductSpecDto dto) {
         ProductSpec model=new ProductSpec();
         model.setId(dto.getId());
+        model.setProductSpecNumber(dto.getCode());
         return model;
     }
 }

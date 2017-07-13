@@ -10,7 +10,8 @@ import java.util.List;
  */
 public class OrderDto extends BaseDto<OrderDto> {
     private String id;
-    private String type;
+    private String order; // 订单号
+    private String type; // 订单状态
     private List<ShoppingCartDto> bags;
     private AddressDto address;
     private String receipt; // 发票信息
@@ -62,5 +63,13 @@ public class OrderDto extends BaseDto<OrderDto> {
 
     public void setAddition(String addition) {
         this.addition = addition;
+    }
+
+    public String getOrder() {
+        return order;
+    }
+
+    public void setOrder(String order) {
+        this.order = order;
     }
 }
