@@ -4,12 +4,8 @@ import com.thinkgem.jeesite.common.rest.BaseConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Design;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Created by wangqingxiang on 2017/6/21.

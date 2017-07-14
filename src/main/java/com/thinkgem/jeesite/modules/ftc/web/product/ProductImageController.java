@@ -7,7 +7,6 @@ import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.BaseController;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductImageService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

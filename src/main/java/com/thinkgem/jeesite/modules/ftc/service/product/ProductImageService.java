@@ -6,7 +6,6 @@ package com.thinkgem.jeesite.modules.ftc.service.product;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

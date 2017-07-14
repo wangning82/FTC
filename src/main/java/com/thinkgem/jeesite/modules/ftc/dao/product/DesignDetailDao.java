@@ -6,7 +6,6 @@ package com.thinkgem.jeesite.modules.ftc.dao.product;
 import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.ftc.entity.product.DesignDetail;
-import com.thinkgem.jeesite.modules.ftc.entity.product.Image;
 
 /**
  * 设计明细
