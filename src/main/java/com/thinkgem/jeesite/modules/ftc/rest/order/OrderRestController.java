@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by houyi on 2017/6/17 0017.
@@ -231,8 +232,11 @@ public class OrderRestController extends BaseRestController {
             //获取对应的支付账户操作工具（可根据账户id）
             PayResponse payResponse = apyAccountService.getPayResponse(4);
             Order order = orderService.get(orderId);
+            order.setTradeNo(UUID.randomUUID().toString().replaceAll("-", ""));
+            orderService.save(order);
+
             PayOrder payOrder = new PayOrder();
-            payOrder.setOutTradeNo(order.getOrderNo());
+            payOrder.setOutTradeNo(order.getTradeNo());
             payOrder.setSubject("订单");
             payOrder.setPrice(order.getPayAmount());
             payOrder.setTransactionType(PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType("APP"));
@@ -288,7 +292,7 @@ public class OrderRestController extends BaseRestController {
      */
     @ApiOperation(value = "运单信息", notes = "运单信息")
     @RequestMapping(value = {"showWaybill"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public RestResult showWaybill(@RequestParam("token") String token, @RequestParam("orderNo") String orderNo) {
+    public RestResult showWaybill(@RequestParam("token") String token, @RequestParam("order") String orderNo) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             OrderWaybill param = new OrderWaybill();

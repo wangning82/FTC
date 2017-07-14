@@ -266,13 +266,13 @@ public class OrderService extends CrudService<OrderDao, Order> {
     /**
      * 订单支付后回调
      *
-     * @param orderNo
+     * @param tradeNo
      * @param payType
      */
     @Transactional(readOnly = false)
-    public void payOrder(String orderNo, String payType) {
+    public void payOrder(String tradeNo, String payType) {
         Order param = new Order();
-        param.setOrderNo(orderNo);
+        param.setTradeNo(tradeNo);
         List<Order> result = this.findList(param);
         if (CollectionUtils.isNotEmpty(result)) {
             Order order = result.get(0);
