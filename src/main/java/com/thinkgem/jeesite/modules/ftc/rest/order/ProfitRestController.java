@@ -95,12 +95,17 @@ public class ProfitRestController extends BaseRestController {
 
     @ApiOperation(value = "提现记录列表", notes = "提现记录列表")
     @RequestMapping(value = {"findWithdrawList"}, method = {RequestMethod.POST})
-    public RestResult findWithdrawList(@RequestParam("token") String token,
+    public RestResult findWithdrawList(@RequestParam("token") String token, @RequestParam("type") String type,
                                        HttpServletRequest request, HttpServletResponse response){
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             CustomerBill param = new CustomerBill();
             param.setType(BillTypeEnum.WITHDRAW.getValue());
+            if("1".equals(type)){
+                param.setStatus(BillStatusEnum.APPLY.getValue()); // 申请提现（提现中）
+            }else if("2".equals(type)){
+                param.setStatus(BillStatusEnum.ARRIVE.getValue()); // 提现完成
+            }
             Page<CustomerBill> customerBillPage = customerBillService.findPage(new Page<CustomerBill>(request, response), param);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerBillConverter.convertListFromModelToDto(customerBillPage.getList()));
         } else {

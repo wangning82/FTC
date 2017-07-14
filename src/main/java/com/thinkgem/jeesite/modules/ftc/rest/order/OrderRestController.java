@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.modules.ftc.rest.order;
 import com.egzosn.pay.common.api.PayConfigStorage;
 import com.egzosn.pay.common.bean.PayMessage;
 import com.egzosn.pay.common.bean.PayOrder;
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
@@ -157,13 +159,15 @@ public class OrderRestController extends BaseRestController {
      */
     @ApiOperation(value = "订单列表", notes = "订单列表")
     @RequestMapping(value = {"orderList"}, method = {RequestMethod.POST, RequestMethod.GET})
-    public RestResult orderList(@RequestParam("token") String token) {
+    public RestResult orderList(@RequestParam("token") String token, @RequestParam("type") String type,
+                                HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             Order param = new Order();
             param.setCustomer(customer);
-            List<Order> result = orderService.findList(param);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, orderConverter.convertListFromModelToDto(result));
+            param.setOrderStatus(type);
+            Page<Order> orderPage = orderService.findPage(new Page<Order>(request, response), param);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, orderConverter.convertListFromModelToDto(orderPage.getList()));
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }

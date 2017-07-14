@@ -41,7 +41,8 @@ public class WishlistRestController extends BaseRestController {
      */
     @ApiOperation(value = "我的收藏列表", notes = "我收藏的商品和店铺")
     @RequestMapping(value = {"list"}, method = {RequestMethod.POST})
-    public RestResult list(@RequestParam("token") String token, @RequestParam("type") String type, HttpServletRequest request, HttpServletResponse response) {
+    public RestResult list(@RequestParam("token") String token, @RequestParam("type") String type,
+                           HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             Wishlist wishlist = new Wishlist();
@@ -66,7 +67,8 @@ public class WishlistRestController extends BaseRestController {
      */
     @ApiOperation(value = "加入收藏", notes = "我收藏的商品和店铺")
     @RequestMapping(value = {"add"}, method = {RequestMethod.POST})
-    public RestResult add(@RequestParam("token") String token, @RequestParam("id") String id, @RequestParam("type") String type, HttpServletRequest request, HttpServletResponse response) {
+    public RestResult add(@RequestParam("token") String token, @RequestParam("id") String id,
+                          @RequestParam("type") String type) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             Wishlist wishlist = new Wishlist();
@@ -98,7 +100,7 @@ public class WishlistRestController extends BaseRestController {
      */
     @ApiOperation(value = "取消收藏", notes = "取消收藏")
     @RequestMapping(value = {"delete"}, method = {RequestMethod.POST})
-    public RestResult delete(@RequestParam("token") String token, @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response) {
+    public RestResult delete(@RequestParam("token") String token, @RequestParam("id") String id) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             wishlistService.delete(new Wishlist(id));
