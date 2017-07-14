@@ -5,6 +5,7 @@
 	<sql id="orderColumns">
 		a.id AS "id",
 		a.order_number AS "orderNo",
+		a.trade_no AS "tradeNo",
 		a.customer_id AS "customer.id",
 		a.pay_type AS "payType",
 		a.shipment_time AS "shipmentTime",
@@ -43,6 +44,9 @@
 			
 			<if test="orderNo != null and orderNo != ''">
 				AND a.order_number = #{orderNo}
+			</if>
+			<if test="tradeNo != null and tradeNo != ''">
+				AND a.trade_no = #{tradeNo}
 			</if>
 			<if test="payType != null and payType != ''">
 				AND a.pay_type = #{payType}
@@ -83,6 +87,7 @@
 		INSERT INTO os_order(
 			id,
 			order_number,
+			trade_no,
 			customer_id,
 			pay_type,
 			shipment_time,
@@ -100,6 +105,7 @@
 		) VALUES (
 			#{id},
 			#{orderNo},
+			#{tradeNo},
 			#{customer.id},
 			#{payType},
 			#{shipmentTime},
@@ -120,6 +126,7 @@
 	<update id="update">
 		UPDATE os_order SET 	
 			order_number = #{orderNo},
+			trade_no = #{tradeNo},
 			customer_id = #{customer.id},
 			pay_type = #{payType},
 			shipment_time = #{shipmentTime},

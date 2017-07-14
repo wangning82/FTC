@@ -21,6 +21,7 @@ public class Order extends DataEntity<Order> {
 	
 	private static final long serialVersionUID = 1L;
 	private String orderNo;		// 订单编号
+	private String tradeNo;     // 交易编号
 	private Customer customer;		// 顾客
 	private String payType;		// 支付方式
 	private String shipmentTime;		// 配送时间
@@ -170,5 +171,13 @@ public class Order extends DataEntity<Order> {
 
 	public void setAddress(Address address) {
 		this.address = address;
+	}
+
+	public String getTradeNo() {
+		return tradeNo;
+	}
+
+	public void setTradeNo(String tradeNo) {
+		this.tradeNo = tradeNo;
 	}
 }
