@@ -367,13 +367,16 @@ public class CustomerRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             Page<Customer> param = new Page<Customer>(request, response);
-            param.setOrderBy("a.wishlist_number desc");
-            Page<Customer> result = customerService.findPage(param, new Customer());
-            List<Customer> shopList = result.getList();
-            for (Customer obj : shopList) {
-                // TODO 查询商品
+            String orderBy = request.getParameter("orderBy");
+            if ("0".equals(orderBy)) {
+                // 按照热度排序
+                param.setOrderBy("a.visit_number desc");
+            } else if ("1".equals(orderBy)) {
+                // 按照关注排序
+                param.setOrderBy("a.wishlist_number desc");
             }
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertListFromModelToDto(shopList));
+            Page<Customer> result = customerService.findPage(param, new Customer());
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertListFromModelToDto(result.getList()));
         }
     }
 
