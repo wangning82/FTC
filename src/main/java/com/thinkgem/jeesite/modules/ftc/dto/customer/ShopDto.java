@@ -12,6 +12,7 @@ public class ShopDto extends BaseDto<ShopDto> {
     private String id;
     private String name;
     private String desc;
+    private String backgroundUrl;
     private CustomerDto user;
     private List<ProductDto> goods;
 
@@ -53,5 +54,13 @@ public class ShopDto extends BaseDto<ShopDto> {
 
     public void setGoods(List<ProductDto> goods) {
         this.goods = goods;
+    }
+
+    public String getBackgroundUrl() {
+        return backgroundUrl;
+    }
+
+    public void setBackgroundUrl(String backgroundUrl) {
+        this.backgroundUrl = backgroundUrl;
     }
 }

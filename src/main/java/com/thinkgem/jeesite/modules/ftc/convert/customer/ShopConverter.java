@@ -19,6 +19,7 @@ public class ShopConverter extends BaseConverter<Customer, ShopDto> {
     public Customer convertDtoToModel(ShopDto dto) {
         Customer customer = customerConverter.convertDtoToModel(dto.getUser());
         customer.setShopName(dto.getName());
+        customer.setShopBackground(dto.getBackgroundUrl());
         return customer;
     }
 
@@ -28,6 +29,7 @@ public class ShopConverter extends BaseConverter<Customer, ShopDto> {
         shopDto.setId(model.getId());
         shopDto.setName(model.getShopName());
         shopDto.setDesc(model.getSignature());
+        shopDto.setBackgroundUrl(model.getShopBackground());
         shopDto.setUser(customerConverter.convertModelToDto(model));
         return shopDto;
     }
