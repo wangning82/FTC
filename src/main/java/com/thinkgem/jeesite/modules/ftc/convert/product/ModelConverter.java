@@ -29,7 +29,18 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
         dto.setId(model.getId());
         dto.setName(model.getName());
         dto.setDesc(model.getIntroduce());
-        dto.setOpen(false);
+        dto.setCategory(model.getCategory().getId());
+        List<ProductSpecDto> attrs=
+                productSpecConverter.convertListFromModelToDto(model.getSpecs());
+        dto.setOthersAttributeGroup(attrs);
+        if(attrs!=null&&attrs.size()>0){
+            for(int i=0;i<attrs.size();i++){
+                if(attrs.get(i).isDefaultFlag()){
+                    dto.setShowAttributeGroup(attrs.get(i));
+                }
+            }
+
+        }
         return dto;
     }
 
@@ -37,8 +48,8 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
     public Product convertDtoToModel(ModelDto dto) {
         Product model=new Product();
         model.setId(dto.getId());
-        model.setCategory(new Category(dto.getCategoryId()));
-        List<ProductSpec> productSpecList=productSpecConverter.convertListFromDtoToModel(dto.getAttrs());
+        model.setCategory(new Category(dto.getCategory()));
+        List<ProductSpec> productSpecList=productSpecConverter.convertListFromDtoToModel(dto.getOthersAttributeGroup());
         model.setSpecs(productSpecList);
         return model;
     }

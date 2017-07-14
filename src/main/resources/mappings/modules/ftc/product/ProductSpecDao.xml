@@ -6,6 +6,7 @@
 		a.id AS "id",
 		a.product_spec_number AS "productSpecNumber",
 		a.product_id AS "product.id",
+		b.name as "product.name",
 		a.spec_id AS "spec.id",
 		a.spec_name AS "spec.name",
 		a.stock AS "stock",
@@ -24,6 +25,7 @@
 
 
 	<sql id="productSpecJoins">
+		left join os_product b on a.product_id=b.id
 	</sql>
     
 	<select id="get" resultType="ProductSpec">
@@ -89,8 +91,7 @@
 			create_date,
 			create_by,
 			update_date,
-			update_by,
-			pic_img
+			update_by
 		) VALUES (
 			#{id},
 			#{productSpecNumber},
@@ -106,8 +107,7 @@
 			#{createDate},
 			#{createBy.id},
 			#{updateDate},
-			#{updateBy.id},
-			#{picImg}
+			#{updateBy.id}
 		)
 	</insert>
 	
@@ -124,8 +124,7 @@
 			default_status = #{defaultStatus},
 			status = #{status},
 			update_date = #{updateDate},
-			update_by = #{updateBy.id},
-			pic_img=#{picImg}
+			update_by = #{updateBy.id}
 		WHERE id = #{id}
 	</update>
 	

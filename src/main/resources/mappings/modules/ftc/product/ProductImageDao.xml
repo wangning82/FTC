@@ -5,6 +5,7 @@
     <sql id="imageColumns">
 		a.id AS "id",
 		a.spec_id AS "productSpec.id",
+		c.spec_name as "productSpec.spec.name",
 		a.position_id AS "position.id",
 		b.name as "position.name",
 		a.img_url AS "imgUrl",
@@ -16,6 +17,7 @@
 
     <sql id="imageJoins">
 		left join os_position b on a.position_id=b.id
+		left join os_product_specification c on a.spec_id =c.id
 	</sql>
 
     <select id="get" resultType="ProductImage">
@@ -66,13 +68,13 @@
 
     <insert id="insert">
 		INSERT INTO os_product_image(
-				a.id ,
-		a.spec_id ,
-		a.position_id ,
-		a.img_url ,
-		a.img_nail_url ,
-		a.create_date,
-		a.create_by
+				id ,
+		spec_id ,
+		position_id ,
+		img_url ,
+		img_nail_url ,
+		create_date,
+		create_by
 		) VALUES (
 			#{id},
 			#{productSpec.id},

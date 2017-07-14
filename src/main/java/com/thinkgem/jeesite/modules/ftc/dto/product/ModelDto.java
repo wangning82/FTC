@@ -9,50 +9,22 @@ import java.util.List;
  */
 public class ModelDto extends BaseDto<ModelDto> {
     private String id;
-    private String did;
+
     private String name;//名称
     private String desc;//描述
-    private double  price;//价格
-    private int  count;//库存
-    private boolean open;
-    private String showImg;
-    private String categoryName;
-    private String categoryId;
 
-    public String getCategoryName() {
-        return categoryName;
+    private String category;
+
+    ProductSpecDto showAttributeGroup;//默认的规格
+    List<ProductSpecDto> othersAttributeGroup;//规格列表
+    private List<PositionDto> sprites;//位置信息
+
+    public String getId() {
+        return id;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
-
-    public String getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public String getShowImg() {
-        return showImg;
-    }
-
-    public void setShowImg(String showImg) {
-        this.showImg = showImg;
-    }
-
-    List<ProductImageDto> textures;//图片
-    private List<PositionDto> sprites;
-    private List<ProductSpecDto>  attrs;
-
-    public String getDid() {
-        return did;
-    }
-
-    public void setDid(String did) {
-        this.did = did;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -71,45 +43,28 @@ public class ModelDto extends BaseDto<ModelDto> {
         this.desc = desc;
     }
 
-    public double getPrice() {
-        return price;
+    public String getCategory() {
+        return category;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public int getCount() {
-        return count;
+    public ProductSpecDto getShowAttributeGroup() {
+        return showAttributeGroup;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setShowAttributeGroup(ProductSpecDto showAttributeGroup) {
+        this.showAttributeGroup = showAttributeGroup;
     }
 
-    public boolean isOpen() {
-        return open;
+    public List<ProductSpecDto> getOthersAttributeGroup() {
+        return othersAttributeGroup;
     }
 
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
-
-    public List<ProductImageDto> getTextures() {
-        return textures;
-    }
-
-    public void setTextures(List<ProductImageDto> textures) {
-        this.textures = textures;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setOthersAttributeGroup(List<ProductSpecDto> othersAttributeGroup) {
+        this.othersAttributeGroup = othersAttributeGroup;
     }
 
     public List<PositionDto> getSprites() {
@@ -118,13 +73,5 @@ public class ModelDto extends BaseDto<ModelDto> {
 
     public void setSprites(List<PositionDto> sprites) {
         this.sprites = sprites;
-    }
-
-    public List<ProductSpecDto> getAttrs() {
-        return attrs;
-    }
-
-    public void setAttrs(List<ProductSpecDto> attrs) {
-        this.attrs = attrs;
     }
 }

@@ -11,6 +11,8 @@ import java.util.List;
  * Created by wangqingxiang on 2017/6/17.
  */
 public class BaseConverter <T extends DataEntity<T>,D extends BaseDto>{
+
+
     public T convertDtoToModel(D dto){
         return null;
     }

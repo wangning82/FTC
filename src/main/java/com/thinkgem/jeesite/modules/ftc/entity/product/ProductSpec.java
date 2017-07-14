@@ -73,7 +73,6 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 		this.product = product;
 	}
 
-	@Length(min=0, max=11, message="库存长度必须介于 0 和 11 之间")
 	public Double getStock() {
 		return stock;
 	}
@@ -82,7 +81,6 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 		this.stock = stock;
 	}
 	
-	@Length(min=0, max=11, message="销售量长度必须介于 0 和 11 之间")
 	public Double getSalesVolume() {
 		return salesVolume;
 	}
@@ -99,7 +97,6 @@ public class ProductSpec extends DataEntity<ProductSpec> {
 		this.price = price;
 	}
 	
-	@Length(min=0, max=11, message="积分长度必须介于 0 和 11 之间")
 	public Double getScore() {
 		return score;
 	}

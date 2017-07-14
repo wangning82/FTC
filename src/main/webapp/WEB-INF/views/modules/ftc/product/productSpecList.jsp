@@ -25,6 +25,9 @@
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
+			<li><label>规格编号：</label>
+				<form:input path="productSpecNumber" htmlEscape="false" maxlength="64" class="input-medium"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/></li>
 			<li class="clearfix"></li>
 		</ul>
@@ -34,15 +37,13 @@
 		<thead>
 			<tr>
 				<th>商品规格编号</th>
-				<th>商品ID</th>
+				<th>商品</th>
 				<th>规格</th>
 				<th>库存</th>
 				<th>销售量</th>
 				<th>价格</th>
 				<th>积分</th>
-				<th>是否默认状态：0,不默认；1,默认</th>
-				<th>商品状态</th>
-				<th>更新时间</th>
+				<th>是否默认</th>
 				<shiro:hasPermission name="ftc:product:productSpec:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
 		</thead>
@@ -53,10 +54,10 @@
 					${productSpec.productSpecNumber}
 				</a></td>
 				<td>
-					${productSpec.productId}
+					${productSpec.product.name}
 				</td>
 				<td>
-					${productSpec.spec}
+					${productSpec.spec.name}
 				</td>
 				<td>
 					${productSpec.stock}
@@ -73,12 +74,7 @@
 				<td>
 					${fns:getDictLabel(productSpec.defaultStatus, 'ftc_product_productspec_isdefault', '')}
 				</td>
-				<td>
-					${fns:getDictLabel(productSpec.status, 'ftc_product_productspec_status', '')}
-				</td>
-				<td>
-					<fmt:formatDate value="${productSpec.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
+
 				<shiro:hasPermission name="ftc:product:productSpec:edit"><td>
     				<a href="${ctx}/ftc/product/productSpec/form?id=${productSpec.id}">修改</a>
 					<a href="${ctx}/ftc/product/productSpec/delete?id=${productSpec.id}" onclick="return confirmx('确认要删除该商品规格吗？', this.href)">删除</a>

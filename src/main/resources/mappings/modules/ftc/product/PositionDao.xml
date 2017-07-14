@@ -23,6 +23,7 @@
 		a.rotation AS "rotation"
 	</sql>
 
+
 	<sql id="positionJoins">
 		left join os_category b on a.category_id=b.id
 		left join sys_user c on a.create_by=c.id

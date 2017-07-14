@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ProductImageConverter extends BaseConverter<ProductImage,ProductImageDto> {
+    public static String BASE_PATH="";
     @Override
     public ProductImageDto convertModelToDto(ProductImage model) {
         ProductImageDto dto=new ProductImageDto();
         dto.setId(model.getPosition().getName());
-        dto.setImgUrl(model.getImgUrl());
-        dto.setImgNailUrl(model.getImgNailUrl());
+        dto.setImgUrl(model.getImgUrl()==null?"":BASE_PATH+model.getImgUrl());
+        dto.setImgNailUrl(model.getImgNailUrl()==null?"":(BASE_PATH+model.getImgNailUrl()));
         return dto;
     }
 

@@ -26,7 +26,12 @@
 			if (i<files.length-1) url+="|";
 		}//<c:if test="${selectMultiple}">
 		$("#${input}").val($("#${input}").val()+($("#${input}").val(url)==""?url:"|"+url));//</c:if><c:if test="${!selectMultiple}">
-		$("#${input}").val(${prefixUrl}+url);//</c:if>
+		if(${empty urlPrefix}){
+			$("#${input}").val(url);
+		}else{
+			$("#${input}").val("${urlPrefix}"+url);
+		}
+		//</c:if>
 		${input}Preview();
 		//top.$.jBox.close();
 	}

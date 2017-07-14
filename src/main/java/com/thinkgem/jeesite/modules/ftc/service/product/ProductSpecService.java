@@ -5,6 +5,9 @@ package com.thinkgem.jeesite.modules.ftc.service.product;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,8 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao;
 @Transactional(readOnly = true)
 public class ProductSpecService extends CrudService<ProductSpecDao, ProductSpec> {
 
+	@Autowired
+	private ProductImageDao productImageDao;
 	public ProductSpec get(String id) {
 		return super.get(id);
 	}
@@ -37,6 +42,20 @@ public class ProductSpecService extends CrudService<ProductSpecDao, ProductSpec>
 	@Transactional(readOnly = false)
 	public void save(ProductSpec productSpec) {
 		super.save(productSpec);
+		List<ProductImage> images=productSpec.getImages();
+		if(images!=null&&images.size()>0){
+			for(ProductImage image:images){
+				if (image.getIsNewRecord()){
+					image.preInsert();
+					image.setProductSpec(productSpec);
+					productImageDao.insert(image);
+				}else{
+					image.preUpdate();
+					productImageDao.update(image);
+				}
+			}
+		}
+
 	}
 	
 	@Transactional(readOnly = false)

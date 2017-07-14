@@ -105,6 +105,87 @@ public class CommentRestController extends BaseRestController {
     }
 
     /**
+     * 评价详情
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = {"delete"}, method = {RequestMethod.POST})
+    @ApiOperation(value = "删除评价", notes = "删除评价")
+    public RestResult delete(@RequestParam("token") String token,@RequestParam("cid") String id) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Comment comment = new Comment(id);
+
+            commentService.delete(comment);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+        }
+
+    }
+    /**
+     * 取消点赞
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = {"canclePraise"}, method = {RequestMethod.POST})
+    @ApiOperation(value = "取消点赞", notes = "取消")
+    public RestResult canclePraise(@RequestParam("token") String token,@RequestParam("gid")String id) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Comment comment=new Comment();
+            comment.setCustomer(customer);
+            comment.setProduct(new Product(id));
+            comment.setType("1");
+            if(StringUtils.isEmpty(comment.getType())){
+                return new RestResult(CODE_ERROR,"类型不能为空",null);
+            }
+
+            List<Comment> comments=commentService.findList(comment);
+            if(comments==null||comments.size()==0){
+                return new RestResult(CODE_SUCCESS, "没有点赞");
+            }
+            commentService.delete(comments.get(0));
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+        }
+
+    }
+    /**
+     * 点赞
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = {"praise"}, method = {RequestMethod.POST})
+    @ApiOperation(value = "点赞", notes = "点赞")
+    public RestResult praise(@RequestParam("token") String token,@RequestParam("gid")String id) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Comment comment=new Comment();
+            comment.setCustomer(customer);
+            comment.setProduct(new Product(id));
+            comment.setType("1");
+            if(StringUtils.isEmpty(comment.getType())){
+                return new RestResult(CODE_ERROR,"类型不能为空",null);
+            }
+            List<Comment> comments=commentService.findList(comment);
+            if(comments !=null&&comments.size()>0){
+                return new RestResult(CODE_ERROR, "你已经点过赞了");
+            }
+            commentService.save(comment);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+        }
+
+    }
+
+
+    /**
      * 回复列表
      *
      * @param
@@ -121,6 +202,50 @@ public class CommentRestController extends BaseRestController {
         List<ReplyDto> replyDtoList = replyConverter.convertListFromModelToDto(replyPage.getList());
         dto.setReplyList(replyDtoList);
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, dto);
+    }
+    /**
+     * 回复列表
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = {"reply"}, method = {RequestMethod.GET})
+    @ApiOperation(value = "回复", notes = "回复评价")
+    public RestResult reply(@RequestParam("token") String token,@RequestParam("id")String id,@RequestParam("content")String content) {
+
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Reply reply=new Reply();
+            reply.setCustomer(customer);
+            reply.setComment(new Comment(id));
+            reply.setContent(content);
+            replyService.save(reply);
+        }
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+    }
+    /**
+     * 删除回复
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = {"reply/delete"}, method = {RequestMethod.GET})
+    @ApiOperation(value = "删除回复", notes = "删除回复")
+    public RestResult reply(@RequestParam("token") String token,@RequestParam("id")String id) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Reply reply=replyService.get(id);
+            if(!reply.getCustomer().getId().equals(customer.getId())){
+                return new RestResult(CODE_ERROR, "只能删除自己的回复");
+            }
+
+            replyService.delete(reply);
+        }
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
     }
 
 }

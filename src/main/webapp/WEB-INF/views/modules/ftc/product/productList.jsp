@@ -51,7 +51,6 @@
 				<th>商品编号</th>
 				<th>商品分类</th>
 				<th>商品名称</th>
-				<th>展示图片</th>
 				<th>标签</th>
 
 				<th>显示积分</th>
@@ -90,10 +89,7 @@
 				<td>
 						${product.name}
 				</td>
-				<td>
-					<img src="${product.picImg}" style="height: 50px;"/>
 
-				</td>
 				<td>
 					${product.labelId}
 				</td>

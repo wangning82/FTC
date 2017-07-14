@@ -20,6 +20,11 @@ public class DesignDto extends BaseDto<DesignDto>{
     private String status;
     private Customer user;
     private List<ProductImageDto> seeds;
+    private String imgUrl;
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
 
     public void setSeeds(List<ProductImageDto> seeds) {
         this.seeds = seeds;

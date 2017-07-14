@@ -34,7 +34,9 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
         Product model = new Product();
         model.setId(dto.getId());
         model.setCategory(new Category(dto.getCategory()));
-
+        model.setName(dto.getName());
+        model.setSpecs(productSpecConverter.convertListFromDtoToModel(dto.getOthersAttributeGroup()));
+        model.setIntroduce(dto.getDesc());
         return model;
     }
 

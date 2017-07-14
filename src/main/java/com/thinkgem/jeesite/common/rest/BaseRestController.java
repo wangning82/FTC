@@ -20,6 +20,7 @@ public class BaseRestController {
     protected static final String CAPTCHA_CACHE = "captchaCache"; // 短信验证码缓存
     protected static final String TOKEN_CACHE = "tokenCache"; // 接口令牌缓存
 
+
     /**
      * 生成随机数
      * @param min

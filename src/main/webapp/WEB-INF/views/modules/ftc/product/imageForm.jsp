@@ -32,73 +32,53 @@
 	</ul><br/>
 	<form:form id="inputForm" modelAttribute="image" action="${ctx}/ftc/product/image/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
-		<sys:message content="${message}"/>		
+		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">商品：</label>
+			<label class="control-label">分类：</label>
 			<div class="controls">
-				<form:input path="product.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<sys:treeselect id="category" name="category.id" value="" labelName=""
+								labelValue=""
+								title="分类" url="/ftc/product/category/treeData" extId="" cssClass=""
+								allowClear="true"/>
 			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">产品：</label>
+			<div class="controls">
+				<sys:treeselect id="product" name="product.id" value="" labelName=""
+								labelValue=""
+								title="产品" url="/ftc/product/product/treeData" extId="" cssClass=""
+								allowClear="true" />
+			</div>
+		</div>
+
+		<div class="controls">
+			<sys:treeselect id="productSpec.id" name="productSpec.id" value="" labelName=""
+							labelValue=""
+							title="规格" url="/ftc/product/productSpec/treeData" extId="" cssClass=""
+							allowClear="true" />
 		</div>
 		<div class="control-group">
 			<label class="control-label">展示图片：</label>
 			<div class="controls">
-				<form:input path="url" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<form:input path="imgUrl" htmlEscape="false" maxlength="255" class="input-xlarge "/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">排序：</label>
-			<div class="controls">
-				<form:input path="sort" htmlEscape="false" maxlength="2" class="input-xlarge  digits"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">状态：</label>
-			<div class="controls">
-				<form:input path="status" htmlEscape="false" maxlength="2" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">位置id：</label>
-			<div class="controls">
-				<form:input path="position.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
+
+
 		<div class="control-group">
 			<label class="control-label">位置：</label>
 			<div class="controls">
-				<form:input path="position.name" htmlEscape="false" maxlength="255" class="input-xlarge "/>
+				<table>
+					<thead>
+					<th>
+						图片
+					</th>
+					</thead>
+				</table>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">设计id：</label>
-			<div class="controls">
-				<form:input path="design.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">信息：</label>
-			<div class="controls">
-				<form:input path="info" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">旋转：</label>
-			<div class="controls">
-				<form:input path="rotation" htmlEscape="false" class="input-xlarge  number"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">缩放：</label>
-			<div class="controls">
-				<form:input path="scale" htmlEscape="false" class="input-xlarge  number"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">名称：</label>
-			<div class="controls">
-				<form:input path="name" htmlEscape="false" maxlength="255" class="input-xlarge "/>
-			</div>
-		</div>
+
 		<div class="form-actions">
 			<shiro:hasPermission name="ftc:product:image:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
