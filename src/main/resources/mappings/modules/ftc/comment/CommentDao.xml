@@ -38,6 +38,7 @@
 		FROM os_comment a
 		<include refid="commentJoins"/>
 		WHERE a.id = #{id}
+
 	</select>
 	
 	<select id="findList" resultType="Comment">

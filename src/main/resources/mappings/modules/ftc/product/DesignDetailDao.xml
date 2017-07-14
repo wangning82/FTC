@@ -24,7 +24,7 @@
 		left join os_position b on a.position_id=b.id
 	</sql>
     
-	<select id="get" resultType="Image">
+	<select id="get" resultType="DesignDetail">
 		SELECT 
 			<include refid="imageColumns"/>
 		FROM os_design_detail a
@@ -32,7 +32,7 @@
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="Image">
+	<select id="findList" resultType="DesignDetail">
 		SELECT 
 			<include refid="imageColumns"/>
 		FROM os_design_detail a
@@ -53,7 +53,7 @@
 		</choose>
 	</select>
 	
-	<select id="findAllList" resultType="Image">
+	<select id="findAllList" resultType="DesignDetail">
 		SELECT 
 			<include refid="imageColumns"/>
 		FROM os_design_detail a

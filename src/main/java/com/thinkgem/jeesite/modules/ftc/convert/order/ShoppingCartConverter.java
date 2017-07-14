@@ -28,8 +28,7 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         shoppingCart.setBuyNumber(dto.getCount());
         shoppingCart.setCheckStatus(dto.getSelected());
         shoppingCart.setProduct(productConverter.convertDtoToModel(dto.getGood()));
-        shoppingCart.setProductSpec(productSpecConverter.convertDtoToModel(dto.getGood().getShowAttibuteGroup()));
-
+        shoppingCart.setProductSpec(productSpecConverter.convertDtoToModel(dto.getGood().getShowAttributeGroup()));
         return shoppingCart;
     }
 
@@ -41,7 +40,7 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         shoppingCartDto.setSelected(model.getCheckStatus());
 
         ProductDto productDto = productConverter.convertModelToDto(model.getProduct());
-        productDto.setShowAttibuteGroup(productSpecConverter.convertModelToDto(model.getProductSpec()));
+        productDto.setShowAttributeGroup(productSpecConverter.convertModelToDto(model.getProductSpec()));
 
         shoppingCartDto.setGood(productDto);
         return shoppingCartDto;

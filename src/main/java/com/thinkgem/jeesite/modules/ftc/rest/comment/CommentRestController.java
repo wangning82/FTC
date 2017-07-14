@@ -12,6 +12,7 @@ import com.thinkgem.jeesite.modules.ftc.dto.comment.ReplyDto;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.Advert;
 import com.thinkgem.jeesite.modules.ftc.entity.comment.Comment;
 import com.thinkgem.jeesite.modules.ftc.entity.comment.Reply;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.comment.CommentService;
 import com.thinkgem.jeesite.modules.ftc.service.comment.ReplyService;
@@ -78,6 +79,29 @@ public class CommentRestController extends BaseRestController {
         }
         comment = commentService.get(comment.getId());
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, commentConverter.convertModelToDto(comment));
+    }
+
+    /**
+     * 评价详情
+     *
+     * @param
+     * @return
+     */
+    @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
+    @ApiOperation(value = "回复或点赞", notes = "回复或点赞")
+    public RestResult save(@RequestParam("token") String token,CommentDto dto) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Comment comment = commentConverter.convertDtoToModel(dto);
+            if(StringUtils.isEmpty(comment.getType())){
+                return new RestResult(CODE_ERROR,"类型不能为空",null);
+            }
+            commentService.save(comment);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+        }
+
     }
 
     /**

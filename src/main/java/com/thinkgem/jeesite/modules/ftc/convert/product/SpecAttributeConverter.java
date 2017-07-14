@@ -17,7 +17,7 @@ public class SpecAttributeConverter extends BaseConverter<SpecAttribute,SpecAttr
     @Override
     public SpecAttributeDto convertModelToDto(SpecAttribute model) {
         SpecAttributeDto dto=new SpecAttributeDto();
-        dto.setName(model.getName());
+        dto.setValue(model.getName());
         dto.setId(model.getId());
         return super.convertModelToDto(model);
     }

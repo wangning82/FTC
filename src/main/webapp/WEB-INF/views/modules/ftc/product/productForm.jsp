@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp" %>
 <%@ taglib prefix="fnf" uri="/WEB-INF/tlds/fnf.tld" %>
+<c:set var="prefix" value="${pageContext.request.servletContext().getRealPath('')}"/>
 <html>
 <head>
     <title>商品管理</title>
@@ -12,7 +13,9 @@
     </style>
     <script type="text/javascript">
 
+
         $(document).ready(function () {
+            alert(${prefix});
             //$("#name").focus();
             $("#inputForm").validate({
                 submitHandler: function (form) {
@@ -192,7 +195,7 @@
         <div class="controls">
             <form:hidden id="picImg" path="picImg" htmlEscape="false" maxlength="255" class="input-xlarge"/>
             <sys:ckfinder input="picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="100"
-                          maxHeight="100"/>
+                          maxHeight="100" urlPrefix="${prefix}"/>
         </div>
     </div>
 

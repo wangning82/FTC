@@ -10,12 +10,14 @@ import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
+import com.thinkgem.jeesite.modules.ftc.entity.comment.Comment;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.service.comment.CommentService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.WishlistService;
 import com.thinkgem.jeesite.modules.ftc.service.product.PositionService;
@@ -59,7 +61,8 @@ public class ProductRestController extends BaseRestController {
     private WishlistService wishlistService;
     @Autowired
     private ShopConverter shopConverter;
-
+    @Autowired
+    private CommentService commentService;
     /**
      * 获取商品列表，传入参数
      * 可以根据分类获取商品或模型
@@ -148,6 +151,11 @@ public class ProductRestController extends BaseRestController {
     public RestResult findByUser(CustomerDto user, HttpServletRequest request, HttpServletResponse response) {
 
         Customer customer = customerService.get(user.getId());
+
+        //热度加一
+        customer.setVisitNumber(customer.getVisitNumber()+1);
+        customerService.save(customer);
+
         Product product = new Product();
         product.setDesignBy(customer);
 
@@ -218,11 +226,22 @@ public class ProductRestController extends BaseRestController {
             Wishlist wishlist = new Wishlist();
             wishlist.setCustomer(customer);
             wishlist.setProduct(product);
-            wishlist = wishlistService.get(wishlist);
-            if (wishlist == null) {
+            List<Wishlist> wishlist1= wishlistService.findList(wishlist);
+            if (wishlist1==null||wishlist1.size()==0) {
                 good.setFavourited(false);
             } else {
                 good.setFavourited(true);
+            }
+            //获取客户点赞信息
+            Comment comment = new Comment();
+            comment.setProduct(product);
+            comment.setCustomer(customer);
+            comment.setType("1");
+            List<Comment> commentList= commentService.findList(comment);
+            if (commentList == null||commentList.size()==0) {
+                good.setPraised(false);
+            } else {
+                good.setPraised(true);
             }
             Map<String, Object> result = new HashMap<>();
             result.put("shop", shop);

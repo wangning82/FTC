@@ -26,8 +26,6 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
         model.setName(dto.getName());
         model.setPrice(dto.getPrice());
         model.setCode(dto.getNumber());
-        Product product =modelConverter.convertDtoToModel(dto.getModel());
-        model.setModel(product);
         Customer customer=model.getCustomer();
 
         return model;
@@ -40,7 +38,6 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
         dto.setId(model.getId());
         dto.setName(model.getName());
         dto.setUser(model.getCustomer());
-        dto.setModel(modelConverter.convertModelToDto(model.getModel()));
         dto.setMeshes(designDetailConverter.convertListFromModelToDto(model.getDetails()));
         dto.setPrice(model.getPrice());
         dto.setNumber(model.getCode());

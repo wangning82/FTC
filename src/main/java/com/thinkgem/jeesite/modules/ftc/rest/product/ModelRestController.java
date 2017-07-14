@@ -50,6 +50,18 @@ public class ModelRestController extends BaseRestController {
 
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,modelDtoList);
     }
+    /**
+     * 模型列表
+     * @param id
+     * @return
+     */
+    @ApiOperation(value = "模型明细", notes = "获取单个模型")
+    @RequestMapping(value = {"info"},method = { RequestMethod.POST})
+    public RestResult info(String id) {
+        //只查询是模型的数据
+        Product product=productService.get(id);
 
+        return new RestResult(CODE_SUCCESS,MSG_SUCCESS,product);
+    }
 
 }

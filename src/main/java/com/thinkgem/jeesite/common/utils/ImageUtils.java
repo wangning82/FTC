@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.common.utils;
 
+import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import sun.misc.BASE64Decoder;
 
 import java.awt.AlphaComposite;
@@ -88,16 +89,31 @@ public class ImageUtils {
      * @param folderName
      * @return
      */
-    public final static String generateImg(String base64ImgStr, String folderName,int imgType) {
+    public final static String generateImg(String base64ImgStr, String folderName, String imgType) {
 
         String imgFilePath;
-
+        OutputStream out = null;
         if (base64ImgStr == null) // 图像数据为空
             return null;
 
         try {
             BASE64Decoder decoder = new BASE64Decoder();
-            String basePath = getServletContext().getRealPath("/");
+            String realPath = getServletContext().getRealPath("/upload");
+
+
+            if (imgType.equals(ImgSourceEnum.IMG_SOURCE_SUCAI.getValue())) {
+                folderName = "/" + folderName + "/sucai";
+            } else if (imgType.equals(ImgSourceEnum.IMG_SOURCE_DIANPU.getValue())) {
+                folderName = "/" + folderName + "/dianpu";
+            } else if (imgType.equals(ImgSourceEnum.IMG_SOURCE_GUIGE.getValue())) {
+                folderName = "/" + folderName + "/guige";
+            } else if (imgType.equals(ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue())) {
+                folderName = "/" + folderName + "/touxiang";
+            }
+            File file = new File(realPath + folderName);
+            if (!file.exists()) {
+                file.mkdirs();
+            }
             imgFilePath = folderName + "/" + IdGen.uuid() + ".jpg";
             // Base64解码
             byte[] bytes = decoder.decodeBuffer(base64ImgStr);
@@ -107,15 +123,20 @@ public class ImageUtils {
                 }
             }
             // 生成jpeg图片
-            OutputStream out = new FileOutputStream(basePath + imgFilePath);
+            out = new FileOutputStream(realPath + imgFilePath);
             out.write(bytes);
             out.flush();
             out.close();
-
-//            ImageUtils.scale2(basePath+imgFilePath, basePath+"/mini"+imgFilePath, 500, 300, true);//测试OK
-
             return imgFilePath;
         } catch (Exception e) {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (Exception f) {
+                f.printStackTrace();
+            }
+
             return null;
         }
 

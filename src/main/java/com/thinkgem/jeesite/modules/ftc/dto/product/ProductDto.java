@@ -19,15 +19,24 @@ public class ProductDto extends BaseDto<ProductDto> {
     private String category;//分类id
     private boolean open;//是否开放
     private BigDecimal designPrice;//设计费
+    private List<PositionDto> sprites;//位置信息
 
 
-    ProductSpecDto showAttibuteGroup;//默认的规格
+    ProductSpecDto showAttributeGroup;//默认的规格
     List<ProductSpecDto> othersAttributeGroup;//规格列表
 
 
-    private Integer priaseCount;//点赞数量
+    public List<PositionDto> getSprites() {
+        return sprites;
+    }
+
+    public void setSprites(List<PositionDto> sprites) {
+        this.sprites = sprites;
+    }
+
+    private Integer praiseCount;//点赞数量
     private Integer favouriteCount;//收藏数量
-    private boolean priased;//点赞数量
+    private boolean praised;//点赞数量
     private boolean favourited;//收藏数量
     private String attrDesc;//规格描述
 
@@ -103,12 +112,12 @@ public class ProductDto extends BaseDto<ProductDto> {
         this.designPrice = designPrice;
     }
 
-    public ProductSpecDto getShowAttibuteGroup() {
-        return showAttibuteGroup;
+    public ProductSpecDto getShowAttributeGroup() {
+        return showAttributeGroup;
     }
 
-    public void setShowAttibuteGroup(ProductSpecDto showAttibuteGroup) {
-        this.showAttibuteGroup = showAttibuteGroup;
+    public void setShowAttributeGroup(ProductSpecDto showAttibuteGroup) {
+        this.showAttributeGroup = showAttibuteGroup;
     }
 
     public List<ProductSpecDto> getOthersAttributeGroup() {
@@ -119,14 +128,6 @@ public class ProductDto extends BaseDto<ProductDto> {
         this.othersAttributeGroup = othersAttributeGroup;
     }
 
-    public Integer getPriaseCount() {
-        return priaseCount;
-    }
-
-    public void setPriaseCount(Integer priaseCount) {
-        this.priaseCount = priaseCount;
-    }
-
     public Integer getFavouriteCount() {
         return favouriteCount;
     }
@@ -135,12 +136,20 @@ public class ProductDto extends BaseDto<ProductDto> {
         this.favouriteCount = favouriteCount;
     }
 
-    public boolean isPriased() {
-        return priased;
+    public Integer getPraiseCount() {
+        return praiseCount;
     }
 
-    public void setPriased(boolean priased) {
-        this.priased = priased;
+    public void setPraiseCount(Integer praiseCount) {
+        this.praiseCount = praiseCount;
+    }
+
+    public boolean isPraised() {
+        return praised;
+    }
+
+    public void setPraised(boolean praised) {
+        this.praised = praised;
     }
 
     public boolean isFavourited() {

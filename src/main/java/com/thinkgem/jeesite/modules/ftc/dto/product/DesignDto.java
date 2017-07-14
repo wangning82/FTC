@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.modules.ftc.dto.product;
 import com.thinkgem.jeesite.common.rest.BaseDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.DesignDetail;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 
 import java.util.List;
 
@@ -11,14 +12,22 @@ import java.util.List;
  */
 public class DesignDto extends BaseDto<DesignDto>{
     private String id;
-    private ModelDto model;
+    private ProductDto model;
     private List<DesignDetailDto> meshes;
     private String name;
     private String number;
     private Double price;
     private String status;
     private Customer user;
+    private List<ProductImageDto> seeds;
 
+    public void setSeeds(List<ProductImageDto> seeds) {
+        this.seeds = seeds;
+    }
+
+    public List<ProductImageDto> getSeeds() {
+        return seeds;
+    }
 
     public String getStatus() {
         return status;
@@ -63,11 +72,11 @@ public class DesignDto extends BaseDto<DesignDto>{
         this.id = id;
     }
 
-    public ModelDto getModel() {
+    public ProductDto getModel() {
         return model;
     }
 
-    public void setModel(ModelDto model) {
+    public void setModel(ProductDto model) {
         this.model = model;
     }
 

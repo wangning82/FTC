@@ -7,15 +7,15 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.SpecAttribute;
  * Created by wangqingxiang on 2017/6/17.
  */
 public class SpecAttributeDto extends BaseDto<SpecAttributeDto>{
-    private String name;
+    private String value;
     private String id;
 
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getId() {
@@ -27,6 +27,6 @@ public class SpecAttributeDto extends BaseDto<SpecAttributeDto>{
     }
     public void convert(SpecAttribute attribute){
         this.setId(attribute.getId());
-        this.setName(attribute.getName());
+        this.setValue(attribute.getName());
     }
 }

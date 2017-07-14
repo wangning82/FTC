@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.convert.product;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
@@ -23,21 +24,13 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
     private ProductImageConverter productImageConverter;
     @Override
     public ModelDto convertModelToDto(Product model) {
-        ModelDto d = new ModelDto();
-        d.setId(model.getId());
-        d.setDesc(model.getIntroduce());
-        d.setName(model.getName());
-        d.setOpen(true);
-        d.setPrice(model.getShowPrice());
-        d.setShowImg(model.getPicImg());
-        d.setCategoryId(model.getCategory().getId());
-        List<ProductImageDto> textures= productImageConverter.convertListFromModelToDto(model.getImages());
-        d.setTextures(textures);
-
-        List<ProductSpecDto> specDtos=
-                productSpecConverter.convertListFromModelToDto(model.getSpecs());
-        d.setAttrs(specDtos);
-        return d;
+        ModelDto dto = new ModelDto();
+        if(model==null)return dto;
+        dto.setId(model.getId());
+        dto.setName(model.getName());
+        dto.setDesc(model.getIntroduce());
+        dto.setOpen(false);
+        return dto;
     }
 
     @Override

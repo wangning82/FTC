@@ -29,6 +29,7 @@
 			<include refid="wishlistColumns"/>
 		FROM os_wishlist a
 		<include refid="wishlistJoins"/>
+
 		WHERE a.id = #{id}
 	</select>
 	
