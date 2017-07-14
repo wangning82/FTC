@@ -9,11 +9,10 @@ import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
-import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.UserInfoConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
-import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
@@ -70,8 +69,8 @@ public class CustomerRestController extends BaseRestController {
     @ApiOperation(value = "发送短信验证码", notes = "用户登录首页和找回密码页面，发送短信验证码")
     @RequestMapping(value = {"sendShortMessage"}, method = {RequestMethod.POST})
     public RestResult sendShortMessage(@RequestParam("mobile") String mobile) {
-//        String captcha = getShortMessageNumber();
-        String captcha="1234";
+        String captcha = getShortMessageNumber();
+//        String captcha="1234";
         EhCacheUtils.put(CAPTCHA_CACHE, mobile, captcha);
         //TODO 调用短信接口发送验证码
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, captcha);
@@ -273,19 +272,21 @@ public class CustomerRestController extends BaseRestController {
      * 更新用户信息
      *
      * @param token
-     * @param customerDto
+     * @param shopDto
      * @return
      */
     @ApiOperation(value = "更新用户信息", notes = "更新用户信息")
     @RequestMapping(value = {"updateCustomer"}, method = {RequestMethod.POST})
-    public RestResult updateCustomer(@RequestParam("token") String token, CustomerDto customerDto) {
+    public RestResult updateCustomer(@RequestParam("token") String token, ShopDto shopDto) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            customer.setUserName(customerDto.getName());
-            customer.setSignature(customerDto.getDesc());
-            customer.setPicImg(ImageUtils.generateImg(customerDto.getImgUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue()));
+            customer.setUserName(shopDto.getUser().getName());
+            customer.setSignature(shopDto.getUser().getDesc());
+            customer.setShopName(shopDto.getName());
+            customer.setPicImg(ImageUtils.generateImg(shopDto.getUser().getImgUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue()));
+            customer.setShopBackground(ImageUtils.generateImg(shopDto.getBackgroundUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_DIANPU.getValue()));
             customerService.save(customer);
             EhCacheUtils.put(TOKEN_CACHE, token, userInfoConverter.convertModelToDto(customer));
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
