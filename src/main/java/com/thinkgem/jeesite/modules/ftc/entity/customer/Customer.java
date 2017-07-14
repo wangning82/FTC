@@ -44,6 +44,7 @@ public class Customer extends DataEntity<Customer> {
 	private String qq;		// qq
 	private String wechat;		// wechat
 	private Integer wishlistNumber; // 关注人数
+	private Integer visitNumber; // 访问数量(热度)
 
 	private String accessToken; // 令牌
 	private Date expiresTime; // 令牌有效时间
@@ -295,5 +296,13 @@ public class Customer extends DataEntity<Customer> {
 
 	public void setWishlistNumber(Integer wishlistNumber) {
 		this.wishlistNumber = wishlistNumber;
+	}
+
+	public Integer getVisitNumber() {
+		return visitNumber;
+	}
+
+	public void setVisitNumber(Integer visitNumber) {
+		this.visitNumber = visitNumber;
 	}
 }

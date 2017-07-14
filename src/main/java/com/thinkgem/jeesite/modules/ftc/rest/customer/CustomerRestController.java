@@ -4,6 +4,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.common.utils.EhCacheUtils;
+import com.thinkgem.jeesite.common.utils.ImageUtils;
 import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
@@ -282,7 +283,7 @@ public class CustomerRestController extends BaseRestController {
         } else {
             customer.setUserName(customerDto.getName());
             customer.setSignature(customerDto.getDesc());
-            customer.setPicImg(customerDto.getImgUrl()); // TODO 更新图片
+            customer.setPicImg(ImageUtils.generateImg(customerDto.getImgUrl(), customer.getId(), 0));
             customerService.save(customer);
             EhCacheUtils.put(TOKEN_CACHE, token, userInfoConverter.convertModelToDto(customer));
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);

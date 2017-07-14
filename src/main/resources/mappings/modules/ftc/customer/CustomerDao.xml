@@ -32,7 +32,8 @@
 		a.score AS "score",
 		a.qq AS "qq",
 		a.wechat AS "wechat",
-		a.wishlist_number AS "wishlistNumber"
+		a.wishlist_number AS "wishlistNumber",
+		a.visit_number AS "visitNumber"
 	</sql>
 	
 	<sql id="customerJoins">
@@ -131,7 +132,8 @@
 			score,
 			qq,
 			wechat,
-			wishlist_number
+			wishlist_number,
+			visit_number
 		) VALUES (
 			#{id},
 			#{userCode},
@@ -162,7 +164,8 @@
 			#{score},
 			#{qq},
 			#{wechat},
-			#{wishlistNumber}
+			#{wishlistNumber},
+			#{visitNumber}
 		)
 	</insert>
 	
@@ -195,7 +198,8 @@
 			score = #{score},
 			qq = #{qq},
 			wechat = #{wechat},
-			wishlist_number = #{wishlistNumber}
+			wishlist_number = #{wishlistNumber},
+			visit_number = #{visitNumber}
 		WHERE id = #{id}
 	</update>
 	
