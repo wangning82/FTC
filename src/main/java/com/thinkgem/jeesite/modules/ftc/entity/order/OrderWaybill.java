@@ -14,8 +14,8 @@ import org.hibernate.validator.constraints.Length;
 public class OrderWaybill extends DataEntity<OrderWaybill> {
 	
 	private static final long serialVersionUID = 1L;
-	private Order order;		// 订单ID
-	private OrderShipment shipment;		// 收货地址
+	private Order order = new Order();		// 订单ID
+	private OrderShipment shipment = new OrderShipment();		// 收货地址
 	private String waybillNumber;		// 运单号
 	private String expressCompany;		// 快递公司
 	

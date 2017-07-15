@@ -15,13 +15,13 @@ import org.hibernate.validator.constraints.Length;
 public class Address extends DataEntity<Address> {
 	
 	private static final long serialVersionUID = 1L;
-	private Customer customer;		// 用户ID
+	private Customer customer = new Customer();		// 用户ID
 	private String userName;  // 收件人姓名
 	private String userTag;		// 地址标签
 	private String userPhone;		// 手机号码
-	private Area province;		// 省份ID
-	private Area city;		// 城市ID
-	private Area district;		// 区域ID
+	private Area province = new Area();		// 省份ID
+	private Area city = new Area();		// 城市ID
+	private Area district = new Area();		// 区域ID
 	private String userAdress;		// 详细地址
 	private String userZipcode;		// 邮政编码
 	private String isDefault;  // 是否默认

@@ -159,7 +159,7 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "订单列表", notes = "订单列表")
-    @RequestMapping(value = {"orderList"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"orderList"}, method = {RequestMethod.POST})
     public RestResult orderList(@RequestParam("token") String token, @RequestParam("type") String type,
                                 HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
@@ -182,7 +182,7 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "取消订单", notes = "取消订单，参数为订单号")
-    @RequestMapping(value = {"cancelOrder"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"cancelOrder"}, method = {RequestMethod.POST})
     public RestResult cancelOrder(@RequestParam("token") String token, @RequestParam("order") String orderNo) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
@@ -256,7 +256,7 @@ public class OrderRestController extends BaseRestController {
      * @return 支付是否成功
      */
     @ApiOperation(value = "支付回调", notes = "回调接口")
-    @RequestMapping(value = "payBack.json", method = {RequestMethod.GET})
+    @RequestMapping(value = "payBack.json", method = {RequestMethod.POST})
     public String payBack(HttpServletRequest request) throws IOException {
         //根据账户id，获取对应的支付账户操作工具
         PayResponse payResponse = apyAccountService.getPayResponse(4);
@@ -291,7 +291,7 @@ public class OrderRestController extends BaseRestController {
      * @return
      */
     @ApiOperation(value = "运单信息", notes = "运单信息")
-    @RequestMapping(value = {"showWaybill"}, method = {RequestMethod.POST, RequestMethod.GET})
+    @RequestMapping(value = {"showWaybill"}, method = {RequestMethod.POST})
     public RestResult showWaybill(@RequestParam("token") String token, @RequestParam("order") String orderNo) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {

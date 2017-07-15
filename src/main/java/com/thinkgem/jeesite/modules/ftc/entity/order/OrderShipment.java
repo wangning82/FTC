@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 public class OrderShipment extends DataEntity<OrderShipment> {
 	
 	private static final long serialVersionUID = 1L;
-	private Order order;		// 订单ID
+	private Order order = new Order();		// 订单ID
 	private String userName;		// 姓名
 	private String userPhone;		// 手机号码
 	private String provinceId;		// 省份ID

@@ -17,9 +17,9 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class Wishlist extends DataEntity<Wishlist> {
 	
 	private static final long serialVersionUID = 1L;
-	private Product product;		// 商品ID
-	private Customer customer;		// 用户ID
-	private Customer designer;		// 店铺id
+	private Product product = new Product();		// 商品ID
+	private Customer customer = new Customer();		// 用户ID
+	private Customer designer = new Customer();		// 店铺id
 	private String type;		// 类型
 	
 	public Wishlist() {

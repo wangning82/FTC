@@ -22,7 +22,7 @@ public class Order extends DataEntity<Order> {
 	private static final long serialVersionUID = 1L;
 	private String orderNo;		// 订单编号
 	private String tradeNo;     // 交易编号
-	private Customer customer;		// 顾客
+	private Customer customer = new Customer();		// 顾客
 	private String payType;		// 支付方式
 	private String shipmentTime;		// 配送时间
 	private String shipmentType;		// 配送方式
@@ -36,7 +36,7 @@ public class Order extends DataEntity<Order> {
 	private BigDecimal buyNumber;		// 商品总数量
 	private List<OrderProduct> orderProductList = Lists.newArrayList();		// 子表列表
 
-	private Address address;
+	private Address address = new Address();
 	
 	public Order() {
 		super();

@@ -17,8 +17,8 @@ import java.math.BigDecimal;
 public class CustomerBill extends DataEntity<CustomerBill> {
 	
 	private static final long serialVersionUID = 1L;
-	private Customer customer;		// 客户id
-	private Order order;		// 订单id
+	private Customer customer = new Customer();		// 客户id
+	private Order order = new Order();		// 订单id
 	private BigDecimal money;		// 金额
 	private String type;		// 类型
 	private String status;		// 状态

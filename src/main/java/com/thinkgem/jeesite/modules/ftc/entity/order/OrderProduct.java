@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 public class OrderProduct extends DataEntity<OrderProduct> {
 	
 	private static final long serialVersionUID = 1L;
-	private Order order;		// 订单ID 父类
+	private Order order = new Order();		// 订单ID 父类
 	private String productNumber;		// 商品编号
 	private String name;		// 商品名称
 	private String picImg;		// 展示图片
@@ -28,7 +28,7 @@ public class OrderProduct extends DataEntity<OrderProduct> {
 	private BigDecimal productScore;		// 商品总积分
 	private BigDecimal productAmount;		// 商品总金额
 	private BigDecimal buyNumber;		// 商品总数量
-	private Customer designBy;		// 设计者
+	private Customer designBy = new Customer();		// 设计者
 	private BigDecimal designPrice;		// 设计单价
 	private BigDecimal designAmount;		// 设计总费用
 	private BigDecimal price;		// 价格
