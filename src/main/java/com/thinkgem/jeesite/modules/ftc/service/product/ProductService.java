@@ -11,11 +11,13 @@ import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductSpecDao;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,8 +33,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	private ProductSpecDao productSpecDao;
 	@Autowired
 	private ProductImageDao productImageDao;
-	@Autowired
-	private DesignDao designDao;
+
 	public Product get(String id) {
 		Product product= super.get(id);
 
@@ -46,7 +47,28 @@ public class ProductService extends CrudService<ProductDao, Product> {
 	public Page<Product> findPage(Page<Product> page, Product product) {
 		return super.findPage(page, product);
 	}
-	
+
+	public List<Product> findListWithSpec(Page<Product>page,Product product){
+		 page = this.findPage(page,product);
+		List<Product> productList = page.getList();
+		List<ProductDto> goodList = new ArrayList<>();
+		for (int i = 0; i < productList.size(); i++) {
+			product = productList.get(i);
+			List<ProductSpec> specs = productSpecDao.findList(new ProductSpec(product));
+			for (int j = 0; j < specs.size(); j++) {
+				ProductSpec spec = specs.get(j);
+				if ("1".equals(spec.getDefaultStatus())) {
+					ProductImage image = new ProductImage();
+					image.setProductSpec(spec);
+					List<ProductImage> images = productImageDao.findList(image);
+					spec.setImages(images);
+				}
+			}
+			product.setSpecs(specs);
+
+		}
+		return productList;
+	}
 	@Transactional(readOnly = false)
 	public void save(Product product) {
 		//保存商品时

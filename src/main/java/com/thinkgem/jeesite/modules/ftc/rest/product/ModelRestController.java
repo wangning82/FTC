@@ -108,11 +108,7 @@ public class ModelRestController extends BaseRestController {
         }
         product.setSpecs(specs);
         ModelDto model = modelConverter.convertModelToDto(product);
-        //还要获取模型的分类包含的图片位置信息
-        Category category = product.getCategory();
-        List<Position> positionList = positionService.findList(new Position(category));
-        List<PositionDto> positionDtoList = positionConverter.convertListFromModelToDto(positionList);
-        model.setSprites(positionDtoList);
+
 
 
 

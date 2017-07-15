@@ -3,18 +3,20 @@
  */
 package com.thinkgem.jeesite.modules.ftc.service.customer;
 
-import java.util.List;
-
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.ftc.constant.WishlistTypeEnum;
+import com.thinkgem.jeesite.modules.ftc.dao.customer.CustomerDao;
+import com.thinkgem.jeesite.modules.ftc.dao.customer.WishlistDao;
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.service.CrudService;
-import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
-import com.thinkgem.jeesite.modules.ftc.dao.customer.WishlistDao;
+import java.util.List;
 
 /**
  * 收藏Service
@@ -26,7 +28,9 @@ import com.thinkgem.jeesite.modules.ftc.dao.customer.WishlistDao;
 public class WishlistService extends CrudService<WishlistDao, Wishlist> {
 
 	@Autowired
-	private CustomerService customerService;
+	private CustomerDao customerDao;
+	@Autowired
+	private ProductDao productDao;
 
 	public Wishlist get(String id) {
 		return super.get(id);
@@ -42,18 +46,30 @@ public class WishlistService extends CrudService<WishlistDao, Wishlist> {
 	
 	@Transactional(readOnly = false)
 	public void save(Wishlist wishlist) {
-		if(WishlistTypeEnum.WISHLIST_SHOP.getValue().equals(wishlist.getType())){
-			// 统计店铺收藏数量
-			Customer customer = customerService.get(wishlist.getCustomer().getId());
-			customer.setWishlistNumber(dao.getShopWishlistNumber(wishlist.getDesigner().getId()));
-			customerService.save(customer);
-		}
 		super.save(wishlist);
+		updateWishListCount(wishlist);
 	}
 	
 	@Transactional(readOnly = false)
 	public void delete(Wishlist wishlist) {
 		super.delete(wishlist);
+		updateWishListCount(wishlist);
+
+	}
+	private void updateWishListCount(Wishlist wishlist){
+		if(WishlistTypeEnum.WISHLIST_SHOP.getValue().equals(wishlist.getType())){
+			// 统计店铺收藏数量
+			Customer customer = customerDao.get(wishlist.getCustomer().getId());
+			customer.setWishlistNumber(dao.getShopWishlistNumber(wishlist.getDesigner().getId()));
+			customer.preUpdate();
+			customerDao.update(customer);
+		}else{
+			// 统计店铺收藏数量
+			Product product = productDao.get(wishlist.getProduct().getId());
+			product.setFavouriteCount(dao.getProductWishlistNumber(wishlist.getProduct().getId()));
+			product.preUpdate();
+			productDao.update(product);
+		}
 	}
 	
 }

@@ -52,7 +52,7 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
 
 //        dto.setShowPrice(model.getShowPrice());
         dto.setDesignPrice(model.getDesignPrice());
-        dto.setCategory(model.getCategory().getId());
+        dto.setCategory(model.getCategory()==null?null:model.getCategory().getId());
         dto.setPraiseCount(model.getPriaseCount());
         dto.setFavouriteCount(model.getFavouriteCount());
         List<ProductSpecDto> attrs=

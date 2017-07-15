@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.ftc.rest.product;
 
+import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.common.utils.ImageUtils;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.*;
 
@@ -72,20 +74,28 @@ public class DesignRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
+
     /**
-     * 优秀设计
+     * 我的设计
      *
      * @param
      * @return
      */
-    @ApiOperation(value = "设计列表", notes = "获取设计列表")
+    @ApiOperation(value = "我的设计", notes = "获取我的设计列表")
     @RequestMapping(value = {"list"}, method = {RequestMethod.POST})
-    public RestResult list(Design design) {
-        //
-        List<Design> bestDesign = designService.findList(design);
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, bestDesign);
+    public RestResult mylist(@RequestParam("token") String token, HttpServletRequest request,HttpServletResponse response) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            Design design=new Design();
+            design.setCustomer(customer);
+            Page<Design> page = designService.findPage(new Page<Design>(request, response), design);
+            List<Design> designList=page.getList();
+            List<DesignDto> designDtoList=designConverter.convertListFromModelToDto(designList);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, designDtoList);
+        }
     }
-
     /**
      * 优秀设计
      *
@@ -239,8 +249,6 @@ public class DesignRestController extends BaseRestController {
 
         Design designModel = designService.get(design.getId());
         designModel.setName(design.getName());
-        designModel.setPrice(design.getPrice());
-        designModel.setDesignStatus(design.getStatus());
         designModel.setUpdateDate(new Date());
         designService.save(designModel);
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
@@ -278,7 +286,7 @@ public class DesignRestController extends BaseRestController {
             specs.get(i).setImages(images);
         }
         product.setSpecs(specs);
-        ProductDto good = productConverter.convertModelToDto(product);
+        ModelDto good = modelConverter.convertModelToDto(product);
         dto.setModel(good);
 
 
@@ -335,7 +343,12 @@ public class DesignRestController extends BaseRestController {
      */
     @ApiOperation(value = "我要设计", notes = "我要设计，获取模型信息")
     @RequestMapping(value = {"iwant"}, method = {RequestMethod.POST})
-    public RestResult iWant(@RequestParam("id") String id, HttpServletRequest request) {
+    public RestResult iWant(@RequestParam("token") String token,@RequestParam("id") String id,  HttpServletRequest request) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        }
+
         if (id == null || id.equals("")||id.equals("0")) {
             return iWant(request);
         } else {
@@ -366,14 +379,10 @@ public class DesignRestController extends BaseRestController {
             specs.get(i).setImages(images);
         }
         product.setSpecs(specs);
-        ProductDto productDto = productConverter.convertModelToDto(product);
-        //还要获取模型的分类包含的图片位置信息
-        Category category = product.getCategory();
-        List<Position> positionList = positionService.findList(new Position(category));
-        List<PositionDto> positionDtoList = positionConverter.convertListFromModelToDto(positionList);
-        productDto.setSprites(positionDtoList);
+        ModelDto modelDto = modelConverter.convertModelToDto(product);
 
-        dto.setModel(productDto);
+
+        dto.setModel(modelDto);
 
         try{
 

@@ -29,7 +29,7 @@ public class ModelConverter extends BaseConverter<Product, ModelDto> {
         dto.setId(model.getId());
         dto.setName(model.getName());
         dto.setDesc(model.getIntroduce());
-        dto.setCategory(model.getCategory().getId());
+        dto.setCategory(model.getCategory()==null?null:model.getCategory().getId());
         List<ProductSpecDto> attrs=
                 productSpecConverter.convertListFromModelToDto(model.getSpecs());
         dto.setOthersAttributeGroup(attrs);

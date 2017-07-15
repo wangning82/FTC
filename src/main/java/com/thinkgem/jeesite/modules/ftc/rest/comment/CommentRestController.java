@@ -64,6 +64,7 @@ public class CommentRestController extends BaseRestController {
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, commentDtoList);
     }
 
+
     /**
      * 评价详情
      *
@@ -130,9 +131,9 @@ public class CommentRestController extends BaseRestController {
      * @param
      * @return
      */
-    @RequestMapping(value = {"canclePraise"}, method = {RequestMethod.POST})
+    @RequestMapping(value = {"cancelPraise"}, method = {RequestMethod.POST})
     @ApiOperation(value = "取消点赞", notes = "取消")
-    public RestResult canclePraise(@RequestParam("token") String token,@RequestParam("gid")String id) {
+    public RestResult cancelPraise(@RequestParam("token") String token,@RequestParam("gid")String id) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");

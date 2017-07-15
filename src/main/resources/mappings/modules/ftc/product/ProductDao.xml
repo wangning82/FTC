@@ -74,6 +74,9 @@
 			<if test="createBy != null and createBy.id != null and createBy.id != ''">
 				AND a.create_by = #{createBy.id}
 			</if>
+			<if test="designBy != null and designBy.id != null and designBy.id != ''">
+				AND a.design_by = #{designBy.id}
+			</if>
 			<if test="searchKey != null and searchKey != ''">
 				AND a.search_key = #{searchKey}
 			</if>

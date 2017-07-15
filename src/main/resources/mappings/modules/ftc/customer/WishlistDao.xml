@@ -124,7 +124,7 @@
 		WHERE id = #{id}
 	</update>
 
-	<select id="getShopWishlistNumber" resultType="java.lang.Integer" parameterType="java.lang.String">
+	<select id="getShopWishlistNumber" resultType="java.lang.Integer"  parameterType="java.lang.String">
 		select count(*)
 		from os_wishlist
 		where designer_id = #{shopId}

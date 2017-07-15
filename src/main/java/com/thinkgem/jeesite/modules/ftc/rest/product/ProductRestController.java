@@ -148,40 +148,25 @@ public class ProductRestController extends BaseRestController {
      */
     @ApiOperation(value = "潮人馆商品列表", notes = "获取设计者的商品")
     @RequestMapping(value = {"findByUser", ""}, method = {RequestMethod.POST})
-    public RestResult findByUser(CustomerDto user, HttpServletRequest request, HttpServletResponse response) {
+    public RestResult findByUser(@RequestParam("token") String token,@RequestParam("uid") String userId, HttpServletRequest request, HttpServletResponse response) {
 
-        Customer customer = customerService.get(user.getId());
+        Customer customer = customerService.get(userId);
 
+        if(customer==null){
+            return new RestResult(CODE_NULL, "没有找到用户信息");
+        }
         //热度加一
         customer.setVisitNumber(customer.getVisitNumber()+1);
         customerService.save(customer);
 
         Product product = new Product();
         product.setDesignBy(customer);
+        Page<Product> page=new Page<Product>(1,4);
+        page.setOrderBy("a.hot_num");
+        List<Product> productList=productService.findListWithSpec(page,product);
 
-        Page<Product> page = productService.
-                findPage(new Page<Product>(request, response),
-                        product);
 
-        List<Product> productList = page.getList();
-        List<ProductDto> goodList = new ArrayList<>();
-        for (int i = 0; i < productList.size(); i++) {
-            product = productList.get(i);
-            List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
-            for (int j = 0; j < specs.size(); j++) {
-                ProductSpec spec = specs.get(j);
-                if ("1".equals(spec.getDefaultStatus())) {
-                    ProductImage image = new ProductImage();
-                    image.setProductSpec(spec);
-                    List<ProductImage> images = productImageService.findList(image);
-                    spec.setImages(images);
-                }
-            }
-            product.setSpecs(specs);
-            ProductDto good = productConvert.convertModelToDto(product);
-            goodList.add(good);
-        }
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, goodList);
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, productConvert.convertListFromModelToDto(productList));
     }
 
 

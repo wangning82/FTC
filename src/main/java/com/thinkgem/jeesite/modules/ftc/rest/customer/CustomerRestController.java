@@ -15,8 +15,10 @@ import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
 import io.swagger.annotations.Api;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -60,6 +63,8 @@ public class CustomerRestController extends BaseRestController {
 
     @Autowired
     private ShopConverter shopConverter;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 发送短信验证码
@@ -377,9 +382,25 @@ public class CustomerRestController extends BaseRestController {
                 param.setOrderBy("a.wishlist_number desc");
             }
             Page<Customer> result = customerService.findPage(param, new Customer());
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertListFromModelToDto(result.getList()));
+
+            List<Customer> customerList=result.getList();
+            List<ShopDto> shopDtoList=new ArrayList<>();
+            if(CollectionUtils.isNotEmpty(customerList)){
+                for(Customer customer1:customerList){
+                    Product product = new Product();
+                    product.setDesignBy(customer1);
+                    Page<Product> page=new Page<Product>(1,4);
+                    page.setOrderBy("a.hot_num");
+                    List<Product> productList=productService.findListWithSpec(page,product);
+                    ShopDto dto=shopConverter.convertModelToDto(customer1,productList);
+                    shopDtoList.add(dto);
+                }
+            }
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopDtoList);
         }
     }
+
 
     @ApiOperation(value = "获取潮店信息", notes = "获取潮店信息")
     @RequestMapping(value = {"hotShop"}, method = {RequestMethod.POST})

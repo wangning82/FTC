@@ -15,7 +15,8 @@
 		a.del_flag AS "delFlag",
 		a.design_status AS "designStatus",
 		b.name AS "model.name",
-		c.user_name As "customer.userName"
+		c.user_name As "customer.userName",
+		a.pic_img as "picImg"
 	</sql>
 
     <sql id="designJoins">
@@ -100,7 +101,8 @@
 			update_by,
 			update_date,
 			del_flag,
-			design_status
+			design_status,
+			pic_img
 		) VALUES (
 			#{id},
 			#{name},
@@ -112,7 +114,8 @@
             #{updateBy.id},
 			#{updateDate},
 			#{delFlag},
-			#{designStatus}
+			#{designStatus},
+			#{picImg}
 
 		)
 	</insert>
@@ -125,7 +128,8 @@
 			price = #{price},
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
-			design_status = #{designStatus}
+			design_status = #{designStatus},
+			pic_img=#{picImg}
 		WHERE id = #{id}
 	</update>
 

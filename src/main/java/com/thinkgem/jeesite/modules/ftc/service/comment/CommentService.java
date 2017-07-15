@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.ftc.service.comment;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,6 +70,22 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	public void delete(Comment comment) {
 		super.delete(comment);
 		replyDao.delete(new Reply(comment));
+	}
+
+	/**
+	 * 更新评价的回复数量
+	 */
+	private void updateCommentCommentCount(){
+
+	}
+
+	/**
+	 * 更新商品的评价数量
+	 * @param comment
+     */
+	private void updateProductCommentCount(Comment comment){
+		Product product=new Product();
+//		product.setPriaseCount();
 	}
 	
 }

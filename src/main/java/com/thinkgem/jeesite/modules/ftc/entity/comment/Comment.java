@@ -28,7 +28,7 @@ public class Comment extends DataEntity<Comment> {
 	private String content;		// 评论内容
 	private Integer goodCount;		// 好评数
 	private String status;		// 状态
-	private String type;		// 评论类型
+	private String type;		// 评论类型 1 点赞　２　回复
 	private List<Reply> replyList = Lists.newArrayList();		// 子表列表
 	
 	public Comment() {

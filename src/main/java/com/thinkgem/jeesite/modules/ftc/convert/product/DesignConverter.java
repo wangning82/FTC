@@ -20,12 +20,12 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
 
     @Autowired
     private DesignDetailConverter designDetailConverter;
+    @Autowired
+    private ModelConverter modelConverter;
     @Override
     public Design convertDtoToModel(DesignDto dto) {
         Design model=new Design();
-        model.setName(dto.getName());
-        model.setPrice(dto.getPrice());
-        model.setCode(dto.getNumber());
+//        model.setName(dto.getName());
         List<DesignDetail> details=designDetailConverter.
                 convertListFromDtoToModel(dto.getMeshes());
         model.setDetails(details);
@@ -39,11 +39,10 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
         DesignDto dto=new DesignDto();
         if(model==null)return dto;
         dto.setId(model.getId());
-        dto.setName(model.getName());
-        dto.setUser(model.getCustomer());
+        dto.setImgUrl(model.getPicImg());
+//        dto.setName(model.getName());
         dto.setMeshes(designDetailConverter.convertListFromModelToDto(model.getDetails()));
-        dto.setPrice(model.getPrice());
-        dto.setNumber(model.getCode());
+        dto.setModel(modelConverter.convertModelToDto(model.getModel()));
         return dto;
     }
 }

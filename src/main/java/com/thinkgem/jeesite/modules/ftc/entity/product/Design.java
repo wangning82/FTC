@@ -25,6 +25,16 @@ public class Design extends DataEntity<Design> {
 	private String designStatus;		// 状态
 	private List<DesignDetail> details;//设计明细
 	private Customer customer;
+	private String picImg;//展示图片
+
+	public String getPicImg() {
+		return picImg;
+	}
+
+	public void setPicImg(String picImg) {
+		this.picImg = picImg;
+	}
+	
 
 	public Customer getCustomer() {
 		return customer;

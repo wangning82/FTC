@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.dto.product;
 
 import com.thinkgem.jeesite.common.rest.BaseDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 
 import java.util.List;
 
@@ -13,11 +14,11 @@ public class ModelDto extends BaseDto<ModelDto> {
     private String name;//名称
     private String desc;//描述
 
+    private CustomerDto Customer;
     private String category;
 
     ProductSpecDto showAttributeGroup;//默认的规格
     List<ProductSpecDto> othersAttributeGroup;//规格列表
-    private List<PositionDto> sprites;//位置信息
 
     public String getId() {
         return id;
@@ -67,11 +68,4 @@ public class ModelDto extends BaseDto<ModelDto> {
         this.othersAttributeGroup = othersAttributeGroup;
     }
 
-    public List<PositionDto> getSprites() {
-        return sprites;
-    }
-
-    public void setSprites(List<PositionDto> sprites) {
-        this.sprites = sprites;
-    }
 }

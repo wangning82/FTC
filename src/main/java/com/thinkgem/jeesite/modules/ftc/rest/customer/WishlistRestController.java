@@ -81,7 +81,12 @@ public class WishlistRestController extends BaseRestController {
             wishlist.setCustomer(customer);
             List<Wishlist> result = wishlistService.findList(wishlist);
             if(CollectionUtils.isNotEmpty(result)){
-                return new RestResult(CODE_ERROR, "您已经收藏过了");
+                if (WishlistTypeEnum.WISHLIST_PRODUCT.getValue().equals(type)) {
+                    return new RestResult(CODE_ERROR, "您已经收藏过了");
+                } else {
+                    return new RestResult(CODE_ERROR, "您已经关注过了");
+                }
+
             }else {
                 wishlistService.save(wishlist);
             }
