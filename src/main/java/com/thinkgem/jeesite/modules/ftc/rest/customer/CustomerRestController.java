@@ -21,6 +21,7 @@ import com.thinkgem.jeesite.modules.sys.entity.Area;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,7 +69,7 @@ public class CustomerRestController extends BaseRestController {
      */
     @ApiOperation(value = "发送短信验证码", notes = "用户登录首页和找回密码页面，发送短信验证码")
     @RequestMapping(value = {"sendShortMessage"}, method = {RequestMethod.POST})
-    public RestResult sendShortMessage(@RequestParam("mobile") String mobile) {
+    public RestResult sendShortMessage(@ApiParam("电话号码，必选") @RequestParam(value = "mobile", required = true) String mobile) {
         String captcha = getShortMessageNumber();
 //        String captcha="1234";
         EhCacheUtils.put(CAPTCHA_CACHE, mobile, captcha);

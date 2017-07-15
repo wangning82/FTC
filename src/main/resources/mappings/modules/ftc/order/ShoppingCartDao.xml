@@ -23,7 +23,7 @@
 		LEFT JOIN os_customer b ON b.id = a.customer_id
 		LEFT JOIN os_product_specification c ON c.product_spec_number = a.product_spec_number
 		LEFT JOIN os_product d ON d.id = c.product_id
-		LEFT JOIN os_product_design e ON e.product_id = d.id
+		LEFT JOIN os_design e ON e.model_id = d.id
 	</sql>
     
 	<select id="get" resultType="ShoppingCart">

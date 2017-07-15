@@ -166,6 +166,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param shoppingCart
      * @return
      */
+    @Transactional(readOnly = false)
     public OrderProduct cart2OrderProduct(Order order, ShoppingCart shoppingCart){
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setOrder(order);
@@ -190,6 +191,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param orderProduct
      * @return
      */
+    @Transactional(readOnly = false)
     public ShoppingCart orderProduct2Cart(OrderProduct orderProduct){
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setCustomer(orderProduct.getOrder().getCustomer());
@@ -311,6 +313,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param customer
      * @return
      */
+    @Transactional(readOnly = false)
     public CustomerIncomeDto findIncomeByDesigner(Customer customer){
         CustomerIncomeDto incomeDto = new CustomerIncomeDto();
         Map<String, BigDecimal> today = dao.findIncomeToday(customer.getId());
@@ -332,6 +335,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * 销售统计
      * @return
      */
+    @Transactional(readOnly = false)
     public CustomerSoldDto findSoldInfo(String productId){
         CustomerSoldDto soldDto = new CustomerSoldDto();
         Product product = productService.get(productId);
