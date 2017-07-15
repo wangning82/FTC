@@ -92,7 +92,7 @@
 			check_status
 		) VALUES (
 			#{id},
-			#{productSpecNumber},
+			#{productSpec.productSpecNumber},
 			#{customer.id},
 			#{buyNumber},
 			#{createDate},
@@ -103,7 +103,7 @@
 	
 	<update id="update">
 		UPDATE os_shopping_cart SET 	
-			product_spec_number = #{productSpecNumber},
+			product_spec_number = #{productSpec.productSpecNumber},
 			customer_id = #{customer.id},
 			buy_number = #{buyNumber},
 			update_date = #{updateDate},
