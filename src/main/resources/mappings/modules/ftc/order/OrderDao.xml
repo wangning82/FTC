@@ -150,8 +150,8 @@
 
 	<select id="findIncomeToday" parameterType="java.lang.String" resultType="java.util.HashMap">
 		SELECT
-			sum(op.design_amount) AS income,
-			sum(op.price) AS total
+			IFNULL(sum(op.design_amount), 0) AS income,
+			IFNULL(sum(op.price), 0) AS total
 		FROM
 			os_order o,
 			os_order_product op
@@ -163,8 +163,8 @@
 
 	<select id="findIncomeMonth" parameterType="java.lang.String" resultType="java.util.HashMap">
 		SELECT
-			sum(op.design_amount) AS income,
-			sum(op.price) AS total
+			IFNULL(sum(op.design_amount), 0) AS income,
+			IFNULL(sum(op.price), 0) AS total
 		FROM
 			os_order o,
 			os_order_product op
@@ -176,8 +176,8 @@
 
 	<select id="findIncomeAll" parameterType="java.lang.String" resultType="java.util.HashMap">
 		SELECT
-			sum(op.design_amount) AS income,
-			sum(op.price) AS total
+			IFNULL(sum(op.design_amount), 0) AS income,
+			IFNULL(sum(op.price), 0) AS total
 		FROM
 			os_order o,
 			os_order_product op

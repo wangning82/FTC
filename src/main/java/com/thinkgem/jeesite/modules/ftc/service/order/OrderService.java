@@ -339,14 +339,16 @@ public class OrderService extends CrudService<OrderDao, Order> {
     public CustomerSoldDto findSoldInfo(String productId){
         CustomerSoldDto soldDto = new CustomerSoldDto();
         Product product = productService.get(productId);
-        soldDto.setGood(productConverter.convertModelToDto(product));
+        if(product != null){
+            soldDto.setGood(productConverter.convertModelToDto(product));
 
-        OrderProduct param = new OrderProduct();
-        param.setProductNumber(product.getNumber());
-        OrderProduct orderProduct = orderProductDao.findSoldInfo(param);
-        soldDto.setCount(orderProduct.getBuyNumber());
-        soldDto.setIncomeReal(orderProduct.getDesignAmount());
-        soldDto.setIncomeTotal(orderProduct.getPrice());
+            OrderProduct param = new OrderProduct();
+            param.setProductNumber(product.getNumber());
+            OrderProduct orderProduct = orderProductDao.findSoldInfo(param);
+            soldDto.setCount(orderProduct.getBuyNumber());
+            soldDto.setIncomeReal(orderProduct.getDesignAmount());
+            soldDto.setIncomeTotal(orderProduct.getPrice());
+        }
 
         return soldDto;
     }
