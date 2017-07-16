@@ -300,14 +300,14 @@ public class CustomerRestController extends BaseRestController {
     }
 
     @ApiOperation(value = "获取地区列表", notes = "用户编辑收货地址时的备选条件 ")
-    @RequestMapping(value = {"findAreaList"}, method = {RequestMethod.GET})
+    @RequestMapping(value = {"findAreaList"}, method = {RequestMethod.POST})
     public RestResult findAreaList() {
         List<Area> areaList = areaService.findAll();
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, areaList);
     }
 
     @ApiOperation(value = "获取收货地址列表", notes = "用户选择收货地址时显示")
-    @RequestMapping(value = {"findAddressList"}, method = {RequestMethod.GET})
+    @RequestMapping(value = {"findAddressList"}, method = {RequestMethod.POST})
     public RestResult findAddressList(@RequestParam("token") String token) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
@@ -322,7 +322,7 @@ public class CustomerRestController extends BaseRestController {
     }
 
     @ApiOperation(value = "获取默认收货地址", notes = "用户下单时默认的收货地址")
-    @RequestMapping(value = {"findDefualtAddress"}, method = {RequestMethod.GET})
+    @RequestMapping(value = {"findDefualtAddress"}, method = {RequestMethod.POST})
     public RestResult findDefualtAddress(@RequestParam("token") String token) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {

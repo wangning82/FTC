@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.convert.customer;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
+import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
@@ -18,10 +19,12 @@ public class AddressConverter extends BaseConverter<Address, AddressDto> {
         address.setUserName(dto.getName());
         address.setUserPhone(dto.getPhone());
         address.setUserAdress(dto.getDetail());
-        address.setProvince(new Area(dto.getProvince()));
-        address.setCity(new Area(dto.getCity()));
         address.setDistrict(new Area(dto.getDistrict()));
-        address.setIsDefault(dto.getIsDefault());
+        if(dto.isDefault()){
+            address.setIsDefault(FlagEnum.Flag_YES.getValue());
+        }else {
+            address.setIsDefault(FlagEnum.Flag_NO.getValue());
+        }
         return address;
     }
 
@@ -29,13 +32,15 @@ public class AddressConverter extends BaseConverter<Address, AddressDto> {
     public AddressDto convertModelToDto(Address model) {
         AddressDto addressDto = new AddressDto();
         addressDto.setId(model.getId());
-        addressDto.setProvince(model.getProvince().getId());
-        addressDto.setCity(model.getCity().getId());
         addressDto.setDistrict(model.getDistrict().getId());
         addressDto.setName(model.getUserName());
         addressDto.setPhone(model.getUserPhone());
         addressDto.setDetail(model.getUserAdress());
-        addressDto.setIsDefault(model.getIsDefault());
+        if(FlagEnum.Flag_YES.getValue().equals(model.getIsDefault())){
+            addressDto.setDefault(true);
+        }else if(FlagEnum.Flag_NO.getValue().equals(model.getIsDefault())){
+            addressDto.setDefault(false);
+        }
         return addressDto;
     }
 }

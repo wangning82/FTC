@@ -12,7 +12,7 @@ public class ShoppingCartDto extends BaseDto<ShoppingCartDto> {
 
     private String id;
     private ProductDto good;
-    private String selected; // 是否选中
+    private boolean selected; // 是否选中
     private BigDecimal count; // 购买数量
 
     public String getId() {
@@ -31,11 +31,11 @@ public class ShoppingCartDto extends BaseDto<ShoppingCartDto> {
         this.good = good;
     }
 
-    public String getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(String selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 

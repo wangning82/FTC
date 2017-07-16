@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.convert.order;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
+import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductSpecConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.order.ShoppingCartDto;
@@ -26,7 +27,11 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setId(dto.getId());
         shoppingCart.setBuyNumber(dto.getCount());
-        shoppingCart.setCheckStatus(dto.getSelected());
+        if(dto.isSelected()){
+            shoppingCart.setCheckStatus(FlagEnum.Flag_YES.getValue());
+        }else {
+            shoppingCart.setCheckStatus(FlagEnum.Flag_NO.getValue());
+        }
         shoppingCart.setProduct(productConverter.convertDtoToModel(dto.getGood()));
         shoppingCart.setProductSpec(productSpecConverter.convertDtoToModel(dto.getGood().getShowAttributeGroup()));
         return shoppingCart;
@@ -37,8 +42,11 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         ShoppingCartDto shoppingCartDto = new ShoppingCartDto();
         shoppingCartDto.setId(model.getId());
         shoppingCartDto.setCount(model.getBuyNumber());
-        shoppingCartDto.setSelected(model.getCheckStatus());
-
+        if(FlagEnum.Flag_YES.getValue().equals(model.getCheckStatus())){
+            shoppingCartDto.setSelected(true);
+        }else if(FlagEnum.Flag_NO.getValue().equals(model.getCheckStatus())){
+            shoppingCartDto.setSelected(false);
+        }
         ProductDto productDto = productConverter.convertModelToDto(model.getProduct());
         productDto.setShowAttributeGroup(productSpecConverter.convertModelToDto(model.getProductSpec()));
 

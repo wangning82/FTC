@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.convert.product;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.SpecAttributeDto;
@@ -16,30 +17,33 @@ import java.util.List;
  * Created by wangqingxiang on 2017/6/20.
  */
 @Component
-public class ProductSpecConverter extends BaseConverter<ProductSpec,ProductSpecDto> {
+public class ProductSpecConverter extends BaseConverter<ProductSpec, ProductSpecDto> {
     @Autowired
     private ProductImageConverter productImageConverter;
+
     @Override
     public ProductSpecDto convertModelToDto(ProductSpec model) {
 
-        ProductSpecDto dto=new ProductSpecDto();
-        if(model==null) return dto;
+        ProductSpecDto dto = new ProductSpecDto();
+        if (model == null) return dto;
         dto.setId(model.getId());
         dto.setCode(model.getProductSpecNumber());
         dto.setDefaultFlag(false);
         dto.setPrice(model.getPrice());
-        SpecAttribute attribute= model.getSpec();
-        String[] attrArray=attribute.getName().split(",");
-        List<SpecAttributeDto> attrs=new ArrayList<>();
-        for(String a:attrArray){
-            SpecAttributeDto attr=new SpecAttributeDto();
-            String[] s=a.split(":");
-            attr.setId(s[0]);
-            attr.setValue(s[1]);
-            attrs.add(attr);
+        SpecAttribute attribute = model.getSpec();
+        if(attribute != null && StringUtils.isNotEmpty(attribute.getName())){
+            String[] attrArray = attribute.getName().split(",");
+            List<SpecAttributeDto> attrs = new ArrayList<>();
+            for (String a : attrArray) {
+                SpecAttributeDto attr = new SpecAttributeDto();
+                String[] s = a.split(":");
+                attr.setId(s[0]);
+                attr.setValue(s[1]);
+                attrs.add(attr);
+            }
+            dto.setAttrs(attrs);
         }
-        dto.setAttrs(attrs);
-        List<ProductImageDto> images=productImageConverter.convertListFromModelToDto(model.getImages());
+        List<ProductImageDto> images = productImageConverter.convertListFromModelToDto(model.getImages());
         dto.setTextures(images);
         dto.setDefaultFlag("1".equals(model.getDefaultStatus()));
         return dto;
@@ -47,7 +51,7 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec,ProductSpecD
 
     @Override
     public ProductSpec convertDtoToModel(ProductSpecDto dto) {
-        ProductSpec model=new ProductSpec();
+        ProductSpec model = new ProductSpec();
         model.setId(dto.getId());
         model.setProductSpecNumber(dto.getCode());
         return model;
