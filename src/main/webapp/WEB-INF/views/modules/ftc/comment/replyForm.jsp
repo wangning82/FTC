@@ -36,7 +36,7 @@
 		<div class="control-group">
 			<label class="control-label">评论：</label>
 			<div class="controls">
-				<form:input path="commentId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="comment.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 

@@ -190,16 +190,7 @@ public class ProductRestController extends BaseRestController {
             //更新热度，自动加一
             productService.addHot(product);
 
-            //获取规格信息
-            List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
-            //获取规格图片信息
-            for (int i = 0; i < specs.size(); i++) {
-                ProductImage image = new ProductImage();
-                image.setProductSpec(specs.get(i));
-                List<ProductImage> images = productImageService.findList(image);
-                specs.get(i).setImages(images);
-            }
-            product.setSpecs(specs);
+
             //获取店铺信息
             Customer designer = customerService.get(product.getDesignBy().getId());
             ShopDto shop = shopConverter.convertModelToDto(designer);

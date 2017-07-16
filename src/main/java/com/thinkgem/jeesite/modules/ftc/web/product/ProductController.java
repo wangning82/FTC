@@ -44,14 +44,6 @@ public class ProductController extends BaseController {
 	@Autowired
 	private ProductSpecService productSpecService;
 
-	@Autowired
-	private SpecificationService specificationService;
-	@Autowired
-	private PositionService positionService;
-	@Autowired
-	private DesignService designService;
-	@Autowired
-	private ProductImageService productImageService;
 	@ModelAttribute
 	public Product get(@RequestParam(required=false) String id) {
 		Product entity = null;

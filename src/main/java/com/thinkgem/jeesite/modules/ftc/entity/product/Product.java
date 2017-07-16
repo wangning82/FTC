@@ -34,7 +34,7 @@ public class Product extends DataEntity<Product> {
 	private Customer designBy;//设计者
 	private BigDecimal designPrice;//设计费
 	private Integer hotNum;//热度
-	private Integer priaseCount;//点赞数量
+	private Integer praiseCount;//点赞数量
 	private Integer favouriteCount;//收藏数量
 	private List<ProductImage>images;
 	private Category category;
@@ -50,16 +50,20 @@ public class Product extends DataEntity<Product> {
 	private String pageKeyword;		// 页面关键词
 	private List<ProductSpec> specs;//商品规格
 
+	public Integer getHotNum() {
+		return hotNum;
+	}
+
 	public void setHotNum(Integer hotNum) {
 		this.hotNum = hotNum;
 	}
 
-	public Integer getPriaseCount() {
-		return priaseCount;
+	public Integer getPraiseCount() {
+		return praiseCount;
 	}
 
-	public void setPriaseCount(Integer priaseCount) {
-		this.priaseCount = priaseCount;
+	public void setPraiseCount(Integer praiseCount) {
+		this.praiseCount = praiseCount;
 	}
 
 	public Integer getFavouriteCount() {

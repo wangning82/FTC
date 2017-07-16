@@ -46,10 +46,10 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">商品：</label>
+			<label class="control-label">模型：</label>
 			<div class="controls">
-				<form:hidden path="product.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-				<form:input path="product.name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:hidden path="model.id" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="model.name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 
 			</div>
 		</div>
@@ -70,30 +70,41 @@
 						<th>图片</th>
 						<th>旋转</th>
 						<th>缩放</th>
+						<shiro:hasPermission name="ftc:product:product:edit">
+							<th width="10">&nbsp;</th>
+						</shiro:hasPermission>
 					</tr>
 					</thead>
 					<tbody>
-					<c:forEach items="${design.images}" var="image">
+					<c:forEach items="${design.details}" var="detail">
 						<tr>
 
 							<td>
-									${image.position.name}
+									${detail.position.name}
+							</td>
+							<td width="50px">
+									<img src="${detail.picImg}" height="40px"/>
 							</td>
 							<td>
-									<img src="${image.url}" height="40px"/>
+									${detail.rotation}
 							</td>
 							<td>
-									${image.rotation}
-							</td>
-							<td>
-									${image.scale}
+									${detail.scale}
 							</td>
 
 						</tr>
 					</c:forEach>
 
 					</tbody>
-
+					<shiro:hasPermission name="ftc:product:product:edit">
+						<tfoot>
+						<tr>
+							<td colspan="4"><a href="javascript:"
+											   onclick="addSpecRow()"
+											   class="btn">新增</a></td>
+						</tr>
+						</tfoot>
+					</shiro:hasPermission>
 
 				</table>
 

@@ -23,6 +23,7 @@ public class Reply extends DataEntity<Reply> {
 	private String goodCount;		// 好评数
 	private String status;		// 状态
 	private String type;		// 评论类型
+	private Reply parent;//上级
 	
 	public Reply() {
 		super();
@@ -35,6 +36,13 @@ public class Reply extends DataEntity<Reply> {
 		this.comment=comment;
 	}
 
+	public Reply getParent() {
+		return parent;
+	}
+
+	public void setParent(Reply parent) {
+		this.parent = parent;
+	}
 
 	public Customer getCustomer() {
 		return customer;

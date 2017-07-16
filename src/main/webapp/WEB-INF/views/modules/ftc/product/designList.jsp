@@ -45,7 +45,7 @@
 			<tr>
 				<th>名称</th>
 				<th>编号</th>
-				<th>商品</th>
+				<th>模型</th>
 				<th>设计费</th>
 				<th>设计者</th>
 				<th>创建时间</th>
@@ -63,7 +63,7 @@
 					${design.code}
 				</td>
 				<td>
-					${design.product.name}
+					${design.model.name}
 				</td>
 				<td>
 					${design.price}

@@ -13,6 +13,7 @@
 		a.create_by AS "createBy.id",
 		a.update_date AS "updateDate",
 		a.update_by AS "updateBy.id",
+		a.parent_id AS "parent.id",
 
 
 		a.customer_id AS "customer.id",
@@ -97,7 +98,8 @@
 			create_date,
 			create_by,
 			update_date,
-			update_by
+			update_by,
+			parent_id
 		) VALUES (
 			#{id},
 			#{comment.id},
@@ -109,7 +111,8 @@
 			#{createDate},
 			#{createBy.id},
 			#{updateDate},
-			#{updateBy.id}
+			#{updateBy.id},
+			#{parent.id}
 		)
 	</insert>
 	

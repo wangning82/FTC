@@ -18,7 +18,6 @@
 
 
         $(document).ready(function () {
-            alert(${prefix});
             //$("#name").focus();
             $("#inputForm").validate({
                 submitHandler: function (form) {
@@ -215,7 +214,7 @@
                     <th>库存</th>
                     <th>价格</th>
                     <th>积分</th>
-                    <th>图片</th>
+                    <%--<th>图片</th>--%>
                     <shiro:hasPermission name="ftc:product:product:edit">
                         <th width="10">&nbsp;</th>
                     </shiro:hasPermission>
@@ -239,7 +238,7 @@
 								<input id="specs{{idx}}_id" name="specs[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 								<input id="specs{{idx}}_delFlag" name="specs[{{idx}}].delFlag" type="hidden" value="0"/>
 								<input id="specs{{idx}}_spec_id" name="specs[{{idx}}].spec.id" type="text" value="{{row.spec.id}}" maxlength="100" class="input-small "/>
-							   <input id="specs{{idx}}_picImg" name="specs[{{idx}}].picImg" type="hidden" value="{{row.picImg}}" maxlength="100" class="input-small "/>
+							   <%--<input id="specs{{idx}}_picImg" name="specs[{{idx}}].picImg" type="hidden" value="{{row.picImg}}" maxlength="100" class="input-small "/>--%>
 
 							</td>
 							<td>
@@ -257,10 +256,10 @@
 							<td>
 								<input id="specs{{idx}}_store" name="specs[{{idx}}].store" type="text" value="{{row.store}}" maxlength="255" class="input-small "/>
 							</td>
-							<td>
-							    <sys:ckfinder input="specs{{idx}}_picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"
-                          maxHeight="100" />
-                          </td>
+							<%--<td>--%>
+							    <%--<sys:ckfinder input="specs{{idx}}_picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"--%>
+                          <%--maxHeight="100" />--%>
+                          <%--</td>--%>
 							<shiro:hasPermission name="ftc:product:product:edit"><td class="text-center" width="10">
 								{{#delBtn}}<span class="close" onclick="delRow(this, '#specs{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 							</td></shiro:hasPermission>
