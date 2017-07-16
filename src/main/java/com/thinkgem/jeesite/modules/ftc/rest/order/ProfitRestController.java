@@ -7,10 +7,13 @@ import com.thinkgem.jeesite.modules.ftc.constant.BillStatusEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.BillTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerBillConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerSoldDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerWithdrawDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerBillService;
+import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import io.swagger.annotations.Api;
@@ -24,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by houyi on 2017/7/12.
@@ -35,6 +40,9 @@ public class ProfitRestController extends BaseRestController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private CustomerBillService customerBillService;
@@ -57,15 +65,21 @@ public class ProfitRestController extends BaseRestController {
      * @param response
      * @return
      */
-    @ApiOperation(value = "卖出产品列表", notes = "卖出产品列表")
+    @ApiOperation(value = "设计师卖出产品列表", notes = "设计师卖出产品列表")
     @RequestMapping(value = {"findSoldPage"}, method = {RequestMethod.POST})
     public RestResult findSoldPage(@RequestParam("token") String token,
                                    @RequestParam("type") String type,
                                    HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            Page<Product> productPage = productService.findSoldPage(new Page<Product>(request, response), new Product());
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, productConvert.convertListFromModelToDto(productPage.getList()));
+            Product param = new Product();
+            param.setDesignBy(customer);
+            Page<Product> productPage = productService.findSoldPage(new Page<Product>(request, response), param);
+            List<CustomerSoldDto> result = new ArrayList<CustomerSoldDto>();
+            for(Product product : productPage.getList()){
+                result.add(orderService.findSoldInfo(product));
+            }
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, result);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
@@ -82,12 +96,26 @@ public class ProfitRestController extends BaseRestController {
         }
     }
 
-    @ApiOperation(value = "商品营收统计", notes = "商品营收统计")
+    @ApiOperation(value = "商品提现统计", notes = "商品提现统计")
     @RequestMapping(value = {"findSoldInfo"}, method = {RequestMethod.POST})
-    public RestResult findSoldInfo(@RequestParam("token") String token, @RequestParam("id") String productId){
+    public RestResult findSoldInfo(@RequestParam("token") String token){
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, orderService.findSoldInfo(productId));
+            Customer result = customerService.get(customer.getId());
+            CustomerWithdrawDto customerWithdrawDto = new CustomerWithdrawDto();
+            customerWithdrawDto.setRemain(result.getBillBlance());
+
+            CustomerBill entry = new CustomerBill();
+            entry.setType(BillTypeEnum.ENTRY.getValue());
+            entry.setStatus(BillStatusEnum.ARRIVE.getValue());
+            customerWithdrawDto.setTotal(customerBillService.findTotalBill(entry).getMoney());
+
+            CustomerBill withdraw = new CustomerBill();
+            withdraw.setType(BillTypeEnum.WITHDRAW.getValue());
+            withdraw.setStatus(BillStatusEnum.ARRIVE.getValue());
+            customerWithdrawDto.setWithdraw(customerBillService.findTotalBill(withdraw).getMoney());
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, customerWithdrawDto);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }

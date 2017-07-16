@@ -336,9 +336,8 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @return
      */
     @Transactional(readOnly = false)
-    public CustomerSoldDto findSoldInfo(String productId){
+    public CustomerSoldDto findSoldInfo(Product product){
         CustomerSoldDto soldDto = new CustomerSoldDto();
-        Product product = productService.get(productId);
         if(product != null){
             soldDto.setGood(productConverter.convertModelToDto(product));
 

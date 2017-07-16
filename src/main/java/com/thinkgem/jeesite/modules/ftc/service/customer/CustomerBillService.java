@@ -60,4 +60,9 @@ public class CustomerBillService extends CrudService<CustomerBillDao, CustomerBi
         super.delete(customerBill);
     }
 
+    @Transactional(readOnly = false)
+    public CustomerBill findTotalBill(CustomerBill customerBill) {
+        return dao.findTotalBill(customerBill);
+    }
+
 }

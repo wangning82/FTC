@@ -14,5 +14,11 @@ import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
  */
 @MyBatisDao
 public interface CustomerBillDao extends CrudDao<CustomerBill> {
-	
+
+    /**
+     * 统计
+     * @param entry
+     * @return
+     */
+    CustomerBill findTotalBill(CustomerBill entry);
 }

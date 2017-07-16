@@ -152,9 +152,9 @@
 
 	<select id="findSoldInfo" resultType="OrderProduct">
 		SELECT
-			sum(a.buy_number) as "buyNumber",
-			sum(a.design_amount) AS "designAmount",
-			sum(a.price) AS "price"
+			IFNULL(sum(a.buy_number), 0) as "buyNumber",
+			IFNULL(sum(a.design_amount), 0) AS "designAmount",
+			IFNULL(sum(a.price), 0) AS "price"
 		FROM os_order_product a
 		WHERE
 			a.product_number = #{productNumber}
