@@ -288,8 +288,10 @@ public class CustomerRestController extends BaseRestController {
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            customer.setUserName(shopDto.getUser().getName());
-            customer.setSignature(shopDto.getUser().getDesc());
+            if(shopDto.getUser()!=null){
+                customer.setUserName(shopDto.getUser().getName());
+                customer.setSignature(shopDto.getUser().getDesc());
+            }
             customer.setShopName(shopDto.getName());
             customer.setPicImg(ImageUtils.generateImg(shopDto.getUser().getImgUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue()));
             customer.setShopBackground(ImageUtils.generateImg(shopDto.getBackgroundUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_DIANPU.getValue()));
