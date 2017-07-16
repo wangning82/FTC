@@ -6,6 +6,7 @@ import com.egzosn.pay.common.bean.PayOrder;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.order.ShoppingCartConverter;
@@ -19,6 +20,8 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderWaybillService;
 import com.thinkgem.jeesite.modules.ftc.service.order.ShoppingCartService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import com.thinkgem.jeesite.modules.pay.entity.PayType;
 import com.thinkgem.jeesite.modules.pay.service.ApyAccountService;
 import com.thinkgem.jeesite.modules.pay.service.PayResponse;
@@ -64,6 +67,8 @@ public class OrderRestController extends BaseRestController {
 
     @Autowired
     private ApyAccountService apyAccountService;
+    @Autowired
+    private ProductSpecService productSpecService;
 
     /**
      * 添加购物车
@@ -125,6 +130,17 @@ public class OrderRestController extends BaseRestController {
             ShoppingCart param = new ShoppingCart();
             param.setCustomer(customer);
             List<ShoppingCart> result = cartService.findList(param);
+            if(CollectionUtils.isNotEmpty(result)){
+                for(int i=0;i<result.size();i++){
+                    ShoppingCart shoppingCart=result.get(i);
+                    String productSpecId=shoppingCart.getProductSpec().getId();
+                    if(StringUtils.isNotEmpty(productSpecId)){
+
+                        shoppingCart.setProductSpec(productSpecService.getWithImages(productSpecId));
+                    }
+                }
+            }
+
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shoppingCartConverter.convertListFromModelToDto(result));
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");

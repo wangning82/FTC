@@ -30,6 +30,16 @@ public class ProductSpecService extends CrudService<ProductSpecDao, ProductSpec>
 	public ProductSpec get(String id) {
 		return super.get(id);
 	}
+	public ProductSpec getWithImages(String id){
+		ProductSpec spec=super.get(id);
+		if(spec!=null){
+			ProductImage image=new ProductImage();
+			image.setProductSpec(spec);
+			spec.setImages(productImageDao.findList(image));
+		}
+		return spec;
+
+	}
 	
 	public List<ProductSpec> findList(ProductSpec productSpec) {
 		return super.findList(productSpec);
