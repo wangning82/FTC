@@ -37,5 +37,10 @@ public class AreaService extends TreeService<AreaDao, Area> {
 		super.delete(area);
 		UserUtils.removeCache(UserUtils.CACHE_AREA_LIST);
 	}
+
+	@Transactional(readOnly = false)
+	public List<Area> findByParentIdsLike(Area area){
+		return dao.findByParentIdsLike(area);
+	}
 	
 }

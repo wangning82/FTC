@@ -9,9 +9,11 @@ import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.customer.AreaConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.UserInfoConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.AreaDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
@@ -62,7 +64,11 @@ public class CustomerRestController extends BaseRestController {
     private AddressConverter addressConverter;
 
     @Autowired
+    private AreaConverter areaConverter;
+
+    @Autowired
     private ShopConverter shopConverter;
+
     @Autowired
     private ProductService productService;
 
@@ -288,7 +294,7 @@ public class CustomerRestController extends BaseRestController {
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            if(shopDto.getUser()!=null){
+            if (shopDto.getUser() != null) {
                 customer.setUserName(shopDto.getUser().getName());
                 customer.setSignature(shopDto.getUser().getDesc());
             }
@@ -304,8 +310,14 @@ public class CustomerRestController extends BaseRestController {
     @ApiOperation(value = "获取地区列表", notes = "用户编辑收货地址时的备选条件 ")
     @RequestMapping(value = {"findAreaList"}, method = {RequestMethod.POST})
     public RestResult findAreaList() {
-        List<Area> areaList = areaService.findAll();
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, areaList);
+        Area areaParam = new Area();
+        areaParam.setParent(new Area("0"));
+        List<Area> areaList = areaService.findList(areaParam);
+        if(CollectionUtils.isNotEmpty(areaList)){
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, areaConverter.convertModelToDto(areaList.get(0)));
+        }else {
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+        }
     }
 
     @ApiOperation(value = "获取收货地址列表", notes = "用户选择收货地址时显示")
@@ -385,16 +397,16 @@ public class CustomerRestController extends BaseRestController {
             }
             Page<Customer> result = customerService.findPage(param, new Customer());
 
-            List<Customer> customerList=result.getList();
-            List<ShopDto> shopDtoList=new ArrayList<>();
-            if(CollectionUtils.isNotEmpty(customerList)){
-                for(Customer customer1:customerList){
+            List<Customer> customerList = result.getList();
+            List<ShopDto> shopDtoList = new ArrayList<>();
+            if (CollectionUtils.isNotEmpty(customerList)) {
+                for (Customer customer1 : customerList) {
                     Product product = new Product();
                     product.setDesignBy(customer1);
-                    Page<Product> page=new Page<Product>(1,4);
+                    Page<Product> page = new Page<Product>(1, 4);
                     page.setOrderBy("a.hot_num");
-                    List<Product> productList=productService.findListWithSpec(page,product);
-                    ShopDto dto=shopConverter.convertModelToDto(customer1,productList);
+                    List<Product> productList = productService.findListWithSpec(page, product);
+                    ShopDto dto = shopConverter.convertModelToDto(customer1, productList);
                     shopDtoList.add(dto);
                 }
             }

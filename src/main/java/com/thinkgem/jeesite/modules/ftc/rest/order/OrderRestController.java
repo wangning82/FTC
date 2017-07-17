@@ -67,6 +67,7 @@ public class OrderRestController extends BaseRestController {
 
     @Autowired
     private ApyAccountService apyAccountService;
+
     @Autowired
     private ProductSpecService productSpecService;
 
@@ -130,12 +131,11 @@ public class OrderRestController extends BaseRestController {
             ShoppingCart param = new ShoppingCart();
             param.setCustomer(customer);
             List<ShoppingCart> result = cartService.findList(param);
-            if(CollectionUtils.isNotEmpty(result)){
-                for(int i=0;i<result.size();i++){
-                    ShoppingCart shoppingCart=result.get(i);
-                    String productSpecId=shoppingCart.getProductSpec().getId();
-                    if(StringUtils.isNotEmpty(productSpecId)){
-
+            if (CollectionUtils.isNotEmpty(result)) {
+                for (int i = 0; i < result.size(); i++) {
+                    ShoppingCart shoppingCart = result.get(i);
+                    String productSpecId = shoppingCart.getProductSpec().getId();
+                    if (StringUtils.isNotEmpty(productSpecId)) {
                         shoppingCart.setProductSpec(productSpecService.getWithImages(productSpecId));
                     }
                 }

@@ -1,6 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.convert.order;
 
 import com.thinkgem.jeesite.common.rest.BaseConverter;
+import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.AddressConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.order.OrderDto;
 import com.thinkgem.jeesite.modules.ftc.dto.order.ShoppingCartDto;
@@ -8,6 +9,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderProduct;
 import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,9 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private ProductSpecService productSpecService;
 
     @Override
     public Order convertDtoToModel(OrderDto dto) {
@@ -62,6 +67,12 @@ public class OrderConverter extends BaseConverter<Order, OrderDto> {
         List<ShoppingCartDto> shoppingCartDtoList = new ArrayList<ShoppingCartDto>();
         for(OrderProduct orderProduct : model.getOrderProductList()){
             ShoppingCart shoppingCart = orderService.orderProduct2Cart(orderProduct);
+
+            String productSpecId = shoppingCart.getProductSpec().getId();
+            if (StringUtils.isNotEmpty(productSpecId)) {
+                shoppingCart.setProductSpec(productSpecService.getWithImages(productSpecId));
+            }
+
             ShoppingCartDto shoppingCartDto = shoppingCartConverter.convertModelToDto(shoppingCart);
             shoppingCartDtoList.add(shoppingCartDto);
         }
