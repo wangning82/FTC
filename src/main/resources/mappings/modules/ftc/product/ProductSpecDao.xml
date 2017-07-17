@@ -133,7 +133,7 @@
 		WHERE id = #{id}
 	</update>
 
-	<select id="findSoldList">
+	<select id="findSoldList" resultType="ProductSpec">
 		SELECT DISTINCT
 			<include refid="productSpecColumns"/>
 		FROM os_product_specification a
