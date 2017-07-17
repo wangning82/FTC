@@ -11,11 +11,20 @@ import java.util.List;
 
 /**
  * 商品规格DAO接口
+ *
  * @author wangqignxiang
  * @version 2017-05-25
  */
 @MyBatisDao
 public interface ProductSpecDao extends CrudDao<ProductSpec> {
-	public List<ProductSpec> findForRest(ProductSpec spec);
+    public List<ProductSpec> findForRest(ProductSpec spec);
+
+    /**
+     * 卖出产品列表
+     *
+     * @param entity
+     * @return
+     */
+    List<ProductSpec> findSoldList(ProductSpec entity);
 
 }

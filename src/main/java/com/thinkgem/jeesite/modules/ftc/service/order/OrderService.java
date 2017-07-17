@@ -9,10 +9,12 @@ import com.thinkgem.jeesite.common.utils.OrderNoGenerator;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.constant.*;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.product.ProductSpecConverter;
 import com.thinkgem.jeesite.modules.ftc.dao.order.OrderDao;
 import com.thinkgem.jeesite.modules.ftc.dao.order.OrderProductDao;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerIncomeDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerSoldDto;
+import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
@@ -73,6 +75,9 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
     @Autowired
     private ProductConverter productConverter;
+
+    @Autowired
+    private ProductSpecConverter productSpecConverter;
 
     public Order get(String id) {
         Order order = super.get(id);
@@ -336,10 +341,12 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @return
      */
     @Transactional(readOnly = false)
-    public CustomerSoldDto findSoldInfo(Product product){
+    public CustomerSoldDto findSoldInfo(Product product, ProductSpec productSpec){
         CustomerSoldDto soldDto = new CustomerSoldDto();
         if(product != null){
-            soldDto.setGood(productConverter.convertModelToDto(product));
+            ProductDto productDto = productConverter.convertModelToDto(product);
+            productDto.setShowAttributeGroup(productSpecConverter.convertModelToDto(productSpec));
+            soldDto.setGood(productDto);
 
             OrderProduct param = new OrderProduct();
             param.setProductNumber(product.getNumber());

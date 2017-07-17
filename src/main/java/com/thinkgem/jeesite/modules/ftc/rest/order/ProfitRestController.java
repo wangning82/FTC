@@ -12,10 +12,14 @@ import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerWithdrawDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.CustomerBill;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerBillService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductImageService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +55,12 @@ public class ProfitRestController extends BaseRestController {
     private ProductService productService;
 
     @Autowired
+    private ProductSpecService productSpecService;
+
+    @Autowired
+    private ProductImageService productImageService;
+
+    @Autowired
     private ProductConverter productConvert;
 
     @Autowired
@@ -72,12 +82,20 @@ public class ProfitRestController extends BaseRestController {
                                    HttpServletRequest request, HttpServletResponse response) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            Product param = new Product();
-            param.setDesignBy(customer);
-            Page<Product> productPage = productService.findSoldPage(new Page<Product>(request, response), param);
+            ProductSpec specParam = new ProductSpec();
+            Product productParam = new Product();
+            productParam.setDesignBy(customer);
+            specParam.setProduct(productParam);
+            Page<ProductSpec> productSpecPage = productSpecService.findSoldPage(new Page<ProductSpec>(request, response), specParam);
             List<CustomerSoldDto> result = new ArrayList<CustomerSoldDto>();
-            for(Product product : productPage.getList()){
-                result.add(orderService.findSoldInfo(product));
+            for(ProductSpec productSpec : productSpecPage.getList()){
+                Product product = productService.get(productSpec.getProduct().getId());
+
+                ProductImage imageParam = new ProductImage();
+                imageParam.setProductSpec(productSpec);
+                productSpec.setImages(productImageService.findList(imageParam));
+
+                result.add(orderService.findSoldInfo(product, productSpec));
             }
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, result);
         } else {
@@ -103,7 +121,7 @@ public class ProfitRestController extends BaseRestController {
         if (customer != null) {
             Customer result = customerService.get(customer.getId());
             CustomerWithdrawDto customerWithdrawDto = new CustomerWithdrawDto();
-            customerWithdrawDto.setRemain(result.getBillBlance());
+            customerWithdrawDto.setRemain(result.getBillBlance() == null ? BigDecimal.ZERO : result.getBillBlance());
 
             CustomerBill entry = new CustomerBill();
             entry.setType(BillTypeEnum.ENTRY.getValue());

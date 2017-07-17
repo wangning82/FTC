@@ -226,28 +226,4 @@
 		WHERE id = #{id}
 	</update>
 
-	<select id="findSoldList" resultType="Product">
-		SELECT
-			DISTINCT <include refid="productColumns"/>
-		FROM os_product a
-		INNER JOIN os_order_product op ON op.product_number = a.product_number
-		INNER JOIN os_order o ON o.id = op.order_id
-		LEFT JOIN os_category b ON a.category_id = b.id
-		LEFT JOIN sys_user c ON a.create_by = c.id
-		LEFT JOIN os_customer d ON a.design_by = d.id
-		<where>
-			<!--o.order_status = '4' or o.order_status = '5'-->
-			<if test="designBy != null and designBy.id != ''">
-				AND a.design_by = #{designBy.id}
-			</if>
-		</where>
-		<choose>
-			<when test="page != null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY o.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
 </mapper>

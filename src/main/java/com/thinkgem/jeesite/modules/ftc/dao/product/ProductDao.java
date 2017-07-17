@@ -20,10 +20,4 @@ public interface ProductDao extends CrudDao<Product> {
     public void downShelve(Product product);
     public void addHot(Product product);
 
-    /**
-     * 卖出产品列表
-     * @param entity
-     * @return
-     */
-    List<Product> findSoldList(Product entity);
 }

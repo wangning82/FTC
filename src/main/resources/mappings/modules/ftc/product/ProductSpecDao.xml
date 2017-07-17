@@ -132,5 +132,27 @@
 		DELETE FROM os_product_specification
 		WHERE id = #{id}
 	</update>
+
+	<select id="findSoldList">
+		SELECT DISTINCT
+			<include refid="productSpecColumns"/>
+		FROM os_product_specification a
+		INNER JOIN os_product b ON a.product_id = b.id
+		INNER JOIN os_order_product op ON op.product_spec_number = a.product_spec_number
+		INNER JOIN os_order o ON o.id = op.order_id
+		<where>
+			<if test="product != null and product.designBy != null and product.designBy.id != ''">
+				AND b.design_by = #{product.designBy.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 	
 </mapper>

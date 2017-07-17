@@ -128,7 +128,6 @@
 		SELECT
 			IFNULL(sum(a.money), 0) as "money"
 		FROM os_customer_bill a
-		WHERE
 		<where>
 			<if test="customer != null and customer.id != null and customer.id != ''">
 				AND a.customer_id = #{customer.id}
