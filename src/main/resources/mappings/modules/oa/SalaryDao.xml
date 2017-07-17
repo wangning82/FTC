@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.oa.dao.SalaryDao">
+    
+	<sql id="salaryColumns">
+		a.id AS "id",
+		a.year AS "year",
+		a.month AS "month",
+		a.user_id AS "user.id",
+		a.basic_wage AS "basicWage",
+		a.performance_wage AS "performanceWage",
+		a.degree_subsidy AS "degreeSubsidy",
+		a.age_subsidy AS "ageSubsidy",
+		a.bus_subsidy AS "busSubsidy",
+		a.food_subsidy AS "foodSubsidy",
+		a.real_performance_wage AS "realPerformanceWage",
+		a.hot_subsidy AS "hotSubsidy",
+		a.total_subsidy AS "totalSubsidy",
+		a.cold_subsidy AS "coldSubsidy",
+		a.pension_insurance AS "pensionInsurance",
+		a.unempolyed_insurance AS "unempolyedInsurance",
+		a.medical_insurance AS "medicalInsurance",
+		a.income_tax AS "incomeTax",
+		a.p_insurance AS "pInsurance",
+		a.p_bond AS "pBond",
+		a.shoud_pay AS "shoudPay",
+		a.real_pay AS "realPay",
+		a.add_wage AS "addWage",
+		a.reward AS "reward",
+		a.deduct_work AS "deductWork",
+		a.deduct_leave AS "deductLeave",
+		a.bond_interest AS "bondInterest",
+		a.other1 AS "other1",
+		a.other2 AS "other2",
+		a.other3 AS "other3",
+		a.other4 AS "other4",
+		a.other5 AS "other5",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.single_subsidy AS "singleSubsidy",
+		a.score AS "score",
+		a.update_date AS "updateDate",
+		a.update_by AS "updateBy.id",
+		a.status AS "status",
+		a.del_flag AS "delFlag",
+		u4.name AS "user.name"
+	</sql>
+	
+	<sql id="salaryJoins">
+		LEFT JOIN sys_user u4 ON u4.id = a.user_id
+	</sql>
+    
+	<select id="get" resultType="Salary">
+		SELECT 
+			<include refid="salaryColumns"/>
+		FROM oa_salary a
+		<include refid="salaryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Salary">
+		SELECT 
+			<include refid="salaryColumns"/>
+		FROM oa_salary a
+		<include refid="salaryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="year != null and year != ''">
+				AND a.year = #{year}
+			</if>
+			<if test="month != null and month != ''">
+				AND a.month = #{month}
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Salary">
+		SELECT 
+			<include refid="salaryColumns"/>
+		FROM oa_salary a
+		<include refid="salaryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO oa_salary(
+			id,
+			year,
+			month,
+			user_id,
+			basic_wage,
+			performance_wage,
+			degree_subsidy,
+			age_subsidy,
+			bus_subsidy,
+			food_subsidy,
+			real_performance_wage,
+			hot_subsidy,
+			total_subsidy,
+			cold_subsidy,
+			pension_insurance,
+			unempolyed_insurance,
+			medical_insurance,
+			income_tax,
+			p_insurance,
+			p_bond,
+			shoud_pay,
+			real_pay,
+			add_wage,
+			reward,
+			deduct_work,
+			deduct_leave,
+			bond_interest,
+			other1,
+			other2,
+			other3,
+			other4,
+			other5,
+			create_by,
+			create_date,
+			single_subsidy,
+			score,
+			update_date,
+			update_by,
+			status,
+			del_flag
+		) VALUES (
+			#{id},
+			#{year},
+			#{month},
+			#{user.id},
+			#{basicWage},
+			#{performanceWage},
+			#{degreeSubsidy},
+			#{ageSubsidy},
+			#{busSubsidy},
+			#{foodSubsidy},
+			#{realPerformanceWage},
+			#{hotSubsidy},
+			#{totalSubsidy},
+			#{coldSubsidy},
+			#{pensionInsurance},
+			#{unempolyedInsurance},
+			#{medicalInsurance},
+			#{incomeTax},
+			#{pInsurance},
+			#{pBond},
+			#{shoudPay},
+			#{realPay},
+			#{addWage},
+			#{reward},
+			#{deductWork},
+			#{deductLeave},
+			#{bondInterest},
+			#{other1},
+			#{other2},
+			#{other3},
+			#{other4},
+			#{other5},
+			#{createBy.id},
+			#{createDate},
+			#{singleSubsidy},
+			#{score},
+			#{updateDate},
+			#{updateBy.id},
+			#{status},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE oa_salary SET 	
+			year = #{year},
+			month = #{month},
+			user_id = #{user.id},
+			basic_wage = #{basicWage},
+			performance_wage = #{performanceWage},
+			degree_subsidy = #{degreeSubsidy},
+			age_subsidy = #{ageSubsidy},
+			bus_subsidy = #{busSubsidy},
+			food_subsidy = #{foodSubsidy},
+			real_performance_wage = #{realPerformanceWage},
+			hot_subsidy = #{hotSubsidy},
+			total_subsidy = #{totalSubsidy},
+			cold_subsidy = #{coldSubsidy},
+			pension_insurance = #{pensionInsurance},
+			unempolyed_insurance = #{unempolyedInsurance},
+			medical_insurance = #{medicalInsurance},
+			income_tax = #{incomeTax},
+			p_insurance = #{pInsurance},
+			p_bond = #{pBond},
+			shoud_pay = #{shoudPay},
+			real_pay = #{realPay},
+			add_wage = #{addWage},
+			reward = #{reward},
+			deduct_work = #{deductWork},
+			deduct_leave = #{deductLeave},
+			bond_interest = #{bondInterest},
+			other1 = #{other1},
+			other2 = #{other2},
+			other3 = #{other3},
+			other4 = #{other4},
+			other5 = #{other5},
+			single_subsidy = #{singleSubsidy},
+			score = #{score},
+			update_date = #{updateDate},
+			update_by = #{updateBy.id},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE oa_salary SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>
