@@ -56,7 +56,17 @@
 		SELECT
 			a.id,
 			a.parent_id AS "parent.id",
-			a.parent_ids
+			a.parent_ids,
+			a.code,
+			a.name,
+			a.sort,
+			a.type,
+			a.remarks,
+			a.create_by AS "createBy.id",
+			a.create_date,
+			a.update_by AS "updateBy.id",
+			a.update_date,
+			a.del_flag
 		FROM sys_area a
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
 		ORDER BY a.code
