@@ -111,12 +111,6 @@ public class ModelRestController extends BaseRestController {
         ModelDto model = modelConverter.convertModelToDto(product);
 
 
-        Position position=new Position();
-        position.setCategory(product.getCategory());
-        List<Position> sprites=positionService.findList(position);
-        model.setSprites(positionConverter.convertListFromModelToDto(sprites));
-
-
         return new RestResult(CODE_SUCCESS,MSG_SUCCESS,model);
     }
 

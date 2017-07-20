@@ -20,7 +20,8 @@
 		a.from_x AS "fromX",
 		a.from_y AS "fromY",
 		a.scale AS "scale",
-		a.rotation AS "rotation"
+		a.rotation AS "rotation",
+		a.code As "code"
 	</sql>
 
 
@@ -86,7 +87,8 @@
 		from_x,
 		from_y,
 		scale,
-		rotation
+		rotation,
+		code
 		) VALUES (
 		#{category.id},
 		#{name},
@@ -103,7 +105,8 @@
 		#{fromX},
 		#{fromY},
 		#{scale},
-		#{rotation}
+		#{rotation},
+		#{code}
 		)
 	</insert>
 
@@ -122,7 +125,8 @@
 		from_x=#{fromX},
 		from_y=#{fromY},
 		scale=#{scale},
-		rotation=#{rotation}
+		rotation=#{rotation},
+		code=#{code}
 		WHERE id = #{id}
 	</update>
 

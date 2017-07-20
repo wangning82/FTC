@@ -16,15 +16,6 @@ public class ModelDto extends BaseDto<ModelDto> {
 
     private CustomerDto Customer;
     private String category;
-    private List<PositionDto> sprites;
-
-    public List<PositionDto> getSprites() {
-        return sprites;
-    }
-
-    public void setSprites(List<PositionDto> sprites) {
-        this.sprites = sprites;
-    }
 
     ProductSpecDto showAttributeGroup;//默认的规格
     List<ProductSpecDto> othersAttributeGroup;//规格列表

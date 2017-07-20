@@ -299,6 +299,7 @@ public class CustomerRestController extends BaseRestController {
                 customer.setSignature(shopDto.getUser().getDesc());
             }
             customer.setShopName(shopDto.getName());
+            if(shopDto.getUser()!=null)
             customer.setPicImg(ImageUtils.generateImg(shopDto.getUser().getImgUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue()));
             customer.setShopBackground(ImageUtils.generateImg(shopDto.getBackgroundUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_DIANPU.getValue()));
             customerService.save(customer);

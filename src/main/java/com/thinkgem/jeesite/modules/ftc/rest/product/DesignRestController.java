@@ -381,7 +381,6 @@ public class DesignRestController extends BaseRestController {
         product.setSpecs(specs);
         ModelDto modelDto = modelConverter.convertModelToDto(product);
 
-
         dto.setModel(modelDto);
 
         try{

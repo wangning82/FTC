@@ -22,12 +22,21 @@ public class Position extends DataEntity<Position> {
 	private String sort;		// 排序
 	private String status;		// 状态
 	private Double width; //宽度
+	private String code;//编码
 
 	private Double height;//高度
 	private Double fromX;//横坐标
 	private Double fromY;//纵坐标
 	private Double scale;//缩放
 	private Double rotation;//旋转
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public Position() {
 		super();
