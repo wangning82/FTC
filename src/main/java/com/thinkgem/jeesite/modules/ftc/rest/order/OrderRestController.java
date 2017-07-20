@@ -11,6 +11,7 @@ import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.OrderStatusEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.order.ShoppingCartConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.order.OrderConfirmDto;
 import com.thinkgem.jeesite.modules.ftc.dto.order.OrderDto;
 import com.thinkgem.jeesite.modules.ftc.dto.order.ShoppingCartDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
@@ -210,15 +211,15 @@ public class OrderRestController extends BaseRestController {
      * 取消订单
      *
      * @param token
-     * @param orderNo
+     * @param orderId
      * @return
      */
     @ApiOperation(value = "取消订单", notes = "取消订单，参数为订单号")
     @RequestMapping(value = {"cancelOrder"}, method = {RequestMethod.POST})
-    public RestResult cancelOrder(@RequestParam("token") String token, @RequestParam("order") String orderNo) {
+    public RestResult cancelOrder(@RequestParam("token") String token, @RequestParam("oid") String orderId) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            orderService.cancelOrder(customer, orderNo);
+            orderService.cancelOrder(customer, orderId);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
@@ -238,8 +239,11 @@ public class OrderRestController extends BaseRestController {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             Order order = orderConverter.convertDtoToModel(orderDto);
-            orderService.confirmOrder(customer, order.getOrderNo(), order.getAddress().getId(), order.getInvoiceTitle());
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+            Order confirmOrder = orderService.confirmOrder(customer, order.getOrderNo(), order.getAddress().getId(), order.getInvoiceTitle());
+            OrderConfirmDto confirmDto = new OrderConfirmDto();
+            confirmDto.setOrderId(confirmOrder.getId());
+            confirmDto.setPayPrice(confirmOrder.getOrderAmount());
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, confirmDto);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }

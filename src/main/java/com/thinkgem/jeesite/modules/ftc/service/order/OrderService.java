@@ -29,6 +29,8 @@ import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerBillService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +74,9 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private SystemService systemService;
 
     @Autowired
     private ProductConverter productConverter;
@@ -119,13 +124,13 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * 取消订单
      *
      * @param customer
-     * @param orderNo
+     * @param orderId
      */
     @Transactional(readOnly = false)
-    public void cancelOrder(Customer customer, String orderNo) {
+    public void cancelOrder(Customer customer, String orderId) {
         Order param = new Order();
         param.setCustomer(customer);
-        param.setOrderNo(orderNo);
+        param.setId(orderId);
         List<Order> result = super.findList(param);
         if (CollectionUtils.isNotEmpty(result)) {
             Order order = result.get(0);
@@ -228,7 +233,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param invoiceTitle 发票抬头
      */
     @Transactional(readOnly = false)
-    public void confirmOrder(Customer customer, String orderNo, String addressId, String invoiceTitle) {
+    public Order confirmOrder(Customer customer, String orderNo, String addressId, String invoiceTitle) {
         Order param = new Order();
         param.setCustomer(customer);
         param.setOrderNo(orderNo);
@@ -240,16 +245,31 @@ public class OrderService extends CrudService<OrderDao, Order> {
             OrderProduct orderProductParam = new OrderProduct();
             orderProductParam.setOrder(order);
             List<OrderProduct> orderProductList = orderProductDao.findList(orderProductParam);
+            User user = null; // 生产厂家
             for (OrderProduct orderProduct : orderProductList) {
                 orderAmount = orderAmount.add(orderProduct.getPrice());
                 buyNumber = buyNumber.add(orderProduct.getBuyNumber());
+
+                // 获取生产厂家
+                Product productParam = new Product();
+                productParam.setNumber(orderProduct.getProductNumber());
+                List<Product> productList = productService.findList(productParam);
+                if(CollectionUtils.isNotEmpty(productList)){
+                    Product product = productList.get(0);
+                    user = systemService.getUser(product.getCreateBy().getId());
+                }
             }
             order.setBuyNumber(buyNumber);
             // order.setInvoiceType(invoiceType);
             order.setInvoiceTitle(invoiceTitle);
             // order.setShipmentTime(shipmentTime);
             // order.setShipmentType(shipmentType);
-            // order.setOrderAmount(orderAmount.add(ShipmentAmountEnum.INSTANCE.getAmount(shipmentType))); // 订单金额 = 商品总价 + 物流费
+            if(user != null){
+                order.setOrderAmount(orderAmount.add(user.getFreight())); // 订单金额 = 商品总价 + 物流费
+            }else {
+                order.setOrderAmount(orderAmount);
+            }
+
             super.save(order);
 
             // 生成订单配送记录
@@ -267,7 +287,12 @@ public class OrderService extends CrudService<OrderDao, Order> {
             orderShipment.setUserAdress(address.getUserAdress());
             orderShipment.setUserZipcode(Integer.parseInt(address.getUserZipcode()));
             orderShipmentService.save(orderShipment);
+
+            return order;
+        }else {
+            return null;
         }
+
     }
 
     /**

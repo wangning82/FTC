@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.sys.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,8 @@ public class User extends DataEntity<User> {
 	
 	private String oldLoginIp;	// 上次登陆IP
 	private Date oldLoginDate;	// 上次登陆日期
+
+	private BigDecimal freight; // 运费
 	
 	private Role role;	// 根据角色查询用户条件
 	
@@ -320,5 +323,13 @@ public class User extends DataEntity<User> {
 	@Override
 	public String toString() {
 		return id;
+	}
+
+	public BigDecimal getFreight() {
+		return freight;
+	}
+
+	public void setFreight(BigDecimal freight) {
+		this.freight = freight;
 	}
 }

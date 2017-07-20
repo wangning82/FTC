@@ -75,6 +75,7 @@
 		a.remarks,
 		a.login_flag,
 		a.photo,
+		a.freight AS "freight",
 		a.create_by AS "createBy.id",
 		a.create_date,
 		a.update_by AS "updateBy.id",
@@ -243,7 +244,8 @@
 			update_date, 
 			remarks, 
 			login_flag, 
-			photo, 
+			photo,
+			freight,
 			del_flag
 		) VALUES (
 			#{id}, 
@@ -263,7 +265,8 @@
 			#{updateDate}, 
 			#{remarks}, 
 			#{loginFlag}, 
-			#{photo}, 
+			#{photo},
+			#{freight},
 			#{delFlag}
 		)
 	</insert>
@@ -285,7 +288,8 @@
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
 			login_flag = #{loginFlag},
-			photo = #{photo}
+			photo = #{photo},
+			freight = #{freight}
 		WHERE id = #{id}
 	</update>
 	
@@ -314,7 +318,8 @@
 			update_by = #{updateBy.id}, 
 			update_date = #{updateDate}, 
 			remarks = #{remarks},
-			photo = #{photo}
+			photo = #{photo},
+			freight = #{freight}
 		WHERE id = #{id}
 	</update>
 	
