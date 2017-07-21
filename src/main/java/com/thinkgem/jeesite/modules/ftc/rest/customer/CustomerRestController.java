@@ -1,5 +1,6 @@
 package com.thinkgem.jeesite.modules.ftc.rest.customer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
@@ -15,6 +16,7 @@ import com.thinkgem.jeesite.modules.ftc.convert.customer.UserInfoConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AreaDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
+import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
@@ -28,10 +30,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -357,13 +357,21 @@ public class CustomerRestController extends BaseRestController {
     }
 
     @ApiOperation(value = "保存收货地址", notes = "用户新建或修改收货地址时使用，修改时需要地址标识。")
-    @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST})
-    public RestResult saveAddress(@RequestParam("token") String token, AddressDto address) {
+    @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST},produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public RestResult saveAddress(@RequestParam("token") String token,@RequestParam("address") String address) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            addressService.save(addressConverter.convertDtoToModel(address));
+            try{
+                ObjectMapper objectMapper = new ObjectMapper();
+                AddressDto address1= objectMapper.readValue(address, AddressDto.class);
+                addressService.save(addressConverter.convertDtoToModel(address1));
+            }catch (Exception e){
+                e.printStackTrace();
+                return new RestResult(CODE_ERROR, e.getMessage());
+            }
+
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }

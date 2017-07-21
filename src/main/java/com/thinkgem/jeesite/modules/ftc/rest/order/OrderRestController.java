@@ -306,12 +306,12 @@ public class OrderRestController extends BaseRestController {
             if(order.getOrderStatus().equals(OrderStatusEnum.ORDER_STATUS_COMPLETE.getValue())){
                 return new RestResult(CODE_SUCCESS, "支付完成");
             }else{
-                PayResponse payResponse = apyAccountService.getPayResponse(1);
-                Map<String, Object> result= payResponse.getService().query(order.getTradeNo(), order.getOrderNo());
-                String status=(String)result.get("trade_state");
-                if(!status.equals("SUCCESS")){
-                    orderService.payOrder(order.getTradeNo(),payType);
-                }
+//                PayResponse payResponse = apyAccountService.getPayResponse(1);
+//                Map<String, Object> result= payResponse.getService().query(order.getTradeNo(), order.getOrderNo());
+//                String status=(String)result.get("trade_state");
+//                if(!status.equals("SUCCESS")){
+//                    orderService.payOrder(order.getTradeNo(),payType);
+//                }
             }
 
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);

@@ -74,11 +74,6 @@ public class DesignService extends CrudService<DesignDao, Design> {
 				detail.setId(IdGen.uuid());
 				detail.setDesign(design);
 				detail.setCustomer(design.getCustomer());
-				if(detail.getPicImg().length()>100){
-					detail.setPicImg(ImageUtils.generateImg(detail.getPicImg(),
-							design.getCustomer().getId(),
-							ImgSourceEnum.IMG_SOURCE_SUCAI.getValue()));
-				}
 				detail.setCreateDate(new Date());
 				designDetailDao.insert(detail);
 			}else{

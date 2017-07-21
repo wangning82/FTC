@@ -1,5 +1,7 @@
 package com.thinkgem.jeesite.modules.ftc.rest.product;
 
+import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
@@ -328,15 +330,23 @@ public class DesignRestController extends BaseRestController {
      */
     @ApiOperation(value = "保存设计", notes = "获取设计的详情")
     @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
-    public RestResult save(@RequestBody DesignDto design, @RequestParam("token") String token,HttpServletRequest request) {
+    public RestResult save(@RequestParam String design, @RequestParam("token") String token,HttpServletRequest request) {
 
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
-        Design model = designConverter.convertDtoToModel(design);
-        model.setCustomer(customer);
-        designService.saveForRest(model);
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            DesignDto design1= objectMapper.readValue(design, DesignDto.class);
+            Design model = designConverter.convertDtoToModel(design1);
+            model.setCustomer(customer);
+            designService.saveForRest(model);
+        }catch (Exception e){
+
+        }
+
+
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
