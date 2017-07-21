@@ -3,6 +3,7 @@ package com.thinkgem.jeesite.modules.ftc.rest.order;
 import com.egzosn.pay.common.api.PayConfigStorage;
 import com.egzosn.pay.common.bean.PayMessage;
 import com.egzosn.pay.common.bean.PayOrder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
@@ -13,7 +14,6 @@ import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.order.ShoppingCartConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.order.OrderConfirmDto;
 import com.thinkgem.jeesite.modules.ftc.dto.order.OrderDto;
-import com.thinkgem.jeesite.modules.ftc.dto.order.ShoppingCartDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderProduct;
@@ -24,9 +24,7 @@ import com.thinkgem.jeesite.modules.ftc.service.order.OrderProductService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
 import com.thinkgem.jeesite.modules.ftc.service.order.OrderWaybillService;
 import com.thinkgem.jeesite.modules.ftc.service.order.ShoppingCartService;
-import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
-import com.thinkgem.jeesite.modules.pay.entity.PayType;
 import com.thinkgem.jeesite.modules.pay.service.ApyAccountService;
 import com.thinkgem.jeesite.modules.pay.service.PayResponse;
 import io.swagger.annotations.Api;
@@ -146,7 +144,6 @@ public class OrderRestController extends BaseRestController {
                     }
                 }
             }
-
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shoppingCartConverter.convertListFromModelToDto(result));
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
@@ -158,16 +155,24 @@ public class OrderRestController extends BaseRestController {
      * 生成订单
      *
      * @param token
-     * @param shoppingCartDtoList 购物车
+     * @param orderJson 购物车
      * @return
      */
     @ApiOperation(value = "生成订单", notes = "生成订单")
     @RequestMapping(value = {"createOrder"}, method = {RequestMethod.POST})
-    public RestResult createOrder(@RequestParam("token") String token, List<ShoppingCartDto> shoppingCartDtoList) {
+    public RestResult createOrder(@RequestParam("token") String token, @RequestParam("order") String orderJson) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            Order order = orderService.createOrder(customer, shoppingCartConverter.convertListFromDtoToModel(shoppingCartDtoList));
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, orderConverter.convertModelToDto(order));
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                OrderDto orderDto = objectMapper.readValue(orderJson, OrderDto.class);
+                BigDecimal freight = orderService.createOrder(customer, shoppingCartConverter.convertListFromDtoToModel(orderDto.getBags()));
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, freight);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new RestResult(CODE_ERROR, e.getMessage());
+            }
+
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
@@ -191,12 +196,12 @@ public class OrderRestController extends BaseRestController {
             param.setOrderStatus(type);
             Page<Order> orderPage = orderService.findPage(new Page<Order>(request, response), param);
 
-            List<Order> orderList=orderPage.getList();
-            if(CollectionUtils.isNotEmpty(orderList)){
-                for(Order order:orderList){
-                    OrderProduct orderProduct=new OrderProduct();
+            List<Order> orderList = orderPage.getList();
+            if (CollectionUtils.isNotEmpty(orderList)) {
+                for (Order order : orderList) {
+                    OrderProduct orderProduct = new OrderProduct();
                     orderProduct.setOrder(order);
-                    List<OrderProduct> orderProducts=orderProductService.findList(orderProduct);
+                    List<OrderProduct> orderProducts = orderProductService.findList(orderProduct);
                     order.setOrderProductList(orderProducts);
                 }
             }
@@ -211,15 +216,15 @@ public class OrderRestController extends BaseRestController {
      * 取消订单
      *
      * @param token
-     * @param orderId
+     * @param orderNo
      * @return
      */
     @ApiOperation(value = "取消订单", notes = "取消订单，参数为订单号")
     @RequestMapping(value = {"cancelOrder"}, method = {RequestMethod.POST})
-    public RestResult cancelOrder(@RequestParam("token") String token, @RequestParam("oid") String orderId) {
+    public RestResult cancelOrder(@RequestParam("token") String token, @RequestParam("oid") String orderNo) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            orderService.cancelOrder(customer, orderId);
+            orderService.cancelOrder(customer, orderNo);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
@@ -230,20 +235,27 @@ public class OrderRestController extends BaseRestController {
      * 订单确认
      *
      * @param token
-     * @param orderDto
+     * @param orderJson
      * @return
      */
     @ApiOperation(value = "订单确认", notes = "订单确认")
     @RequestMapping(value = {"confirmOrder"}, method = {RequestMethod.POST})
-    public RestResult confirmOrder(@RequestParam("token") String token, OrderDto orderDto) {
+    public RestResult confirmOrder(@RequestParam("token") String token, @RequestParam("order") String orderJson) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            Order order = orderConverter.convertDtoToModel(orderDto);
-            Order confirmOrder = orderService.confirmOrder(customer, order.getOrderNo(), order.getAddress().getId(), order.getInvoiceTitle());
-            OrderConfirmDto confirmDto = new OrderConfirmDto();
-            confirmDto.setOrderId(confirmOrder.getId());
-            confirmDto.setPayPrice(confirmOrder.getOrderAmount());
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, confirmDto);
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                OrderDto orderDto = objectMapper.readValue(orderJson, OrderDto.class);
+                Order order = orderConverter.convertDtoToModel(orderDto);
+                Order confirmOrder = orderService.confirmOrder(customer, order.getOrderNo(), order.getAddress().getId(), order.getInvoiceTitle());
+                OrderConfirmDto confirmDto = new OrderConfirmDto();
+                confirmDto.setOrderId(confirmOrder.getOrderNo());
+                confirmDto.setPayPrice(confirmOrder.getOrderAmount());
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, confirmDto);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new RestResult(CODE_ERROR, e.getMessage());
+            }
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
@@ -253,13 +265,13 @@ public class OrderRestController extends BaseRestController {
      * 支付订单
      *
      * @param token
-     * @param orderId 订单号
+     * @param orderNo 订单号
      * @param payType 支付方式
      * @return
      */
     @ApiOperation(value = "支付订单", notes = "支付订单")
     @RequestMapping(value = {"payOrder"}, method = {RequestMethod.POST})
-    public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderId,
+    public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderNo,
                                @RequestParam("pType") String payType) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
@@ -267,53 +279,62 @@ public class OrderRestController extends BaseRestController {
 
             //获取对应的支付账户操作工具（可根据账户id）
             PayResponse payResponse = apyAccountService.getPayResponse(1);
-            Order order = orderService.get(orderId);
-            order.setTradeNo(UUID.randomUUID().toString().replaceAll("-", ""));
-            orderService.save(order);
 
-            PayOrder payOrder = new PayOrder();
-            payOrder.setOutTradeNo(order.getTradeNo());
-            payOrder.setSubject("订单");
-            payOrder.setPrice(order.getPayAmount());
-            orderService.payOrder(order.getTradeNo(),payType);
+            Order param = new Order();
+            param.setCustomer(customer);
+            param.setOrderNo(orderNo);
+            List<Order> result = orderService.findList(param);
+            if (CollectionUtils.isNotEmpty(result)) {
+                Order order = result.get(0);
+                order.setTradeNo(UUID.randomUUID().toString().replaceAll("-", ""));
+                orderService.save(order);
+
+                PayOrder payOrder = new PayOrder();
+                payOrder.setOutTradeNo(order.getTradeNo());
+                payOrder.setSubject("订单");
+                payOrder.setPrice(order.getPayAmount());
+                orderService.payOrder(order.getTradeNo(), payType);
 //            payOrder.setTransactionType(PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType("APP"));
-
 //            Map orderInfo = payResponse.getService().orderInfo(payOrder);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+            }
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
     }
+
     /**
-     *
-     *
      * @param token
-     * @param orderId 订单号
+     * @param orderNo 订单号
      * @param payType 支付方式
      * @return
      */
     @ApiOperation(value = "支付完成", notes = "支付完成")
     @RequestMapping(value = {"finishPay"}, method = {RequestMethod.POST})
-    public RestResult finishPay(@RequestParam("token") String token, @RequestParam("oid") String orderId,@RequestParam("pOid") String poid,
-                               @RequestParam("pType") String payType) {
+    public RestResult finishPay(@RequestParam("token") String token, @RequestParam("oid") String orderNo, @RequestParam("pOid") String poid,
+                                @RequestParam("pType") String payType) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            Order order=orderService.get(orderId);
-            if(order==null){
-                return new RestResult(CODE_NULL,  "没有找到订单");
-            }
-            if(order.getOrderStatus().equals(OrderStatusEnum.ORDER_STATUS_COMPLETE.getValue())){
-                return new RestResult(CODE_SUCCESS, "支付完成");
-            }else{
+            Order param = new Order();
+            param.setCustomer(customer);
+            param.setOrderNo(orderNo);
+            List<Order> result = orderService.findList(param);
+            if (CollectionUtils.isNotEmpty(result)) {
+                Order order = result.get(0);
+                if (order.getOrderStatus().equals(OrderStatusEnum.ORDER_STATUS_COMPLETE.getValue())) {
+                    return new RestResult(CODE_SUCCESS, "支付完成");
+                } else {
 //                PayResponse payResponse = apyAccountService.getPayResponse(1);
 //                Map<String, Object> result= payResponse.getService().query(order.getTradeNo(), order.getOrderNo());
 //                String status=(String)result.get("trade_state");
 //                if(!status.equals("SUCCESS")){
 //                    orderService.payOrder(order.getTradeNo(),payType);
 //                }
+                }
+            } else {
+                return new RestResult(CODE_NULL, "没有找到订单");
             }
-
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
@@ -364,7 +385,7 @@ public class OrderRestController extends BaseRestController {
      */
     @ApiOperation(value = "运单信息", notes = "运单信息")
     @RequestMapping(value = {"showWaybill"}, method = {RequestMethod.POST})
-    public RestResult showWaybill(@RequestParam("token") String token, @RequestParam("order") String orderNo) {
+    public RestResult showWaybill(@RequestParam("token") String token, @RequestParam("oid") String orderNo) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
             OrderWaybill param = new OrderWaybill();

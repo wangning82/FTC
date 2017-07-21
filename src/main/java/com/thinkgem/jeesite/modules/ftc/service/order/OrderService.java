@@ -124,13 +124,13 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * 取消订单
      *
      * @param customer
-     * @param orderId
+     * @param orderNo
      */
     @Transactional(readOnly = false)
-    public void cancelOrder(Customer customer, String orderId) {
+    public void cancelOrder(Customer customer, String orderNo) {
         Order param = new Order();
         param.setCustomer(customer);
-        param.setId(orderId);
+        param.setOrderNo(orderNo);
         List<Order> result = super.findList(param);
         if (CollectionUtils.isNotEmpty(result)) {
             Order order = result.get(0);
@@ -146,12 +146,15 @@ public class OrderService extends CrudService<OrderDao, Order> {
      * @param shoppingCarts
      */
     @Transactional(readOnly = false)
-    public Order createOrder(Customer customer, List<ShoppingCart> shoppingCarts) {
+    public BigDecimal createOrder(Customer customer, List<ShoppingCart> shoppingCarts) {
         Order order = new Order();
         order.setOrderNo(OrderNoGenerator.INSTANCE.nextId());
         order.setCustomer(customer);
         order.setOrderStatus(OrderStatusEnum.ORDER_STATUS_FORPAID.getValue());
-        super.save(order);
+
+        BigDecimal orderAmount = BigDecimal.ZERO; // 商品总价
+        BigDecimal buyNumber = BigDecimal.ZERO; // 购买数量
+        User user = null; // 生产厂家
 
         List<OrderProduct> orderProductList = new ArrayList<>();
 
@@ -162,11 +165,32 @@ public class OrderService extends CrudService<OrderDao, Order> {
             orderProductDao.insert(orderProduct);
             orderProductList.add(orderProduct);
 
+            orderAmount = orderAmount.add(orderProduct.getPrice());
+            buyNumber = buyNumber.add(orderProduct.getBuyNumber());
+
+            if(user == null){
+                // 获取生产厂家
+                Product productParam = new Product();
+                productParam.setNumber(orderProduct.getProductNumber());
+                List<Product> productList = productService.findList(productParam);
+                if(CollectionUtils.isNotEmpty(productList)){
+                    Product product = productList.get(0);
+                    user = systemService.getUser(product.getCreateBy().getId());
+                }
+            }
             shoppingCartService.delete(shoppingCart); // 删除购物车
         }
 
+        order.setBuyNumber(buyNumber);
+        if(user != null){
+            order.setOrderAmount(orderAmount.add(user.getFreight())); // 订单金额 = 商品总价 + 物流费
+        }else {
+            order.setOrderAmount(orderAmount);
+        }
+
         order.setOrderProductList(orderProductList);
-        return order;
+        super.save(order);
+        return user.getFreight();
 
     }
 
@@ -240,36 +264,10 @@ public class OrderService extends CrudService<OrderDao, Order> {
         List<Order> result = this.findList(param);
         if (CollectionUtils.isNotEmpty(result)) {
             Order order = result.get(0);
-            BigDecimal orderAmount = BigDecimal.ZERO; // 商品总价
-            BigDecimal buyNumber = BigDecimal.ZERO;
-            OrderProduct orderProductParam = new OrderProduct();
-            orderProductParam.setOrder(order);
-            List<OrderProduct> orderProductList = orderProductDao.findList(orderProductParam);
-            User user = null; // 生产厂家
-            for (OrderProduct orderProduct : orderProductList) {
-                orderAmount = orderAmount.add(orderProduct.getPrice());
-                buyNumber = buyNumber.add(orderProduct.getBuyNumber());
-
-                // 获取生产厂家
-                Product productParam = new Product();
-                productParam.setNumber(orderProduct.getProductNumber());
-                List<Product> productList = productService.findList(productParam);
-                if(CollectionUtils.isNotEmpty(productList)){
-                    Product product = productList.get(0);
-                    user = systemService.getUser(product.getCreateBy().getId());
-                }
-            }
-            order.setBuyNumber(buyNumber);
             // order.setInvoiceType(invoiceType);
             order.setInvoiceTitle(invoiceTitle);
             // order.setShipmentTime(shipmentTime);
             // order.setShipmentType(shipmentType);
-            if(user != null){
-                order.setOrderAmount(orderAmount.add(user.getFreight())); // 订单金额 = 商品总价 + 物流费
-            }else {
-                order.setOrderAmount(orderAmount);
-            }
-
             super.save(order);
 
             // 生成订单配送记录
