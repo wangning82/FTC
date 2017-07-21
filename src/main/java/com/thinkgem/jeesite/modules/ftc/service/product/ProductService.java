@@ -5,8 +5,10 @@ package com.thinkgem.jeesite.modules.ftc.service.product;
 
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.service.CrudService;
+import com.thinkgem.jeesite.common.utils.ImageUtils;
 import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.dao.product.DesignDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductImageDao;
 import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
@@ -90,6 +92,60 @@ public class ProductService extends CrudService<ProductDao, Product> {
 
 		}
 		return productList;
+	}
+	@Transactional(readOnly = false)
+	public void saveForRest(Product product) {
+
+		//保存商品时
+
+		if (product.getIsNewRecord()){
+			product.preInsert();
+			if(product.getNumber()==null||product.getNumber().length()==0){
+				product.setNumber(ProductNoGenerator.INSTANCE.nextId());
+			}
+			dao.insert(product);
+
+		}else{
+			product.preUpdate();
+			dao.update(product);
+		}
+		//保存规格
+		if(product.getSpecs()!=null&&product.getSpecs().size()>0){
+			for (ProductSpec productSpec : product.getSpecs()){
+				if (productSpec.getId() == null){
+					continue;
+				}
+				if (SpecAttribute.DEL_FLAG_NORMAL.equals(productSpec.getDelFlag())){
+					if (StringUtils.isBlank(productSpec.getId())){
+						productSpec.setProduct(product);
+						productSpec.setProductSpecNumber(ProductNoGenerator.INSTANCE.nextId());
+						productSpec.preInsert();
+						productSpecDao.insert(productSpec);
+
+						List<ProductImage>productImages=productSpec.getImages();
+						if(productImages!=null&&productImages.size()>0){
+							for(ProductImage image:productImages){
+								if(image.getImgUrl().length()>100){
+									image.setImgUrl(ImageUtils.generateImg(image.getImgUrl(),product.getId(), ImgSourceEnum.IMG_SOURCE_GUIGE.getValue()));
+									image.preInsert();
+									image.setProductSpec(productSpec);
+									productImageDao.insert(image);
+								}
+							}
+						}
+
+
+
+					}else{
+						productSpec.preUpdate();
+						productSpecDao.update(productSpec);
+					}
+				}else{
+					productSpecDao.delete(productSpec);
+				}
+			}
+		}
+
 	}
 	@Transactional(readOnly = false)
 	public void save(Product product) {

@@ -1,10 +1,12 @@
 package com.thinkgem.jeesite.modules.ftc.rest.product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.CustomerConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.CustomerDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductDto;
@@ -240,13 +242,24 @@ public class ProductRestController extends BaseRestController {
      */
     @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
     @ApiOperation(value = "保存商品", notes = "保存商品")
-    public RestResult save(@RequestBody ProductDto productDto,@RequestParam("token") String token) {
+    public RestResult save(@RequestParam("good") String good,@RequestParam("token") String token) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
-        Product product=productConvert.convertDtoToModel(productDto);
-        productService.save(product);
+        try{
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            ProductDto productDto= objectMapper.readValue(good, ProductDto.class);
+            //将dto转成model
+            Product product=productConvert.convertDtoToModel(productDto);
+            productService.save(product);
+        }catch (Exception e){
+            e.printStackTrace();
+            return new RestResult(CODE_ERROR, e.getMessage());
+
+        }
+
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
