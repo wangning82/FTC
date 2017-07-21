@@ -27,10 +27,7 @@ import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -156,7 +153,7 @@ public class ProductRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "没有找到用户信息");
         }
         //热度加一
-        customer.setVisitNumber(customer.getVisitNumber()+1);
+        customer.setVisitNumber(customer.getVisitNumber()==null?0:customer.getVisitNumber()+1);
         customerService.save(customer);
 
         Product product = new Product();
@@ -186,7 +183,10 @@ public class ProductRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             //获取商品信息
-            Product product = productService.get(id);
+            Product product = productService.getWithSpec(id);
+            if(product==null){
+                return new RestResult(CODE_NULL, "您要找的商品不存在");
+            }
             //更新热度，自动加一
             productService.addHot(product);
 
@@ -240,8 +240,13 @@ public class ProductRestController extends BaseRestController {
      */
     @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
     @ApiOperation(value = "保存商品", notes = "保存商品")
-    public RestResult save(ProductDto productDto) {
-        productService.save(productConvert.convertDtoToModel(productDto));
+    public RestResult save(@RequestBody ProductDto productDto,@RequestParam("token") String token) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        }
+        Product product=productConvert.convertDtoToModel(productDto);
+        productService.save(product);
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 

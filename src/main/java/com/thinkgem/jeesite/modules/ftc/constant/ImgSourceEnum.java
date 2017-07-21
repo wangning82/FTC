@@ -7,7 +7,8 @@ public enum ImgSourceEnum {
     IMG_SOURCE_SUCAI("0", "素材"),
     IMG_SOURCE_TOUXIANG("1", "头像"),
     IMG_SOURCE_DIANPU("2", "店铺"),
-    IMG_SOURCE_GUIGE("3", "规格");
+    IMG_SOURCE_GUIGE("3", "规格"),
+    IMG_SOURCE_SHEJI("4","设计");
 
     private String value;
 

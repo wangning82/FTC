@@ -11,11 +11,10 @@ public class PositionDto extends BaseDto<PositionDto>{
     private String name;		// 名称
     private String sort;		// 排序
     private String status;		// 状态
-    private Double width; //宽度
-
-    private Double height;//高度
-    private Double fromX;//横坐标
-    private Double fromY;//纵坐标
+    private Double w; //宽度w
+    private Double h;//高度
+    private Double x;//横坐标
+    private Double y;//纵坐标
     private Double scale;//缩放
     private Double rotation;//旋转
 
@@ -51,36 +50,36 @@ public class PositionDto extends BaseDto<PositionDto>{
         this.status = status;
     }
 
-    public Double getWidth() {
-        return width;
+    public Double getW() {
+        return w;
     }
 
-    public void setWidth(Double width) {
-        this.width = width;
+    public void setW(Double w) {
+        this.w = w;
     }
 
-    public Double getHeight() {
-        return height;
+    public Double getH() {
+        return h;
     }
 
-    public void setHeight(Double height) {
-        this.height = height;
+    public void setH(Double h) {
+        this.h = h;
     }
 
-    public Double getFromX() {
-        return fromX;
+    public Double getX() {
+        return x;
     }
 
-    public void setFromX(Double fromX) {
-        this.fromX = fromX;
+    public void setX(Double x) {
+        this.x = x;
     }
 
-    public Double getFromY() {
-        return fromY;
+    public Double getY() {
+        return y;
     }
 
-    public void setFromY(Double fromY) {
-        this.fromY = fromY;
+    public void setY(Double y) {
+        this.y = y;
     }
 
     public Double getScale() {

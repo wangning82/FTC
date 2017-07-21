@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.thinkgem.jeesite.common.utils.IdGen;
+import com.thinkgem.jeesite.common.utils.ImageUtils;
 import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
+import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.dao.product.*;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.*;
@@ -49,6 +51,11 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	
 	@Transactional(readOnly = false)
 	public void save(Design design) {
+		if(design.getPicImg().length()>100){
+			design.setPicImg(ImageUtils.generateImg(design.getPicImg(),
+					design.getCustomer().getId(),
+					ImgSourceEnum.IMG_SOURCE_SHEJI.getValue()));
+		}
 		super.save(design);
 	}
 	
@@ -67,6 +74,11 @@ public class DesignService extends CrudService<DesignDao, Design> {
 				detail.setId(IdGen.uuid());
 				detail.setDesign(design);
 				detail.setCustomer(design.getCustomer());
+				if(detail.getPicImg().length()>100){
+					detail.setPicImg(ImageUtils.generateImg(detail.getPicImg(),
+							design.getCustomer().getId(),
+							ImgSourceEnum.IMG_SOURCE_SUCAI.getValue()));
+				}
 				detail.setCreateDate(new Date());
 				designDetailDao.insert(detail);
 			}else{

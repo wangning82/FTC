@@ -18,10 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,11 +129,12 @@ public class DesignRestController extends BaseRestController {
                     endNum = pageSize * (pageNo - 1) + imageFiles.size() % pageSize;
                 }
             }
-            List<Map<String, String>> images = new ArrayList<>();
+            List<ProductImageDto> images=new ArrayList<>();
             for (int i = startNum; i < endNum; i++) {
-                Map<String, String> image = new HashMap<>();
+                ProductImageDto image=new ProductImageDto();
+
                 String imgUrl = imageFiles.get(i);
-                image.put("imgUrl", imgUrl);
+                image.setImgUrl( imgUrl);
                 images.add(image);
             }
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, images);
@@ -301,8 +299,7 @@ public class DesignRestController extends BaseRestController {
      * @param
      * @return
      */
-    @ApiOperation(value = "上传图片", notes = "上传图片" +
-            "")
+    @ApiOperation(value = "上传图片", notes = "上传图片")
     @RequestMapping(value = {"uploadImg"}, method = {RequestMethod.POST})
     public RestResult uploadImg(@RequestParam("img") String img, @RequestParam("token") String
             token, HttpServletRequest request) {
@@ -317,7 +314,9 @@ public class DesignRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             img = basePath + ImageUtils.generateImg(img, customer.getId(), ImgSourceEnum.IMG_SOURCE_SUCAI.getValue());
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, img);
+            ProductImageDto image=new ProductImageDto();
+            image.setImgUrl(img);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, image);
         }
     }
 
@@ -329,8 +328,14 @@ public class DesignRestController extends BaseRestController {
      */
     @ApiOperation(value = "保存设计", notes = "获取设计的详情")
     @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
-    public RestResult save(DesignDto design, @RequestParam("token") String token) {
+    public RestResult save(@RequestBody DesignDto design, @RequestParam("token") String token,HttpServletRequest request) {
+
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        }
         Design model = designConverter.convertDtoToModel(design);
+        model.setCustomer(customer);
         designService.saveForRest(model);
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
@@ -363,7 +368,7 @@ public class DesignRestController extends BaseRestController {
                     request.getServerPort() + request.getContextPath() + "/upload/";
         }
         //我要设计，默认取第一个模型
-        Product product = productService.get("c66595288aff4fee98533f9e949b9b1f");
+        Product product = productService.get("1b8df4c2c8ac456fb223eb7da8b2ace2");
 //        if(list!=null&&list.size()>0){
 //            product=list.get(0);
 //        }
@@ -395,6 +400,7 @@ public class DesignRestController extends BaseRestController {
             for(int i=0;i<size;i++){
                 ProductImageDto seed=new ProductImageDto();
                 seed.setImgUrl(images.get(i));
+                seed.setImgNailUrl(images.get(i));
                 seeds.add(seed);
             }
             dto.setSeeds(seeds);

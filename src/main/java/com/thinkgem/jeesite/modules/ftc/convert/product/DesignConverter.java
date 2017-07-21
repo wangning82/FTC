@@ -29,7 +29,7 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
         List<DesignDetail> details=designDetailConverter.
                 convertListFromDtoToModel(dto.getMeshes());
         model.setDetails(details);
-        model.setCustomer(new Customer(dto.getUser().getId()));
+        model.setPicImg(dto.getImgUrl());
         model.setModel(new Product(dto.getModel().getId()));
         return model;
     }

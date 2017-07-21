@@ -7,7 +7,7 @@ import com.thinkgem.jeesite.common.rest.BaseDto;
  */
 public class DesignDetailDto extends BaseDto<DesignDetailDto> {
     private String id;
-    private String texture;
+    private ProductImageDto texture;
     private Double x;
     private Double y;
     private Double rotation;
@@ -21,11 +21,11 @@ public class DesignDetailDto extends BaseDto<DesignDetailDto> {
         this.id = id;
     }
 
-    public String getTexture() {
+    public ProductImageDto getTexture() {
         return texture;
     }
 
-    public void setTexture(String texture) {
+    public void setTexture(ProductImageDto texture) {
         this.texture = texture;
     }
 

@@ -214,7 +214,7 @@
                     <th>库存</th>
                     <th>价格</th>
                     <th>积分</th>
-                    <%--<th>图片</th>--%>
+                    <th>是否默认</th>
                     <shiro:hasPermission name="ftc:product:product:edit">
                         <th width="10">&nbsp;</th>
                     </shiro:hasPermission>
@@ -255,6 +255,9 @@
 							</td>
 							<td>
 								<input id="specs{{idx}}_store" name="specs[{{idx}}].store" type="text" value="{{row.store}}" maxlength="255" class="input-small "/>
+							</td>
+							<td>
+								<input id="specs{{idx}}_default" name="specs[{{idx}}].defaultStatus" type="text" value="{{row.defaultStatus}}" maxlength="255" class="input-small "/>
 							</td>
 							<%--<td>--%>
 							    <%--<sys:ckfinder input="specs{{idx}}_picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"--%>

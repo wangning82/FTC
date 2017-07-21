@@ -47,16 +47,19 @@ public class ProductService extends CrudService<ProductDao, Product> {
      */
 	public Product getWithSpec(String id){
 		Product product= super.get(id);
-		//获取规格信息
-		List<ProductSpec> specs = productSpecDao.findList(new ProductSpec(product));
-		//获取规格图片信息
-		for (int i = 0; i < specs.size(); i++) {
-			ProductImage image = new ProductImage();
-			image.setProductSpec(specs.get(i));
-			List<ProductImage> images = productImageDao.findList(image);
-			specs.get(i).setImages(images);
+		if(product!=null){
+			//获取规格信息
+			List<ProductSpec> specs = productSpecDao.findList(new ProductSpec(product));
+			//获取规格图片信息
+			for (int i = 0; i < specs.size(); i++) {
+				ProductImage image = new ProductImage();
+				image.setProductSpec(specs.get(i));
+				List<ProductImage> images = productImageDao.findList(image);
+				specs.get(i).setImages(images);
+			}
+			product.setSpecs(specs);
 		}
-		product.setSpecs(specs);
+
 		return product;
 	}
 	public List<Product> findList(Product product) {

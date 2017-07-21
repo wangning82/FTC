@@ -20,10 +20,7 @@ public class PositionConverter extends BaseConverter<Position, PositionDto> {
     public PositionDto convertModelToDto(Position model) {
         PositionDto dto=new PositionDto();
         dto.setId(model.getId());
-        dto.setName(model.getName());
-        dto.setFromX(model.getFromX());
-        dto.setFromY(model.getFromY());
-        dto.setHeight(model.getHeight());
+
         dto.setRotation(model.getRotation());
         dto.setScale(model.getScale());
         return dto;
