@@ -14,9 +14,7 @@ import com.thinkgem.jeesite.modules.ftc.convert.customer.AreaConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.UserInfoConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
-import com.thinkgem.jeesite.modules.ftc.dto.customer.AreaDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
-import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
@@ -31,7 +29,10 @@ import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -196,7 +197,14 @@ public class CustomerRestController extends BaseRestController {
                 return new RestResult(CODE_ERROR, "短信验证码不正确");
             }
         } else {
-            return new RestResult(CODE_ERROR, "没有找到该用户信息");
+            Customer customer = new Customer();
+            customer.setTelephone(mobile);
+            customerService.save(customer);
+            String token = UUID.randomUUID().toString();
+            customer.setAccessToken(token);
+            customer.setExpiresTime(new Date());
+            EhCacheUtils.put(TOKEN_CACHE, token, customer);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
         }
     }
 
@@ -299,11 +307,11 @@ public class CustomerRestController extends BaseRestController {
                 customer.setSignature(shopDto.getUser().getDesc());
             }
             customer.setShopName(shopDto.getName());
-            if(shopDto.getUser()!=null)
-            customer.setPicImg(ImageUtils.generateImg(shopDto.getUser().getImgUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue()));
+            if (shopDto.getUser() != null)
+                customer.setPicImg(ImageUtils.generateImg(shopDto.getUser().getImgUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue()));
             customer.setShopBackground(ImageUtils.generateImg(shopDto.getBackgroundUrl(), customer.getId(), ImgSourceEnum.IMG_SOURCE_DIANPU.getValue()));
             customerService.save(customer);
-            EhCacheUtils.put(TOKEN_CACHE, token, userInfoConverter.convertModelToDto(customer));
+            EhCacheUtils.put(TOKEN_CACHE, token, customer);
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }
@@ -314,9 +322,9 @@ public class CustomerRestController extends BaseRestController {
         Area areaParam = new Area();
         areaParam.setParent(new Area("0"));
         List<Area> areaList = areaService.findList(areaParam);
-        if(CollectionUtils.isNotEmpty(areaList)){
+        if (CollectionUtils.isNotEmpty(areaList)) {
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, areaConverter.convertModelToDto(areaList.get(0)));
-        }else {
+        } else {
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }
@@ -357,17 +365,17 @@ public class CustomerRestController extends BaseRestController {
     }
 
     @ApiOperation(value = "保存收货地址", notes = "用户新建或修改收货地址时使用，修改时需要地址标识。")
-    @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST},produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public RestResult saveAddress(@RequestParam("token") String token,@RequestParam("address") String address) {
+    @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST}, produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public RestResult saveAddress(@RequestParam("token") String token, @RequestParam("address") String address) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            try{
+            try {
                 ObjectMapper objectMapper = new ObjectMapper();
-                AddressDto address1= objectMapper.readValue(address, AddressDto.class);
+                AddressDto address1 = objectMapper.readValue(address, AddressDto.class);
                 addressService.save(addressConverter.convertDtoToModel(address1));
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
                 return new RestResult(CODE_ERROR, e.getMessage());
             }
