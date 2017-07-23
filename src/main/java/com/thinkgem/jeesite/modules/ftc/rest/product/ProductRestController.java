@@ -237,7 +237,7 @@ public class ProductRestController extends BaseRestController {
     /**
      * 保存
      *
-     * @param productDto
+     * @param
      * @return
      */
     @RequestMapping(value = {"save"}, method = {RequestMethod.POST})
@@ -253,7 +253,8 @@ public class ProductRestController extends BaseRestController {
             ProductDto productDto= objectMapper.readValue(good, ProductDto.class);
             //将dto转成model
             Product product=productConvert.convertDtoToModel(productDto);
-            productService.save(product);
+            productService.saveForRest(product);
+
         }catch (Exception e){
             e.printStackTrace();
             return new RestResult(CODE_ERROR, e.getMessage());

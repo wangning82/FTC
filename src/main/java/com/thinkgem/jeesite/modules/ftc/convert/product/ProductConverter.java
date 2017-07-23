@@ -25,10 +25,7 @@ import java.util.Map;
 public class ProductConverter extends BaseConverter<Product, ProductDto> {
     @Autowired
     private ProductSpecConverter productSpecConverter;
-    @Autowired
-    private ProductImageConverter productImageConverter;
-    @Autowired
-    private CustomerConverter customerConverter;
+
     @Override
     public Product convertDtoToModel(ProductDto dto) {
         Product model = new Product();

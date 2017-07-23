@@ -340,6 +340,7 @@ public class DesignRestController extends BaseRestController {
             ObjectMapper objectMapper = new ObjectMapper();
             DesignDto design1= objectMapper.readValue(design, DesignDto.class);
             Design model = designConverter.convertDtoToModel(design1);
+            model.setDesignStatus("0");
             model.setCustomer(customer);
             designService.saveForRest(model);
         }catch (Exception e){
@@ -378,10 +379,14 @@ public class DesignRestController extends BaseRestController {
                     request.getServerPort() + request.getContextPath() + "/upload/";
         }
         //我要设计，默认取第一个模型
-        Product product = productService.get("1b8df4c2c8ac456fb223eb7da8b2ace2");
-//        if(list!=null&&list.size()>0){
-//            product=list.get(0);
-//        }
+        Product product=new Product();
+        product.setModelFlag("1");
+        List<Product> modelList=productService.findList(product);
+        if(modelList==null||modelList.size()==0){
+            return new RestResult(CODE_ERROR,"没有找到模型，请联系管理员");
+        }
+        product = productService.get(modelList.get(0));
+
         DesignDto dto=new DesignDto();
         product = productService.get(product.getId());
         //获取规格信息

@@ -22,6 +22,10 @@ public class SpecAttribute extends DataEntity<SpecAttribute> {
 		super();
 	}
 
+	public SpecAttribute(String id,String name){
+		this.id=id;
+		this.name=name;
+	}
 	public SpecAttribute(String id){
 		super(id);
 	}

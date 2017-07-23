@@ -5,6 +5,7 @@ import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductSpecDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.SpecAttributeDto;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.entity.product.SpecAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,15 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec, ProductSpec
         ProductSpec model = new ProductSpec();
         model.setId(dto.getId());
         model.setProductSpecNumber(dto.getCode());
+        model.setPrice(dto.getPrice());
+        String spec="";
+        for(SpecAttributeDto a:dto.getAttrs()){
+            spec+=","+a.getId()+":"+a.getValue();
+        }
+        model.setSpec(new SpecAttribute(null,spec));
+        List<ProductImage> images=productImageConverter.
+                convertListFromDtoToModel(dto.getTextures());
+        model.setImages(images);
         return model;
     }
 }

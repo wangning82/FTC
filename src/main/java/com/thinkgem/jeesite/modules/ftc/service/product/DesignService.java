@@ -51,11 +51,7 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	
 	@Transactional(readOnly = false)
 	public void save(Design design) {
-		if(design.getPicImg().length()>100){
-			design.setPicImg(ImageUtils.generateImg(design.getPicImg(),
-					design.getCustomer().getId(),
-					ImgSourceEnum.IMG_SOURCE_SHEJI.getValue()));
-		}
+
 		super.save(design);
 	}
 	
@@ -66,6 +62,11 @@ public class DesignService extends CrudService<DesignDao, Design> {
 
 	@Transactional(readOnly = false)
 	public void saveForRest(Design design){
+		if(design.getPicImg()!=null&&design.getPicImg().length()>200){
+			design.setPicImg(ImageUtils.generateImg(design.getPicImg(),
+					design.getCustomer().getId(),
+					ImgSourceEnum.IMG_SOURCE_SHEJI.getValue()));
+		}
 		super.save(design);
 		List<DesignDetail> designDetails=design.getDetails();
 		//保存设计明细
@@ -75,8 +76,10 @@ public class DesignService extends CrudService<DesignDao, Design> {
 				detail.setDesign(design);
 				detail.setCustomer(design.getCustomer());
 				detail.setCreateDate(new Date());
+				detail.preInsert();
 				designDetailDao.insert(detail);
 			}else{
+				detail.preUpdate();
 				designDetailDao.update(detail);
 			}
 

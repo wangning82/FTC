@@ -11,6 +11,7 @@ public class ProductImageDto extends BaseDto<ProductImageDto> {
     private String id;
     private String imgUrl;//原图地址
     private String imgNailUrl;//小图地址
+
     private PositionDto sprite;//位置信息
 
     public PositionDto getSprite() {
@@ -34,6 +35,7 @@ public class ProductImageDto extends BaseDto<ProductImageDto> {
     public String getImgUrl() {
         return imgUrl;
     }
+
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;

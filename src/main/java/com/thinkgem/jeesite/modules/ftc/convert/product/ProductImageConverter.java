@@ -33,6 +33,7 @@ public class ProductImageConverter extends BaseConverter<ProductImage,ProductIma
     @Override
     public ProductImage convertDtoToModel(ProductImageDto dto) {
         ProductImage model=new ProductImage();
+        model.setImgUrl(dto.getImgUrl());
         return model;
     }
 }
