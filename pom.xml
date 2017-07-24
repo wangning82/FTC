@@ -644,6 +644,15 @@
 			<scope>system</scope>
 			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/UserAgentUtils-1.13.jar</systemPath>
 		</dependency>
+
+		<!-- 荣联云通讯 -->
+		<dependency>
+			<groupId>rest.sms</groupId>
+			<artifactId>rest-sms</artifactId>
+			<version>2.6.3r</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/rest-sms-2.6.3r.jar</systemPath>
+		</dependency>
 		
 		<!-- 自定义jar依赖包
 		<dependency>

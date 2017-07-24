@@ -20,6 +20,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
+import com.thinkgem.jeesite.modules.ftc.service.customer.ShortMessageService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
@@ -73,6 +74,9 @@ public class CustomerRestController extends BaseRestController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ShortMessageService shortMessageService;
+
     /**
      * 发送短信验证码
      *
@@ -82,10 +86,9 @@ public class CustomerRestController extends BaseRestController {
     @ApiOperation(value = "发送短信验证码", notes = "用户登录首页和找回密码页面，发送短信验证码")
     @RequestMapping(value = {"sendShortMessage"}, method = {RequestMethod.POST})
     public RestResult sendShortMessage(@ApiParam("电话号码，必选") @RequestParam(value = "mobile", required = true) String mobile) {
-        String captcha = getShortMessageNumber();
+        String captcha = shortMessageService.sendMessage(mobile);
 //        String captcha="1234";
         EhCacheUtils.put(CAPTCHA_CACHE, mobile, captcha);
-        //TODO 调用短信接口发送验证码
         return new RestResult(CODE_SUCCESS, MSG_SUCCESS, captcha);
     }
 
