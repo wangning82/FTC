@@ -6,6 +6,7 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.common.utils.ImageUtils;
+import com.thinkgem.jeesite.common.utils.PropertiesLoader;
 import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.convert.product.DesignConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.product.ModelConverter;
@@ -57,7 +58,8 @@ public class DesignRestController extends BaseRestController {
     private ProductConverter productConverter;
     @Autowired
     private DesignDetailService designDetailService;
-    private static String BASE_IMAGE_PATH = "";
+    PropertiesLoader loader=new PropertiesLoader("jeesite.properties");
+    String serverName=loader.getProperty("serverName");
 
     /**
      * 删除
@@ -104,11 +106,7 @@ public class DesignRestController extends BaseRestController {
     @ApiOperation(value = "素材列表", notes = "获取素材列表")
     @RequestMapping(value = {"sucai"}, method = {RequestMethod.POST})
     public RestResult sucai(HttpServletRequest request) {
-        //
-        if(BASE_IMAGE_PATH.length()==0){
-            BASE_IMAGE_PATH = request.getScheme() + "://" + request.getServerName() + ":" +
-                    request.getServerPort() + request.getContextPath() + "/upload/";
-        }
+
 
         int pageSize = 10;
         int pageNo = 1;
@@ -160,7 +158,7 @@ public class DesignRestController extends BaseRestController {
                         if (file2.isDirectory() && file2.getName().equals("sucai")) {
                             File[] files3 = file2.listFiles();
                             for (File file3 : files3) {
-                                String fileUrl = BASE_IMAGE_PATH+ file1.getName()
+                                String fileUrl = serverName+"/upload/"+ file1.getName()
                                         + "/" + file2.getName() + "/" +
                                         file3.getName();
                                 imageFiles.add(fileUrl);
@@ -182,10 +180,7 @@ public class DesignRestController extends BaseRestController {
     @ApiOperation(value = "我的素材", notes = "我的素材")
     @RequestMapping(value = {"myImage"}, method = {RequestMethod.POST})
     public RestResult myImage(@RequestParam("token") String token, HttpServletRequest request) {
-        if(BASE_IMAGE_PATH.length()==0){
-            BASE_IMAGE_PATH = request.getScheme() + "://" + request.getServerName() + ":" +
-                    request.getServerPort() + request.getContextPath() + "/upload/";
-        }
+
         Customer customer = findCustomerByToken(token);
         if (customer == null)
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
@@ -222,7 +217,7 @@ public class DesignRestController extends BaseRestController {
                     Map<String, String> image = new HashMap<>();
                     File file2 = files[i];
                     if (!file2.isDirectory()) {
-                        image.put("imgUrl", BASE_IMAGE_PATH + customer.getId() + "/material/" + file2.getName());
+                        image.put("imgUrl", serverName+"/upload/" + customer.getId() + "/material/" + file2.getName());
                     }
                     images.add(image);
                 }
@@ -374,10 +369,7 @@ public class DesignRestController extends BaseRestController {
     }
 
     public RestResult iWant(HttpServletRequest request) {
-        if(BASE_IMAGE_PATH.length()==0){
-            BASE_IMAGE_PATH = request.getScheme() + "://" + request.getServerName() + ":" +
-                    request.getServerPort() + request.getContextPath() + "/upload/";
-        }
+
         //我要设计，默认取第一个模型
         Product product=new Product();
         product.setModelFlag("1");

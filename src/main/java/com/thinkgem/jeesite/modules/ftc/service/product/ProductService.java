@@ -143,12 +143,14 @@ public class ProductService extends CrudService<ProductDao, Product> {
                 if (productImages != null && productImages.size() > 0) {
                     for (ProductImage image : productImages) {
 
-                        if (image.getImgUrl() != null) {
+                        if (image.getImgNailUrl() != null) {
                             String url=ImageUtils.generateImg(image.getImgNailUrl(), product.getId(), ImgSourceEnum.IMG_SOURCE_GUIGE.getValue());
 
-                            image.setImgNailUrl(url);
+                            image.setImgNailUrl(serverName+"/upload"+url);
                             url=ImageUtils.generateImg(image.getImgNailUrl(), product.getId(), ImgSourceEnum.IMG_SOURCE_CHANPIN.getValue());
-                            image.setImgUrl(url);
+                            image.setImgUrl(serverName+"/upload"+url);
+                        }else{
+                            image.setImgNailUrl("");
                         }
                         image.preInsert();
                         image.setProductSpec(productSpec2);

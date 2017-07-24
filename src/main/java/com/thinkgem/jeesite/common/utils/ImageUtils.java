@@ -109,6 +109,10 @@ public class ImageUtils {
                 folderName = "/" + folderName + "/guige";
             } else if (imgType.equals(ImgSourceEnum.IMG_SOURCE_TOUXIANG.getValue())) {
                 folderName = "/" + folderName + "/touxiang";
+            } else if (imgType.equals(ImgSourceEnum.IMG_SOURCE_SHEJI.getValue())) {
+                folderName = "/" + folderName + "/sheji";
+            } else if (imgType.equals(ImgSourceEnum.IMG_SOURCE_CHANPIN.getValue())) {
+                folderName = "/" + folderName + "/chanpin";
             }
             File file = new File(realPath + folderName);
             if (!file.exists()) {

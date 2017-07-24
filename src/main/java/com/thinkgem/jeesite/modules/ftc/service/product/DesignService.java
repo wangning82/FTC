@@ -68,7 +68,8 @@ public class DesignService extends CrudService<DesignDao, Design> {
 			String url=ImageUtils.generateImg(design.getPicImg(),
 					design.getCustomer().getId(),
 					ImgSourceEnum.IMG_SOURCE_SHEJI.getValue());
-			design.setPicImg(loader.getProperty("serverName")+"upload/"+url);
+			design.setPicImg(loader.getProperty("serverName")+"/upload" +
+					""+url);
 		}
 		super.save(design);
 		List<DesignDetail> designDetails=design.getDetails();

@@ -40,7 +40,7 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec, ProductSpec
 
                 SpecAttributeDto attr = new SpecAttributeDto();
                 String[] s = a.split(":");
-//                attr.setId(s[0]);
+                attr.setId(s[0]);
                 attr.setValue(s[1]);
                 attrs.add(attr);
             }
