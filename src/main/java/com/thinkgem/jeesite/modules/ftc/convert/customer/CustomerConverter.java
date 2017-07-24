@@ -21,7 +21,6 @@ public class CustomerConverter extends BaseConverter<Customer, CustomerDto> {
         dto.setFollowerCount(model.getWishlistNumber());
         dto.setFollowingCount(model.getWishlistNumber());
         dto.setFavouriteCount(model.getWishlistNumber());
-        dto.setDesignCount(100);
         dto.setImgUrl(model.getPicImg());
         return dto;
     }

@@ -34,6 +34,18 @@ public class ProductImageConverter extends BaseConverter<ProductImage,ProductIma
     public ProductImage convertDtoToModel(ProductImageDto dto) {
         ProductImage model=new ProductImage();
         model.setImgUrl(dto.getImgUrl());
+        model.setImgNailUrl(dto.getImgNailUrl());
+        Position position=new Position();
+        position.setFromX(dto.getSprite().getX());
+        position.setFromY(dto.getSprite().getY());
+        position.setHeight(dto.getSprite().getH());
+        position.setWidth(dto.getSprite().getW());
+        position.setScale(dto.getSprite().getScale());
+        position.setRotation(dto.getSprite().getRotation());
+        position.setCode(dto.getId());
+        position.setName(dto.getName());
+        position.setDelFlag("0");
+        model.setPosition(position);
         return model;
     }
 }

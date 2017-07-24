@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class WishlistConverter extends BaseConverter<Wishlist, WishlistDto> {
     @Autowired
-    private CustomerConverter customerConverter;
+    private ShopConverter shopConverter;
     @Autowired
     private ProductConverter productConverter;
 
@@ -22,7 +22,7 @@ public class WishlistConverter extends BaseConverter<Wishlist, WishlistDto> {
     public WishlistDto convertModelToDto(Wishlist model) {
         WishlistDto dto = new WishlistDto();
         dto.setId(model.getId());
-        dto.setDesigner(customerConverter.convertModelToDto(model.getDesigner()));
+        dto.setShop(shopConverter.convertModelToDto(model.getDesigner()));
         dto.setGoods(productConverter.convertModelToDto(model.getProduct()));
         return dto;
 

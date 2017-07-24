@@ -56,7 +56,7 @@
 				<th>显示积分</th>
 				<th>显示价格</th>
 				<th>商品简介</th>
-				<th>搜索关键词</th>
+				<th>是否模型</th>
 
 
 				<%--<th>是否置顶 1=置顶/0=默认</th>--%>
@@ -105,7 +105,7 @@
 						${product.introduce}
 				</td>
 				<td>
-						${product.searchKey}
+						${fns:getDictLabel(product.modelFlag, 'yes_no', '否')}
 				</td>
 
 				<%--<td>--%>

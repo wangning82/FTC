@@ -24,6 +24,7 @@ public class ProductSpecDto extends BaseDto<ProductSpecDto>{
     }
 
 
+
     public void setCode(String code) {
         this.code = code;
     }

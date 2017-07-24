@@ -34,16 +34,22 @@
 		<form:hidden path="id"/>
 		<sys:message content="${message}"/>
 		<div class="control-group">
-			<label class="control-label">分类：</label>
+			<label class="control-label">商品：</label>
 			<div class="controls">
-				<sys:treeselect id="category" name="category.id" value="${position.category.id}" labelName="" labelValue="${position.category.name}"
-								title="分类" url="/ftc/product/category/treeData" extId="" cssClass="" allowClear="true"/>
+				<sys:treeselect id="product" name="product.id" value="${position.product.id}" labelName="" labelValue="${position.product.name}"
+								title="商品" url="/ftc/product/product/treeData" extId="" cssClass="" allowClear="true"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label class="control-label">名称：</label>
 			<div class="controls">
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">编号：</label>
+			<div class="controls">
+				<form:input path="code" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">

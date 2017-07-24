@@ -441,7 +441,19 @@ public class CustomerRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             Customer result = customerService.get(customerId);
+
+
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertModelToDto(result));
+        }
+    }
+    @ApiOperation(value = "获取客户信息", notes = "获取客户信息")
+    @RequestMapping(value = {"info"}, method = {RequestMethod.POST})
+    public RestResult info(@RequestParam("token") String token) {
+        Customer customer = findCustomerByToken(token);
+        if (customer == null) {
+            return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
+        } else {
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
         }
     }
 

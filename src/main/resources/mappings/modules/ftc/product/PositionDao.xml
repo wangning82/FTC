@@ -3,8 +3,8 @@
 <mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.PositionDao">
 
 	<sql id="positionColumns">
-		a.category_id AS "category.id",
-		b.name AS "category.name",
+		a.product_id AS "product.id",
+		b.name AS "product.name",
 		a.name AS "name",
 		a.sort AS "sort",
 		a.status AS "status",
@@ -26,7 +26,7 @@
 
 
 	<sql id="positionJoins">
-		left join os_category b on a.category_id=b.id
+		left join os_product b on a.product_id=b.id
 		left join sys_user c on a.create_by=c.id
 	</sql>
 
@@ -45,8 +45,8 @@
 		<include refid="positionJoins"/>
 		<where>
 
-			<if test="category != null and category != '' and category.id != null and category.id != ''">
-				AND a.category_id = #{category.id}
+			<if test="product != null and product.id != null and product.id != ''">
+				AND a.product_id = #{product.id}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE
@@ -72,7 +72,7 @@
 
 	<insert id="insert">
 		INSERT INTO os_position(
-		category_id,
+		product_id,
 		name,
 		sort,
 		status,
@@ -90,7 +90,7 @@
 		rotation,
 		code
 		) VALUES (
-		#{category.id},
+		#{product.id},
 		#{name},
 		#{sort},
 		#{status},
@@ -112,7 +112,7 @@
 
 	<update id="update">
 		UPDATE os_position SET
-		category_id = #{category.id},
+		product_id = #{product.id},
 		name = #{name},
 		sort = #{sort},
 		status = #{status},

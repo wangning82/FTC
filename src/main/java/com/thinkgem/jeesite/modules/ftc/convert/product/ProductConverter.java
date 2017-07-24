@@ -34,6 +34,11 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
         model.setName(dto.getName());
         model.setSpecs(productSpecConverter.convertListFromDtoToModel(dto.getOthersAttributeGroup()));
         model.setIntroduce(dto.getDesc());
+        model.setDelFlag("0");
+        model.setModelFlag("0");
+        model.setHotNum(0);
+        model.setDesignPrice(dto.getDesignPrice());
+        model.setShowInShelve(dto.isOpen()?"1":"0");
         return model;
     }
 
@@ -45,6 +50,7 @@ public class ProductConverter extends BaseConverter<Product, ProductDto> {
         dto.setName(model.getName());
         dto.setDesc(model.getIntroduce());
         dto.setOpen(false);
+
 
 
 //        dto.setShowPrice(model.getShowPrice());

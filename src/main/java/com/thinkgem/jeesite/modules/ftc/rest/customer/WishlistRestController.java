@@ -4,11 +4,13 @@ import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.constant.WishlistTypeEnum;
+import com.thinkgem.jeesite.modules.ftc.convert.customer.WishlistConverter;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.WishlistService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +36,12 @@ public class WishlistRestController extends BaseRestController {
     @Autowired
     private WishlistService wishlistService;
 
+    @Autowired
+    private ProductService productService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private WishlistConverter wishlistConverter;
     /**
      * 我的收藏
      *
@@ -51,8 +60,32 @@ public class WishlistRestController extends BaseRestController {
             Page<Wishlist> wishlistPage = wishlistService.findPage(
                     new Page<Wishlist>(request, response), wishlist
             );
+            if(wishlistPage.getCount()==0){
+                return new RestResult(CODE_SUCCESS, "没有收藏");
+            }
+            List<Wishlist> wishlists=new ArrayList<>();
+            if(type.equals("1")){
+                //商品
+                for(Wishlist wish:wishlistPage.getList()){
 
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, wishlistPage.getList());
+                    Product product=productService.getWithSpec(wish.getProduct().getId());
+                    wish.setProduct(product);
+                    wishlists.add(wish);
+                }
+
+
+            }else{
+                //店铺
+                for(Wishlist wish:wishlistPage.getList()){
+                    Customer result = customerService.get(wish.getCustomer());
+                    wish.setCustomer(result);
+                    wishlists.add(wish);
+                }
+
+            }
+
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, wishlistConverter.convertListFromModelToDto(wishlists));
         } else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");
         }

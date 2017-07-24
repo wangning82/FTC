@@ -9,6 +9,7 @@ import java.util.List;
 import com.thinkgem.jeesite.common.utils.IdGen;
 import com.thinkgem.jeesite.common.utils.ImageUtils;
 import com.thinkgem.jeesite.common.utils.ProductNoGenerator;
+import com.thinkgem.jeesite.common.utils.PropertiesLoader;
 import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.dao.product.*;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ModelDto;
@@ -63,9 +64,11 @@ public class DesignService extends CrudService<DesignDao, Design> {
 	@Transactional(readOnly = false)
 	public void saveForRest(Design design){
 		if(design.getPicImg()!=null&&design.getPicImg().length()>200){
-			design.setPicImg(ImageUtils.generateImg(design.getPicImg(),
+			PropertiesLoader loader=new PropertiesLoader("jeesite.properties");
+			String url=ImageUtils.generateImg(design.getPicImg(),
 					design.getCustomer().getId(),
-					ImgSourceEnum.IMG_SOURCE_SHEJI.getValue()));
+					ImgSourceEnum.IMG_SOURCE_SHEJI.getValue());
+			design.setPicImg(loader.getProperty("serverName")+"upload/"+url);
 		}
 		super.save(design);
 		List<DesignDetail> designDetails=design.getDetails();

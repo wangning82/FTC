@@ -92,14 +92,14 @@ public class PositionController extends BaseController {
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		Position position=new Position();
-		position.setCategory(new Category(extId));
+		position.setProduct(new Product(extId));
 		List<Position> list = positionService.findList(position);
 		for (int i=0; i<list.size(); i++){
 			Position e = list.get(i);
 			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) )){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());
-				map.put("pId", e.getCategory().getId());
+				map.put("pId", e.getProduct().getId());
 				map.put("name", e.getName());
 				mapList.add(map);
 			}

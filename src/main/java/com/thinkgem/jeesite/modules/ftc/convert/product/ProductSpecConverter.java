@@ -36,9 +36,11 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec, ProductSpec
             String[] attrArray = attribute.getName().split(",");
             List<SpecAttributeDto> attrs = new ArrayList<>();
             for (String a : attrArray) {
+                if(a==null||a.length()==0) continue;
+
                 SpecAttributeDto attr = new SpecAttributeDto();
                 String[] s = a.split(":");
-                attr.setId(s[0]);
+//                attr.setId(s[0]);
                 attr.setValue(s[1]);
                 attrs.add(attr);
             }
@@ -64,6 +66,7 @@ public class ProductSpecConverter extends BaseConverter<ProductSpec, ProductSpec
         List<ProductImage> images=productImageConverter.
                 convertListFromDtoToModel(dto.getTextures());
         model.setImages(images);
+        model.setDefaultStatus(dto.isDefaultFlag()?"1":"0");
         return model;
     }
 }

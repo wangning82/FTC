@@ -23,7 +23,7 @@
 	</ul>
 	<form:form id="searchForm" modelAttribute="position" action="${ctx}/ftc/product/position/" method="post" class="breadcrumb form-search">
 		<ul class="ul-form">
-			<li><label>类目：</label>
+			<li><label>商品：</label>
 			</li>
 			<li><label>名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-medium"/>
@@ -36,9 +36,9 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-
+				<th>商品</th>
 				<th>名称</th>
-				<th>分类</th>
+				<th>编号</th>
 				<th>排序</th>
 				<th>创建者</th>
 				<th>创建时间</th>
@@ -49,12 +49,17 @@
 		<tbody >
 		<c:forEach items="${page.list}" var="position">
 			<tr>
-				<td><a href="${ctx}/ftc/product/position/form?id=${position.id}">
+				<td>
+						${position.product.name}
+				</td>
+				<td>
+
+					<a href="${ctx}/ftc/product/position/form?id=${position.id}">
 
 						${position.name}
 				</a></td>
 				<td>
-						${position.category.name}
+						${position.code}
 				</td>
 				<td>
 						${position.sort}

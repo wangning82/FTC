@@ -147,7 +147,8 @@
 			design_by,
 			design_price,
 			praise_count,
-			favourite_count
+			favourite_count,
+			del_flag
 
 		) VALUES (
 			#{id},
@@ -179,7 +180,8 @@
 			#{designBy.id},
 			#{designPrice},
 			#{praiseCount},
-			#{favouriteCount}
+			#{favouriteCount},
+			#{delFlag}
 		)
 	</insert>
 	

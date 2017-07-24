@@ -17,7 +17,7 @@ import com.thinkgem.jeesite.common.persistence.DataEntity;
 public class Position extends DataEntity<Position> {
 	
 	private static final long serialVersionUID = 1L;
-	private Category category;		// 类目ID
+	private Product product;		// 类目ID
 	private String name;		// 名称
 	private String sort;		// 排序
 	private String status;		// 状态
@@ -94,15 +94,12 @@ public class Position extends DataEntity<Position> {
 		this.rotation = rotation;
 	}
 
-	public Position(Category category){
-		this.category=category;
-	}
-	public Category getCategory() {
-		return category;
+	public Product getProduct() {
+		return product;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	@Length(min=0, max=64, message="名称长度必须介于 0 和 64 之间")

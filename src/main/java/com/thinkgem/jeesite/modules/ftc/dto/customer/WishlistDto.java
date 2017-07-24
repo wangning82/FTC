@@ -11,7 +11,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
 
 public class WishlistDto extends BaseDto<WishlistDto>{
     private String id;
-    private CustomerDto designer;
+    private ShopDto shop;
     private ProductDto goods;
 
     public String getId() {
@@ -22,12 +22,12 @@ public class WishlistDto extends BaseDto<WishlistDto>{
         this.id = id;
     }
 
-    public CustomerDto getDesigner() {
-        return designer;
+    public ShopDto getShop() {
+        return shop;
     }
 
-    public void setDesigner(CustomerDto designer) {
-        this.designer = designer;
+    public void setShop(ShopDto shop) {
+        this.shop = shop;
     }
 
     public ProductDto getGoods() {

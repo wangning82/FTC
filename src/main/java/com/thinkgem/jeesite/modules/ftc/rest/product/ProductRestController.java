@@ -253,15 +253,17 @@ public class ProductRestController extends BaseRestController {
             ProductDto productDto= objectMapper.readValue(good, ProductDto.class);
             //将dto转成model
             Product product=productConvert.convertDtoToModel(productDto);
+            product.setDesignBy(customer);
+            product.setPraiseCount(0);
+            product.setFavouriteCount(0);
+            product.setRemarks("客户生成");
             productService.saveForRest(product);
-
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, product.getId());
         }catch (Exception e){
             e.printStackTrace();
             return new RestResult(CODE_ERROR, e.getMessage());
 
         }
-
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
     /**

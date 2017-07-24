@@ -8,11 +8,20 @@ import com.thinkgem.jeesite.common.rest.BaseDto;
 public class ProductImageDto extends BaseDto<ProductImageDto> {
 
 
-    private String id;
+    private String name;//位置名称
+    private String id;//位置编号
     private String imgUrl;//原图地址
     private String imgNailUrl;//小图地址
 
     private PositionDto sprite;//位置信息
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public PositionDto getSprite() {
         return sprite;
