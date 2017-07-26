@@ -338,12 +338,13 @@ public class DesignRestController extends BaseRestController {
             model.setDesignStatus("0");
             model.setCustomer(customer);
             designService.saveForRest(model);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, model.getId());
         }catch (Exception e){
-
+            e.printStackTrace();
         }
 
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
 
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
     }
 
     /**

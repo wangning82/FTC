@@ -80,8 +80,8 @@
 			<if test="searchKey != null and searchKey != ''">
 				AND a.search_key = #{searchKey}
 			</if>
-			<if test="modelFlag != null and searchKey != ''">
-				AND a.model_flag = #{modelFlag}
+			<if test="modelFlag != null and modelFlag != ''">
+				AND ifnull(a.model_flag,'0') = #{modelFlag}
 			</if>
 
 			<if test="category != null and category != '' and category.id != null and category.id != ''">

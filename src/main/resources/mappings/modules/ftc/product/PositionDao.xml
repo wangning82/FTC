@@ -21,7 +21,8 @@
 		a.from_y AS "fromY",
 		a.scale AS "scale",
 		a.rotation AS "rotation",
-		a.code As "code"
+		a.code As "code",
+		a.position_id AS　"position.id"
 	</sql>
 
 
@@ -88,7 +89,8 @@
 		from_y,
 		scale,
 		rotation,
-		code
+		code,
+		position_id
 		) VALUES (
 		#{product.id},
 		#{name},
@@ -106,7 +108,8 @@
 		#{fromY},
 		#{scale},
 		#{rotation},
-		#{code}
+		#{code},
+		#{position.id}
 		)
 	</insert>
 

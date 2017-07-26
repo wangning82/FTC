@@ -4,6 +4,7 @@ import com.thinkgem.jeesite.common.rest.BaseConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.product.DesignDetailDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.ProductImageDto;
 import com.thinkgem.jeesite.modules.ftc.entity.product.DesignDetail;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Position;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,11 +19,13 @@ public class DesignDetailConverter extends BaseConverter<DesignDetail,DesignDeta
         dto.setId(model.getId());
         dto.setRotation(model.getRotation());
         dto.setScale(model.getScale());
+        dto.setId(model.getPosition().getCode());
         ProductImageDto texture=new ProductImageDto();
         texture.setImgUrl(model.getPicImg());
         dto.setTexture(texture);
         dto.setX(model.getX());
         dto.setY(model.getY());
+        dto.setSpriteId(model.getPosition().getId());
         return dto;
     }
 
@@ -34,6 +37,7 @@ public class DesignDetailConverter extends BaseConverter<DesignDetail,DesignDeta
         model.setRotation(dto.getRotation());
         model.setX(dto.getX());
         model.setY(dto.getY());
+        model.setPosition(new Position(dto.getSpriteId()));
         return model;
     }
 }
