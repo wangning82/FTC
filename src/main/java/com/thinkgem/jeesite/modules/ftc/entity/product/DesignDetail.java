@@ -19,7 +19,7 @@ public class DesignDetail extends DataEntity<DesignDetail> {
 	private String picImg;		// 图片
 	private Integer sort;		// 排序
 	private String status;		// 状态
-	private Position position;		// 位置id
+	private String position;		// 位置id
 	private Design design;		// 设计id
 	private String info;		// 信息
 	private Double rotation;		// 旋转
@@ -96,11 +96,11 @@ public class DesignDetail extends DataEntity<DesignDetail> {
 		this.status = status;
 	}
 	
-	public Position getPosition() {
+	public String getPosition() {
 		return position;
 	}
 
-	public void setPosition(Position position) {
+	public void setPosition(String position) {
 		this.position = position;
 	}
 
