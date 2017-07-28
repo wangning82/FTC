@@ -154,18 +154,12 @@ public class ProductRestController extends BaseRestController {
         if(customer==null){
             return new RestResult(CODE_NULL, "没有找到用户信息");
         }
-        //热度加一
-        customer.setVisitNumber(customer.getVisitNumber()==null?0:customer.getVisitNumber()+1);
-        customerService.save(customer);
-
         Product product = new Product();
         product.setDesignBy(customer);
-        Page<Product> page=new Page<Product>(1,4);
-        page.setOrderBy("a.hot_num");
-        List<Product> productList=productService.findListWithSpec(page,product);
+        Page<Product> productList=productService.findListWithSpec(new Page<Product>(request,response),product);
 
 
-        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, productConvert.convertListFromModelToDto(productList));
+        return new RestResult(CODE_SUCCESS, MSG_SUCCESS, productConvert.convertListFromModelToDto(productList.getList()));
     }
 
 
@@ -196,6 +190,10 @@ public class ProductRestController extends BaseRestController {
             //获取店铺信息
             Customer designer = customerService.get(product.getDesignBy().getId());
             ShopDto shop = shopConverter.convertModelToDto(designer);
+            Product product1=new Product();
+            product1.setDesignBy(designer);
+            List<Product> productList=productService.findList(product);
+            shop.setTotal((long)productList.size());
 
             ProductDto good = productConvert.convertModelToDto(product);
             product.setDesignBy(designer);

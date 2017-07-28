@@ -14,5 +14,5 @@ import com.thinkgem.jeesite.modules.ftc.entity.comment.Comment;
  */
 @MyBatisDao
 public interface CommentDao extends CrudDao<Comment> {
-	
+	public void updateProductCommentCount(String id);
 }

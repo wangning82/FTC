@@ -74,6 +74,7 @@ public class WishlistRestController extends BaseRestController {
                 }
 
 
+
             }else{
                 //店铺
                 for(Wishlist wish:wishlistPage.getList()){
@@ -138,10 +139,21 @@ public class WishlistRestController extends BaseRestController {
      */
     @ApiOperation(value = "取消收藏", notes = "取消收藏")
     @RequestMapping(value = {"delete"}, method = {RequestMethod.POST})
-    public RestResult delete(@RequestParam("token") String token, @RequestParam("id") String id) {
+    public RestResult delete(@RequestParam("token") String token, @RequestParam("id") String id,@RequestParam("type") String type) {
         Customer customer = findCustomerByToken(token);
         if (customer != null) {
-            wishlistService.delete(new Wishlist(id));
+            Wishlist wishlist = new Wishlist();
+            if (WishlistTypeEnum.WISHLIST_PRODUCT.getValue().equals(type)) {
+                wishlist.setProduct(new Product(id));
+            } else {
+                wishlist.setDesigner(new Customer(id));
+            }
+            wishlist.setCustomer(customer);
+            List<Wishlist> result = wishlistService.findList(wishlist);
+            if(result!=null){
+                wishlistService.delete(wishlist);
+            }
+
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         } else {
             return new RestResult(CODE_ERROR, "没有找到用户信息");

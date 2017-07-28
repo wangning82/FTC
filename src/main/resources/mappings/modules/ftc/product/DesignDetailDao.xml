@@ -4,14 +4,13 @@
     
 	<sql id="imageColumns">
 		a.id AS "id",
-
 		a.pic_img AS "picImg",
 		a.sort AS "sort",
 		a.status AS "status",
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
 		a.position_id AS "position.id",
-		b.name AS "position.name",
+		a.position_name AS "position.name",
 		a.design_id AS "design.id",
 		a.info AS "info",
 		a.rotation AS "rotation",
@@ -21,7 +20,7 @@
 	</sql>
 	
 	<sql id="imageJoins">
-		left join os_position b on a.position_id=b.id
+
 	</sql>
     
 	<select id="get" resultType="DesignDetail">

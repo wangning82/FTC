@@ -16,16 +16,16 @@ public class DesignDetailConverter extends BaseConverter<DesignDetail,DesignDeta
     public DesignDetailDto convertModelToDto(DesignDetail model) {
         DesignDetailDto dto=new DesignDetailDto();
         if(model==null)return dto;
-        dto.setId(model.getId());
         dto.setRotation(model.getRotation());
         dto.setScale(model.getScale());
-        dto.setId(model.getPosition().getCode());
+        dto.setId(model.getInfo());
         ProductImageDto texture=new ProductImageDto();
         texture.setImgUrl(model.getPicImg());
+        texture.setImgNailUrl(model.getPicImg());
+        texture.setId(model.getInfo());
         dto.setTexture(texture);
         dto.setX(model.getX());
         dto.setY(model.getY());
-        dto.setSpriteId(model.getPosition().getId());
         return dto;
     }
 
@@ -37,7 +37,7 @@ public class DesignDetailConverter extends BaseConverter<DesignDetail,DesignDeta
         model.setRotation(dto.getRotation());
         model.setX(dto.getX());
         model.setY(dto.getY());
-        model.setPosition(new Position(dto.getSpriteId()));
+        model.setInfo(dto.getId());
         return model;
     }
 }
