@@ -15,15 +15,6 @@ public class ShopDto extends BaseDto<ShopDto> {
     private String backgroundUrl;
     private CustomerDto user;
     private List<ProductDto> goods;
-    private Long total;
-
-    public Long getTotal() {
-        return total;
-    }
-
-    public void setTotal(Long total) {
-        this.total = total;
-    }
 
     public String getId() {
         return id;

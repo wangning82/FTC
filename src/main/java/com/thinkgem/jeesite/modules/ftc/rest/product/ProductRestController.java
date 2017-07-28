@@ -193,7 +193,7 @@ public class ProductRestController extends BaseRestController {
             Product product1=new Product();
             product1.setDesignBy(designer);
             List<Product> productList=productService.findList(product);
-            shop.setTotal((long)productList.size());
+            shop.getUser().setDesignCount(productList.size());
 
             ProductDto good = productConvert.convertModelToDto(product);
             product.setDesignBy(designer);

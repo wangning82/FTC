@@ -459,7 +459,7 @@ public class CustomerRestController extends BaseRestController {
             page.setOrderBy("a.hot_num");
             Page<Product> productPage=productService.findListWithSpec(page,product);
             ShopDto shop=shopConverter.convertModelToDto(result,productPage.getList());
-            shop.setTotal(productPage.getCount());
+            shop.getUser().setDesignCount((int)productPage.getCount());
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS,shop );
         }
     }
