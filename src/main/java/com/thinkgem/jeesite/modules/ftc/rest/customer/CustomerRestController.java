@@ -15,12 +15,17 @@ import com.thinkgem.jeesite.modules.ftc.convert.customer.ShopConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.customer.UserInfoConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.AddressDto;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
+import com.thinkgem.jeesite.modules.ftc.dto.customer.UserInfoDto;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Wishlist;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Design;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.ShortMessageService;
+import com.thinkgem.jeesite.modules.ftc.service.customer.WishlistService;
+import com.thinkgem.jeesite.modules.ftc.service.product.DesignService;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
 import com.thinkgem.jeesite.modules.sys.service.AreaService;
@@ -425,8 +430,8 @@ public class CustomerRestController extends BaseRestController {
                     product.setDesignBy(customer1);
                     Page<Product> page = new Page<Product>(1, 4);
                     page.setOrderBy("a.hot_num");
-                    List<Product> productList = productService.findListWithSpec(page, product);
-                    ShopDto dto = shopConverter.convertModelToDto(customer1, productList);
+                    Page<Product> productList = productService.findListWithSpec(page, product);
+                    ShopDto dto = shopConverter.convertModelToDto(customer1, productList.getList());
                     shopDtoList.add(dto);
                 }
             }
@@ -444,11 +449,24 @@ public class CustomerRestController extends BaseRestController {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
             Customer result = customerService.get(customerId);
-
-
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, shopConverter.convertModelToDto(result));
+            //热度加一
+            customer.setVisitNumber(customer.getVisitNumber()==null?0:customer.getVisitNumber()+1);
+            customerService.save(customer);
+            //获取潮店商品
+            Product product = new Product();
+            product.setDesignBy(customer);
+            Page<Product> page=new Page<Product>(1,4);
+            page.setOrderBy("a.hot_num");
+            Page<Product> productPage=productService.findListWithSpec(page,product);
+            ShopDto shop=shopConverter.convertModelToDto(result,productPage.getList());
+            shop.getUser().setDesignCount((int)productPage.getCount());
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS,shop );
         }
     }
+    @Autowired
+    private DesignService designService;
+    @Autowired
+    private WishlistService wishlistService;
     @ApiOperation(value = "获取客户信息", notes = "获取客户信息")
     @RequestMapping(value = {"info"}, method = {RequestMethod.POST})
     public RestResult info(@RequestParam("token") String token) {
@@ -456,7 +474,18 @@ public class CustomerRestController extends BaseRestController {
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, userInfoConverter.convertModelToDto(customer));
+            //查询设计数量和收藏数量
+            Design design=new Design();
+            design.setCustomer(customer);
+            Page<Design> designPage=designService.findPage(new Page<Design>(1,1),design);
+            UserInfoDto user=userInfoConverter.convertModelToDto(customer);
+            user.setDesignCount(designPage.getCount());
+            Wishlist wishlist=new Wishlist();
+            wishlist.setCustomer(customer);
+            Page<Wishlist> wishlistPage=wishlistService.findPage(new Page<Wishlist>(1,1),wishlist);
+            user.setWishCount(wishlistPage.getCount());
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, user);
         }
     }
 

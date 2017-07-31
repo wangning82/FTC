@@ -64,7 +64,7 @@ public class WishlistService extends CrudService<WishlistDao, Wishlist> {
 			customer.preUpdate();
 			customerDao.update(customer);
 		}else{
-			// 统计店铺收藏数量
+			// 统计商品收藏数量
 			Product product = productDao.get(wishlist.getProduct().getId());
 			product.setFavouriteCount(dao.getProductWishlistNumber(wishlist.getProduct().getId()));
 			product.preUpdate();

@@ -14,8 +14,10 @@ import com.thinkgem.jeesite.modules.ftc.entity.comment.Comment;
 import com.thinkgem.jeesite.modules.ftc.entity.comment.Reply;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.service.comment.CommentService;
 import com.thinkgem.jeesite.modules.ftc.service.comment.ReplyService;
+import com.thinkgem.jeesite.modules.ftc.service.product.ProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.sf.ehcache.util.ProductInfo;
@@ -44,6 +46,8 @@ public class CommentRestController extends BaseRestController {
     private ReplyService replyService;
     @Autowired
     private ReplyConverter replyConverter;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 商品评价
@@ -100,7 +104,11 @@ public class CommentRestController extends BaseRestController {
                 return new RestResult(CODE_ERROR,"类型不能为空",null);
             }
             commentService.save(comment);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+            Comment comment1=new Comment();
+            comment1.setProduct(comment.getProduct());
+            Page<Comment> commentPage=commentService.findPage(new Page<Comment>(1,1),comment1);
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, commentPage.getCount());
         }
 
     }
@@ -150,8 +158,8 @@ public class CommentRestController extends BaseRestController {
             if(comments==null||comments.size()==0){
                 return new RestResult(CODE_SUCCESS, "没有点赞");
             }
-            commentService.delete(comments.get(0));
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+            Product product=productService.get(id);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, product.getPraiseCount());
         }
 
     }
@@ -180,7 +188,9 @@ public class CommentRestController extends BaseRestController {
                 return new RestResult(CODE_ERROR, "你已经点过赞了");
             }
             commentService.save(comment);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, null);
+
+            Product product=productService.get(id);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, product.getPraiseCount());
         }
 
     }

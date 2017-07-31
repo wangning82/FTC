@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.DesignSeedDao">
+
+    <sql id="imageColumns">
+		a.id AS "id",
+		a.design_id AS "design.id",
+		a.img_url AS "imgUrl",
+		a.img_nail_url AS "imgNailUrl",
+		a.create_date AS "createDate",
+		a.create_by AS "createBy.id"
+
+	</sql>
+
+    <sql id="imageJoins">
+
+
+    </sql>
+
+    <select id="get" resultType="DesignSeed">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM os_design_seed a
+        <include refid="imageJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="DesignSeed">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM os_design_seed a
+        <include refid="imageJoins"/>
+        <where>
+
+            <if test="design != null  and design.id != null and design.id != ''">
+                AND a.design_id = #{design.id}
+            </if>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="DesignSeed">
+        SELECT
+        <include refid="imageColumns"/>
+        FROM os_design_seed a
+        <include refid="imageJoins"/>
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
+		INSERT INTO os_design_seed(
+		id ,
+		design_id ,
+		img_url ,
+		img_nail_url ,
+		create_date,
+		create_by
+		) VALUES (
+		#{id},
+		#{design.id},
+		#{imgUrl},
+		#{imgNailUrl},
+		#{createDate},
+		#{createBy.id}
+		)
+	</insert>
+
+    <update id="update">
+		UPDATE os_design_seed SET
+img_url = #{imgUrl},
+		img_nail_url= #{imgNailUrl}
+		WHERE id = #{id}
+	</update>
+
+    <update id="delete">
+		DELETE FROM os_design_seed
+		WHERE id = #{id}
+	</update>
+
+</mapper>

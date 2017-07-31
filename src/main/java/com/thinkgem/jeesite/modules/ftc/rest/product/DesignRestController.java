@@ -8,10 +8,7 @@ import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.common.utils.ImageUtils;
 import com.thinkgem.jeesite.common.utils.PropertiesLoader;
 import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
-import com.thinkgem.jeesite.modules.ftc.convert.product.DesignConverter;
-import com.thinkgem.jeesite.modules.ftc.convert.product.ModelConverter;
-import com.thinkgem.jeesite.modules.ftc.convert.product.PositionConverter;
-import com.thinkgem.jeesite.modules.ftc.convert.product.ProductConverter;
+import com.thinkgem.jeesite.modules.ftc.convert.product.*;
 import com.thinkgem.jeesite.modules.ftc.dto.customer.ShopDto;
 import com.thinkgem.jeesite.modules.ftc.dto.product.*;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
@@ -56,6 +53,8 @@ public class DesignRestController extends BaseRestController {
     private ProductImageService productImageService;
     @Autowired
     private ProductConverter productConverter;
+    @Autowired
+    private DesignSeedConverter designSeedConverter;
     @Autowired
     private DesignDetailService designDetailService;
     PropertiesLoader loader=new PropertiesLoader("jeesite.properties");
@@ -267,6 +266,9 @@ public class DesignRestController extends BaseRestController {
         designDetail.setDesign(design);
         List<DesignDetail> designDetails=designDetailService.findList(designDetail);
         design.setDetails(designDetails);
+
+        List<DesignSeed> seeds=designService.findSeeds(design);
+        design.setSeeds(seeds);
         DesignDto dto=designConverter.convertModelToDto(design);
         //获取模型信息
         Product product = productService.get(design.getModel().getId());
@@ -275,14 +277,19 @@ public class DesignRestController extends BaseRestController {
         List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
         //获取规格图片信息
         for (int i = 0; i < specs.size(); i++) {
-            ProductImage image = new ProductImage();
-            image.setProductSpec(specs.get(i));
-            List<ProductImage> images = productImageService.findList(image);
-            specs.get(i).setImages(images);
+            ProductSpec spec=specs.get(i);
+            if("1".equals(spec.getDefaultStatus())){
+                ProductImage image = new ProductImage();
+                image.setProductSpec(spec);
+                List<ProductImage> images = productImageService.findList(image);
+                spec.setImages(images);
+            }
+
         }
         product.setSpecs(specs);
         ModelDto good = modelConverter.convertModelToDto(product);
         dto.setModel(good);
+
 
 
 
@@ -382,6 +389,9 @@ public class DesignRestController extends BaseRestController {
 
         DesignDto dto=new DesignDto();
         product = productService.get(product.getId());
+        ProductSpec spec=new ProductSpec();
+        spec.setDefaultStatus("1");
+        spec.setProduct(product);
         //获取规格信息
         List<ProductSpec> specs = productSpecService.findList(new ProductSpec(product));
         //获取规格图片信息
@@ -400,13 +410,13 @@ public class DesignRestController extends BaseRestController {
 
             List<String> images=getImageList( getServletContext().getRealPath("/upload"));
 
-            List<ProductImageDto> seeds=new ArrayList<>();
+            List<DesignSeedDto> seeds=new ArrayList<>();
             int size=4;
             if(images.size()<4){
                 size=images.size();
             }
             for(int i=0;i<size;i++){
-                ProductImageDto seed=new ProductImageDto();
+                DesignSeedDto seed=new DesignSeedDto();
                 seed.setImgUrl(images.get(i));
                 seed.setImgNailUrl(images.get(i));
                 seeds.add(seed);

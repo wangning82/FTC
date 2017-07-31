@@ -31,6 +31,7 @@ import java.util.Map;
 @Service
 @Transactional(readOnly = true)
 public class ProductService extends CrudService<ProductDao, Product> {
+    public static PropertiesLoader loader=new PropertiesLoader("jeesite.properties");
 
     @Autowired
     private ProductSpecDao productSpecDao;
@@ -77,7 +78,7 @@ public class ProductService extends CrudService<ProductDao, Product> {
         return super.findPage(page, product);
     }
 
-    public List<Product> findListWithSpec(Page<Product> page, Product product) {
+    public Page<Product> findListWithSpec(Page<Product> page, Product product) {
         page = this.findPage(page, product);
         List<Product> productList = page.getList();
         List<ProductDto> goodList = new ArrayList<>();
@@ -96,14 +97,14 @@ public class ProductService extends CrudService<ProductDao, Product> {
             product.setSpecs(specs);
 
         }
-        return productList;
+        page.setList(productList);
+        return page;
     }
 
     @Transactional(readOnly = false)
     public void saveForRest(Product product) {
 
-        PropertiesLoader loader=new PropertiesLoader("jeesite.properties");
-        String serverName=loader.getProperty("serverName");
+         String serverName=loader.getProperty("serverName");
         //保存商品时
 
         product.preInsert();
@@ -143,11 +144,12 @@ public class ProductService extends CrudService<ProductDao, Product> {
                 if (productImages != null && productImages.size() > 0) {
                     for (ProductImage image : productImages) {
 
+                        //如果imgnailurl不为空，则是合成图
                         if (image.getImgNailUrl() != null) {
-                            String url=ImageUtils.generateImg(image.getImgNailUrl(), product.getId(), ImgSourceEnum.IMG_SOURCE_GUIGE.getValue());
+                            String url=ImageUtils.generateImg(image.getImgNailUrl(), product.getDesignBy().getId(), ImgSourceEnum.IMG_SOURCE_GUIGE.getValue());
 
                             image.setImgNailUrl(serverName+"/upload"+url);
-                            url=ImageUtils.generateImg(image.getImgNailUrl(), product.getId(), ImgSourceEnum.IMG_SOURCE_CHANPIN.getValue());
+                            url=ImageUtils.generateImg(image.getImgNailUrl(), product.getDesignBy().getId(), ImgSourceEnum.IMG_SOURCE_CHANPIN.getValue());
                             image.setImgUrl(serverName+"/upload"+url);
                         }else{
                             image.setImgNailUrl("");

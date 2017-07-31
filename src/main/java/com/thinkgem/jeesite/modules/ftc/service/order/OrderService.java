@@ -183,7 +183,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
         order.setBuyNumber(buyNumber);
         if(user != null){
-            order.setOrderAmount(orderAmount.add(user.getFreight())); // 订单金额 = 商品总价 + 物流费
+            order.setOrderAmount(orderAmount.add(user.getFreight()==null?new BigDecimal("0"):user.getFreight())); // 订单金额 = 商品总价 + 物流费
         }else {
             order.setOrderAmount(orderAmount);
         }
@@ -204,17 +204,18 @@ public class OrderService extends CrudService<OrderDao, Order> {
     public OrderProduct cart2OrderProduct(Order order, ShoppingCart shoppingCart){
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setOrder(order);
-        orderProduct.setProductNumber(shoppingCart.getProduct().getNumber());
-        orderProduct.setName(shoppingCart.getProduct().getName());
-        orderProduct.setPicImg(shoppingCart.getProduct().getPicImg());
+        Product product=productService.get(shoppingCart.getProduct());
+        orderProduct.setProductNumber(product.getNumber());
+        orderProduct.setName(product.getName());
+        orderProduct.setPicImg(product.getPicImg());
         orderProduct.setProductSpecNumber(shoppingCart.getProductSpec().getProductSpecNumber());
         orderProduct.setProductSpecName(shoppingCart.getProductSpec().getSpec().getName());
         orderProduct.setProductPrice(new BigDecimal(shoppingCart.getProductSpec().getPrice()));
         orderProduct.setBuyNumber(shoppingCart.getBuyNumber());
         orderProduct.setProductAmount(new BigDecimal(shoppingCart.getProductSpec().getPrice()).multiply(shoppingCart.getBuyNumber()));
-        orderProduct.setDesignBy(shoppingCart.getProduct().getDesignBy());
-        orderProduct.setDesignPrice(shoppingCart.getProduct().getDesignPrice());
-        orderProduct.setDesignAmount(shoppingCart.getProduct().getDesignPrice().multiply(shoppingCart.getBuyNumber()));
+        orderProduct.setDesignBy(product.getDesignBy());
+        orderProduct.setDesignPrice(product.getDesignPrice());
+        orderProduct.setDesignAmount(product.getDesignPrice().multiply(shoppingCart.getBuyNumber()));
         orderProduct.setPrice(orderProduct.getProductAmount().add(orderProduct.getDesignAmount()));
         orderProduct.setCommentStatus(FlagEnum.Flag_NO.getValue());
         return orderProduct;

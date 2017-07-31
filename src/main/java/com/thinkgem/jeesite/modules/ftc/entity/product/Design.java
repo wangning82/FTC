@@ -26,6 +26,15 @@ public class Design extends DataEntity<Design> {
 	private List<DesignDetail> details;//设计明细
 	private Customer customer;
 	private String picImg;//展示图片
+	private List<DesignSeed> seeds;
+
+	public List<DesignSeed> getSeeds() {
+		return seeds;
+	}
+
+	public void setSeeds(List<DesignSeed> seeds) {
+		this.seeds = seeds;
+	}
 
 	public String getPicImg() {
 		return picImg;

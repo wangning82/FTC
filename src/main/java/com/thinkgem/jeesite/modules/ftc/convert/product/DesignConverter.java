@@ -21,6 +21,8 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
     @Autowired
     private DesignDetailConverter designDetailConverter;
     @Autowired
+    private DesignSeedConverter designSeedConverter;
+    @Autowired
     private ModelConverter modelConverter;
     @Override
     public Design convertDtoToModel(DesignDto dto) {
@@ -31,6 +33,7 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
         model.setDetails(details);
         model.setPicImg(dto.getImgUrl());
         model.setModel(new Product(dto.getModel().getId()));
+        model.setSeeds(designSeedConverter.convertListFromDtoToModel(dto.getSeeds()));
         return model;
     }
 
@@ -43,6 +46,7 @@ public class DesignConverter extends BaseConverter<Design,DesignDto> {
 //        dto.setName(model.getName());
         dto.setMeshes(designDetailConverter.convertListFromModelToDto(model.getDetails()));
         dto.setModel(modelConverter.convertModelToDto(model.getModel()));
+        dto.setSeeds(designSeedConverter.convertListFromModelToDto(model.getSeeds()));
         return dto;
     }
 }

@@ -4,14 +4,13 @@
     
 	<sql id="imageColumns">
 		a.id AS "id",
-
 		a.pic_img AS "picImg",
 		a.sort AS "sort",
 		a.status AS "status",
 		a.create_date AS "createDate",
 		a.create_by AS "createBy.id",
-		a.position_name AS "position",
-
+		a.position_id AS "position.id",
+		a.position_name AS "position.name",
 		a.design_id AS "design.id",
 		a.info AS "info",
 		a.rotation AS "rotation",
@@ -21,6 +20,7 @@
 	</sql>
 	
 	<sql id="imageJoins">
+
 	</sql>
     
 	<select id="get" resultType="DesignDetail">
@@ -78,7 +78,7 @@
 			status,
 			create_date,
 			create_by,
-
+			position_id,
 			position_name,
 			design_id,
 			info,
@@ -95,7 +95,7 @@
 			#{status},
 			#{createDate},
 			#{createBy.id},
-
+			#{position.id},
 			#{position.name},
 			#{design.id},
 			#{info},
@@ -113,8 +113,8 @@
 			pic_img = #{picImg},
 			sort = #{sort},
 			status = #{status},
-
-			position_name = #{position},
+			position_id = #{position.id},
+			position_name = #{position.name},
 			design_id = #{design.id},
 			info = #{info},
 			rotation = #{rotation},

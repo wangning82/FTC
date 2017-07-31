@@ -5,23 +5,12 @@ import com.thinkgem.jeesite.common.rest.BaseDto;
 /**
  * Created by bingbing on 2017/6/16.
  */
-public class ProductImageDto extends BaseDto<ProductImageDto> {
+public class DesignSeedDto extends BaseDto<DesignSeedDto> {
 
 
     private String id;//位置编号
     private String imgUrl;//原图地址
     private String imgNailUrl;//小图地址
-
-    private PositionDto sprite;//位置信息
-
-
-    public PositionDto getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(PositionDto sprite) {
-        this.sprite = sprite;
-    }
 
     public String getId() {
         return id;

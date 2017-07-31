@@ -125,6 +125,7 @@ public class UserController extends BaseController {
 			}
 		}
 		user.setRoleList(roleList);
+
 		// 保存用户信息
 		systemService.saveUser(user);
 		// 清除当前用户缓存

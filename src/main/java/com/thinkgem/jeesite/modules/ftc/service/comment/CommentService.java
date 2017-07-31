@@ -47,6 +47,7 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	@Transactional(readOnly = false)
 	public void save(Comment comment) {
 		super.save(comment);
+		updateProductCommentCount(comment);
 		for (Reply reply : comment.getReplyList()){
 			if (reply.getId() == null){
 				continue;
@@ -68,8 +69,15 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	
 	@Transactional(readOnly = false)
 	public void delete(Comment comment) {
+		//先更新商品的评价或点赞数量
+		if(comment.getProduct()==null){
+			comment=get(comment.getId());
+		}
+		updateProductCommentCount(comment);
 		super.delete(comment);
+
 		replyDao.delete(new Reply(comment));
+
 	}
 
 	/**
@@ -83,9 +91,8 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	 * 更新商品的评价数量
 	 * @param comment
      */
-	private void updateProductCommentCount(Comment comment){
-		Product product=new Product();
-//		product.setPriaseCount();
+	public void updateProductCommentCount(Comment comment){
+		dao.updateProductCommentCount(comment.getProduct().getId());
 	}
 	
 }

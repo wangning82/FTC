@@ -18,7 +18,7 @@ public class ProductImageConverter extends BaseConverter<ProductImage,ProductIma
         ProductImageDto dto=new ProductImageDto();
         dto.setId(model.getPosition().getCode());
         PositionDto sprite=new PositionDto();
-        sprite.setId(model.getPosition().getId());
+//        sprite.setId(model.getPosition().getId());
         sprite.setX(model.getPosition().getFromX());
         sprite.setW(model.getPosition().getWidth());
         sprite.setH(model.getPosition().getHeight());
@@ -43,7 +43,6 @@ public class ProductImageConverter extends BaseConverter<ProductImage,ProductIma
         position.setScale(dto.getSprite().getScale());
         position.setRotation(dto.getSprite().getRotation());
         position.setCode(dto.getId());
-        position.setName(dto.getName());
         position.setDelFlag("0");
         model.setPosition(position);
         return model;

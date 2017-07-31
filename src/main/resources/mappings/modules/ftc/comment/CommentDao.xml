@@ -144,5 +144,8 @@
 		DELETE FROM os_comment
 		WHERE id = #{id}
 	</update>
-	
+	<update id="updateProductCommentCount">
+		update os_product set praise_count=praise_count+1
+		where id=#{id}
+	</update>
 </mapper>

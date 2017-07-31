@@ -16,7 +16,7 @@ public class DesignDto extends BaseDto<DesignDto>{
     private ModelDto model;
     private List<DesignDetailDto> meshes;
     private String name;
-    private List<ProductImageDto> seeds;
+    private List<DesignSeedDto> seeds;
     private String imgUrl;
 
 
@@ -39,11 +39,11 @@ public class DesignDto extends BaseDto<DesignDto>{
         return imgUrl;
     }
 
-    public void setSeeds(List<ProductImageDto> seeds) {
+    public void setSeeds(List<DesignSeedDto> seeds) {
         this.seeds = seeds;
     }
 
-    public List<ProductImageDto> getSeeds() {
+    public List<DesignSeedDto> getSeeds() {
         return seeds;
     }
 
