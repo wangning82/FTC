@@ -19,7 +19,7 @@ public class AddressConverter extends BaseConverter<Address, AddressDto> {
         address.setUserName(dto.getName());
         address.setUserPhone(dto.getPhone());
         address.setUserAdress(dto.getDetail());
-        address.setDistrict(new Area(dto.getDistrict()));
+        address.setDistrict(new Area(null,dto.getDistrict()));
         if(dto.isDefault()){
             address.setIsDefault(FlagEnum.Flag_YES.getValue());
         }else {
@@ -32,7 +32,7 @@ public class AddressConverter extends BaseConverter<Address, AddressDto> {
     public AddressDto convertModelToDto(Address model) {
         AddressDto addressDto = new AddressDto();
         addressDto.setId(model.getId());
-        addressDto.setDistrict(model.getDistrict().getId());
+        addressDto.setDistrict(model.getDistrict().getName());
         addressDto.setName(model.getUserName());
         addressDto.setPhone(model.getUserPhone());
         addressDto.setDetail(model.getUserAdress());

@@ -204,7 +204,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
     public OrderProduct cart2OrderProduct(Order order, ShoppingCart shoppingCart){
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setOrder(order);
-        Product product=productService.get(shoppingCart.getProduct());
+        Product product=productService.get(shoppingCart.getProduct().getId());
         orderProduct.setProductNumber(product.getNumber());
         orderProduct.setName(product.getName());
         orderProduct.setPicImg(product.getPicImg());

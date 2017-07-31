@@ -81,7 +81,7 @@
 				AND a.search_key = #{searchKey}
 			</if>
 			<if test="modelFlag != null and modelFlag != ''">
-				AND ifnull(a.model_flag,'0') = #{modelFlag}
+				AND a.model_flag = #{modelFlag}
 			</if>
 
 			<if test="category != null and category != '' and category.id != null and category.id != ''">
@@ -209,7 +209,8 @@
 			page_keyword = #{pageKeyword},
 			remarks = #{remarks},
 			category_id=#{category.id},
-			model_flag=#{modelFlag}
+			model_flag=#{modelFlag},
+			praise_count=#{praiseCount}
 		WHERE id = #{id}
 	</update>
 	

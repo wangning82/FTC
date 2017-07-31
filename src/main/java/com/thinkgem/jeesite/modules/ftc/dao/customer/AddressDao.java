@@ -14,5 +14,5 @@ import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
  */
 @MyBatisDao
 public interface AddressDao extends CrudDao<Address> {
-	
+	public void clearDefault(String customerId);
 }

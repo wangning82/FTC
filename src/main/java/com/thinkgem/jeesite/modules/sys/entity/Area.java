@@ -30,6 +30,10 @@ public class Area extends TreeEntity<Area> {
 	public Area(String id){
 		super(id);
 	}
+	public Area(String id,String name){
+		super(id);
+		this.name=name;
+	}
 	
 //	@JsonBackReference
 //	@NotNull

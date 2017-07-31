@@ -29,16 +29,16 @@ public class ShortMessageService {
      */
     public String sendMessage(String mobile) {
         HashMap<String, Object> result = null;
-        CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
-        restAPI.init(shortMessageConfig.getServerUrl(), shortMessageConfig.getServerPort());
-        restAPI.setAccount(shortMessageConfig.getSid(), shortMessageConfig.getToken());
-        restAPI.setAppId(shortMessageConfig.getAppId());
+//        CCPRestSmsSDK restAPI = new CCPRestSmsSDK();
+//        restAPI.init(shortMessageConfig.getServerUrl(), shortMessageConfig.getServerPort());
+//        restAPI.setAccount(shortMessageConfig.getSid(), shortMessageConfig.getToken());
+//        restAPI.setAppId(shortMessageConfig.getAppId());
         String captcha = getShortMessageNumber();
         logger.debug("短信验证码：" + captcha);
-        result = restAPI.sendTemplateSMS(mobile, shortMessageConfig.getTempleteId(), new String[]{captcha, "5"});
-        if (!SUCCESS_CODE.equals(result.get("statusCode"))) {
-            logger.error("发送短信失败，错误码=" + result.get("statusCode") + ";错误信息=" + result.get("statusMsg"));
-        }
+//        result = restAPI.sendTemplateSMS(mobile, shortMessageConfig.getTempleteId(), new String[]{captcha, "5"});
+//        if (!SUCCESS_CODE.equals(result.get("statusCode"))) {
+//            logger.error("发送短信失败，错误码=" + result.get("statusCode") + ";错误信息=" + result.get("statusMsg"));
+//        }
         return captcha;
     }
 

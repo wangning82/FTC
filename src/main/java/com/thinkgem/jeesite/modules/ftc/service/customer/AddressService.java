@@ -43,5 +43,8 @@ public class AddressService extends CrudService<AddressDao, Address> {
 	public void delete(Address address) {
 		super.delete(address);
 	}
-	
+	@Transactional(readOnly = false)
+	public void clearDefault(String  customerId) {
+		dao.clearDefault(customerId);
+	}
 }

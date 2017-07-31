@@ -158,8 +158,9 @@ public class CommentRestController extends BaseRestController {
             if(comments==null||comments.size()==0){
                 return new RestResult(CODE_SUCCESS, "没有点赞");
             }
-            Product product=productService.get(id);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, product.getPraiseCount());
+            int count=commentService.cancelZan(comments.get(0));
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS,count);
         }
 
     }
@@ -185,12 +186,11 @@ public class CommentRestController extends BaseRestController {
             }
             List<Comment> comments=commentService.findList(comment);
             if(comments !=null&&comments.size()>0){
-                return new RestResult(CODE_ERROR, "你已经点过赞了");
+                return new RestResult(CODE_SUCCESS, "你已经点过赞了");
             }
-            commentService.save(comment);
 
-            Product product=productService.get(id);
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, product.getPraiseCount());
+            int count=commentService.zan(comment);
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS, count);
         }
 
     }

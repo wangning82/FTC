@@ -22,10 +22,7 @@
 	</sql>
 	
 	<sql id="addressJoins">
-		LEFT JOIN os_customer u2 ON u2.id = a.user_id
-		LEFT JOIN sys_area a6 ON a6.id = a.province_id
-		LEFT JOIN sys_area a8 ON a8.id = a.city_id
-		LEFT JOIN sys_area a10 ON a10.id = a.district_id
+
 	</sql>
     
 	<select id="get" resultType="Address">
@@ -139,6 +136,11 @@
 	<update id="delete">
 		DELETE FROM os_address
 		WHERE id = #{id}
+	</update>
+	<update id="clearDefault">
+		update os_address
+		set is_default='0'
+		WHERE user_id = #{customerId}
 	</update>
 	
 </mapper>

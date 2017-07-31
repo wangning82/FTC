@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.ftc.service.comment;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ import com.thinkgem.jeesite.modules.ftc.dao.comment.ReplyDao;
 public class CommentService extends CrudService<CommentDao, Comment> {
 
 	@Autowired
+	private ProductDao productDao;
+	@Autowired
 	private ReplyDao replyDao;
 	
 	public Comment get(String id) {
@@ -47,7 +50,6 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	@Transactional(readOnly = false)
 	public void save(Comment comment) {
 		super.save(comment);
-		updateProductCommentCount(comment);
 		for (Reply reply : comment.getReplyList()){
 			if (reply.getId() == null){
 				continue;
@@ -69,11 +71,7 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	
 	@Transactional(readOnly = false)
 	public void delete(Comment comment) {
-		//先更新商品的评价或点赞数量
-		if(comment.getProduct()==null){
-			comment=get(comment.getId());
-		}
-		updateProductCommentCount(comment);
+
 		super.delete(comment);
 
 		replyDao.delete(new Reply(comment));
@@ -94,5 +92,20 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	public void updateProductCommentCount(Comment comment){
 		dao.updateProductCommentCount(comment.getProduct().getId());
 	}
-	
+	@Transactional(readOnly = false)
+	public int zan(Comment comment){
+		this.save(comment);
+		Product product=productDao.get(comment.getProduct().getId());
+		product.setPraiseCount(product.getPraiseCount()+1);
+		productDao.update(product);
+		return product.getPraiseCount();
+	}
+	@Transactional(readOnly = false)
+	public int cancelZan(Comment comment){
+		Product product=productDao.get(comment.getProduct().getId());
+		product.setPraiseCount(product.getPraiseCount()-1);
+		productDao.update(product);
+		this.delete(comment);
+		return product.getPraiseCount();
+	}
 }

@@ -6,6 +6,7 @@ import com.thinkgem.jeesite.common.rest.BaseRestController;
 import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.common.utils.EhCacheUtils;
 import com.thinkgem.jeesite.common.utils.ImageUtils;
+import com.thinkgem.jeesite.common.utils.PropertiesLoader;
 import com.thinkgem.jeesite.modules.ftc.constant.FlagEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.ImgSourceEnum;
 import com.thinkgem.jeesite.modules.ftc.constant.PlatformTypeEnum;
@@ -54,6 +55,7 @@ import java.util.UUID;
 @RequestMapping(value = "/rest/ftc/customer/")
 @Api(value = "用户登录", description = "用户登录")
 public class CustomerRestController extends BaseRestController {
+    PropertiesLoader loader=new PropertiesLoader("jeesite.properties");
 
     @Autowired
     private CustomerService customerService;
@@ -118,6 +120,7 @@ public class CustomerRestController extends BaseRestController {
                 Customer customer = new Customer();
                 customer.setTelephone(mobile);
                 customer.setLoginPassword(password);
+                customer.setPicImg(loader.getProperty("defaultPhoto"));
                 customerService.save(customer);
                 return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
             } else {
@@ -207,6 +210,7 @@ public class CustomerRestController extends BaseRestController {
         } else {
             Customer customer = new Customer();
             customer.setTelephone(mobile);
+            customer.setPicImg(loader.getProperty("defaultPhoto"));
             customerService.save(customer);
             String token = UUID.randomUUID().toString();
             customer.setAccessToken(token);
@@ -373,7 +377,7 @@ public class CustomerRestController extends BaseRestController {
     }
 
     @ApiOperation(value = "保存收货地址", notes = "用户新建或修改收货地址时使用，修改时需要地址标识。")
-    @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST}, produces = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @RequestMapping(value = {"saveAddress"}, method = {RequestMethod.POST})
     public RestResult saveAddress(@RequestParam("token") String token, @RequestParam("address") String address) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
@@ -382,7 +386,13 @@ public class CustomerRestController extends BaseRestController {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 AddressDto address1 = objectMapper.readValue(address, AddressDto.class);
-                addressService.save(addressConverter.convertDtoToModel(address1));
+                Address address2=addressConverter.convertDtoToModel(address1);
+                if("1".equals(address2.getIsDefault())&&address2.getIsNewRecord()){
+                    //清除默认
+                    addressService.clearDefault(customer.getId());
+                }
+                address2.setCustomer(customer);
+                addressService.save(address2);
             } catch (Exception e) {
                 e.printStackTrace();
                 return new RestResult(CODE_ERROR, e.getMessage());
@@ -394,12 +404,12 @@ public class CustomerRestController extends BaseRestController {
 
     @ApiOperation(value = "删除收货地址", notes = "删除收货地址")
     @RequestMapping(value = {"delAddress"}, method = {RequestMethod.POST})
-    public RestResult delAddress(@RequestParam("token") String token, AddressDto address) {
+    public RestResult delAddress(@RequestParam("token") String token, String  id) {
         Customer customer = findCustomerByToken(token);
         if (customer == null) {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         } else {
-            addressService.delete(addressConverter.convertDtoToModel(address));
+            addressService.delete(new Address(id));
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
         }
     }
@@ -479,6 +489,7 @@ public class CustomerRestController extends BaseRestController {
             design.setCustomer(customer);
             Page<Design> designPage=designService.findPage(new Page<Design>(1,1),design);
             UserInfoDto user=userInfoConverter.convertModelToDto(customer);
+            user.setToken(null);
             user.setDesignCount(designPage.getCount());
             Wishlist wishlist=new Wishlist();
             wishlist.setCustomer(customer);
