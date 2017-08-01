@@ -19,5 +19,6 @@ public interface ProductDao extends CrudDao<Product> {
     public void upShelve(Product product);
     public void downShelve(Product product);
     public void addHot(Product product);
+    public List<Product> findBySpecCode(String code);
 
 }

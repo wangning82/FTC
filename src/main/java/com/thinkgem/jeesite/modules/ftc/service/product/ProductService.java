@@ -45,6 +45,10 @@ public class ProductService extends CrudService<ProductDao, Product> {
 
         return product;
     }
+    public List<Product> findBySpecCode(String code) {
+
+        return dao.findBySpecCode( code);
+    }
 
     /**
      * 根据id获取带有图片和规格的商品详情

@@ -490,11 +490,11 @@ public class CustomerRestController extends BaseRestController {
             Page<Design> designPage=designService.findPage(new Page<Design>(1,1),design);
             UserInfoDto user=userInfoConverter.convertModelToDto(customer);
             user.setToken(null);
-            user.setDesignCount(designPage.getCount());
+            user.getShop().getUser().setDesignCount((int)designPage.getCount());
             Wishlist wishlist=new Wishlist();
             wishlist.setCustomer(customer);
             Page<Wishlist> wishlistPage=wishlistService.findPage(new Page<Wishlist>(1,1),wishlist);
-            user.setWishCount(wishlistPage.getCount());
+            user.getShop().getUser().setFavouriteCount((int)wishlistPage.getCount());
 
             return new RestResult(CODE_SUCCESS, MSG_SUCCESS, user);
         }

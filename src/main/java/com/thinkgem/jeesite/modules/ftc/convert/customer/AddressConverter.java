@@ -16,6 +16,7 @@ public class AddressConverter extends BaseConverter<Address, AddressDto> {
     @Override
     public Address convertDtoToModel(AddressDto dto) {
         Address address = new Address();
+        address.setId(dto.getId());
         address.setUserName(dto.getName());
         address.setUserPhone(dto.getPhone());
         address.setUserAdress(dto.getDetail());

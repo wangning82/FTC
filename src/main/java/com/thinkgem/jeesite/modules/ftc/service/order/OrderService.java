@@ -160,6 +160,11 @@ public class OrderService extends CrudService<OrderDao, Order> {
 
         // 订单明细
         for (ShoppingCart shoppingCart : shoppingCarts) {
+            if(shoppingCart.getBuyNumber()==null){
+                System.out.println("购买的数量为零");
+                continue;
+
+            }
             OrderProduct orderProduct = cart2OrderProduct(order, shoppingCart);
             orderProduct.preInsert();
             orderProductDao.insert(orderProduct);
@@ -204,7 +209,12 @@ public class OrderService extends CrudService<OrderDao, Order> {
     public OrderProduct cart2OrderProduct(Order order, ShoppingCart shoppingCart){
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setOrder(order);
-        Product product=productService.get(shoppingCart.getProduct().getId());
+
+        List<Product> productList=productService.findBySpecCode(shoppingCart.getProductSpec().getProductSpecNumber());
+        if(productList==null||productList.size()==0){
+            return orderProduct;
+        }
+        Product product=productList.get(0);
         orderProduct.setProductNumber(product.getNumber());
         orderProduct.setName(product.getName());
         orderProduct.setPicImg(product.getPicImg());
@@ -284,7 +294,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
             orderShipment.setDistrictId(address.getDistrict().getId());
             orderShipment.setDistrictName(address.getDistrict().getName());
             orderShipment.setUserAdress(address.getUserAdress());
-            orderShipment.setUserZipcode(Integer.parseInt(address.getUserZipcode()));
+//            orderShipment.setUserZipcode(Integer.parseInt(address.getUserZipcode()));
             orderShipmentService.save(orderShipment);
 
             return order;

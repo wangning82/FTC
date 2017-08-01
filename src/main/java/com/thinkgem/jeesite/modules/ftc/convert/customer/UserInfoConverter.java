@@ -23,8 +23,8 @@ public class UserInfoConverter extends BaseConverter<Customer, UserInfoDto> {
     @Override
     public UserInfoDto convertModelToDto(Customer model) {
         UserInfoDto userInfoDto = new UserInfoDto();
-//        userInfoDto.setToken(model.getAccessToken());
-//        userInfoDto.setShop(shopConverter.convertModelToDto(model));
+        userInfoDto.setToken(model.getAccessToken());
+        userInfoDto.setShop(shopConverter.convertModelToDto(model));
 
         List<PlatformDto> platformDtoList = new ArrayList<PlatformDto>();
 

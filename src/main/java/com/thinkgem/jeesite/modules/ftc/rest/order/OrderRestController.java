@@ -166,6 +166,7 @@ public class OrderRestController extends BaseRestController {
             try {
                 ObjectMapper objectMapper = new ObjectMapper();
                 OrderDto orderDto = objectMapper.readValue(orderJson, OrderDto.class);
+
                 BigDecimal freight = orderService.createOrder(customer, shoppingCartConverter.convertListFromDtoToModel(orderDto.getBags()));
                 return new RestResult(CODE_SUCCESS, MSG_SUCCESS, freight);
             } catch (Exception e) {
@@ -248,10 +249,8 @@ public class OrderRestController extends BaseRestController {
                 OrderDto orderDto = objectMapper.readValue(orderJson, OrderDto.class);
                 Order order = orderConverter.convertDtoToModel(orderDto);
                 Order confirmOrder = orderService.confirmOrder(customer, order.getOrderNo(), order.getAddress().getId(), order.getInvoiceTitle());
-                OrderConfirmDto confirmDto = new OrderConfirmDto();
-                confirmDto.setOrderId(confirmOrder.getOrderNo());
-                confirmDto.setPayPrice(confirmOrder.getOrderAmount());
-                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, confirmDto);
+
+                return new RestResult(CODE_SUCCESS, MSG_SUCCESS, confirmOrder.getId());
             } catch (Exception e) {
                 e.printStackTrace();
                 return new RestResult(CODE_ERROR, e.getMessage());
@@ -274,6 +273,7 @@ public class OrderRestController extends BaseRestController {
     public RestResult orderPay(@RequestParam("token") String token, @RequestParam("oid") String orderNo,
                                @RequestParam("pType") String payType) {
         Customer customer = findCustomerByToken(token);
+        PayResult result2=null;
         if (customer != null) {
             // 第三方支付
 
@@ -282,7 +282,7 @@ public class OrderRestController extends BaseRestController {
 
             Order param = new Order();
             param.setCustomer(customer);
-            param.setOrderNo(orderNo);
+            param.setId(orderNo);
             List<Order> result = orderService.findList(param);
             if (CollectionUtils.isNotEmpty(result)) {
                 Order order = result.get(0);
@@ -294,14 +294,58 @@ public class OrderRestController extends BaseRestController {
                 payOrder.setSubject("订单");
                 payOrder.setPrice(order.getPayAmount());
                 orderService.payOrder(order.getTradeNo(), payType);
+                 result2=new PayResult();
+                result2.setOid(order.getOrderNo());
+                result2.setpOid("ddddddd");
+                result2.setPrice(order.getPayAmount());
+                result2.setpType(payType);
 //            payOrder.setTransactionType(PayType.valueOf(payResponse.getStorage().getPayType()).getTransactionType("APP"));
 //            Map orderInfo = payResponse.getService().orderInfo(payOrder);
             }
-            return new RestResult(CODE_SUCCESS, MSG_SUCCESS);
+
+            return new RestResult(CODE_SUCCESS, MSG_SUCCESS,result2);
         } else {
             return new RestResult(CODE_NULL, "令牌无效，请重新登录！");
         }
 
+    }
+    class PayResult{
+        private String oid;
+        private String pType;
+        private String pOid;
+        private BigDecimal price;
+
+        public String getOid() {
+            return oid;
+        }
+
+        public void setOid(String oid) {
+            this.oid = oid;
+        }
+
+        public String getpType() {
+            return pType;
+        }
+
+        public void setpType(String pType) {
+            this.pType = pType;
+        }
+
+        public String getpOid() {
+            return pOid;
+        }
+
+        public void setpOid(String pOid) {
+            this.pOid = pOid;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public void setPrice(BigDecimal price) {
+            this.price = price;
+        }
     }
 
     /**

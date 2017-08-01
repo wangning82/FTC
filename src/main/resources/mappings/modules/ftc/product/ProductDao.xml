@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.ftc.dao.product.ProductDao">
-    
-	<sql id="productColumns">
+
+    <sql id="productColumns">
 		a.id AS "id",
 		a.product_number AS "number",
 		a.label_id AS "labelId",
@@ -40,83 +40,118 @@
 		a.favourite_count AS "favouriteCount"
 
 	</sql>
-	
-	<sql id="productJoins">
+
+    <sql id="productJoins">
 		left join os_category b on a.category_id=b.id
 		left join sys_user  c on a.create_by=c.id
 		left join os_customer d on a.design_by=d.id
 	</sql>
-    
-	<select id="get" resultType="Product">
-		SELECT 
-			<include refid="productColumns"/>
-		FROM os_product a
-		<include refid="productJoins"/>
-		WHERE a.id = #{id}
-	</select>
-	
-	<select id="findList" resultType="Product">
-		SELECT 
-			<include refid="productColumns"/>
-		FROM os_product a
-		<include refid="productJoins"/>
-		<where>
-			
-			<if test="number != null and number != ''">
-				AND a.product_number = #{number}
-			</if>
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
-			</if>
-			<if test="createBy != null and createBy.id != null and createBy.id != ''">
-				AND a.create_by = #{createBy.id}
-			</if>
-			<if test="designBy != null and designBy.id != null and designBy.id != ''">
-				AND a.design_by = #{designBy.id}
-			</if>
-			<if test="searchKey != null and searchKey != ''">
-				AND a.search_key = #{searchKey}
-			</if>
-			<if test="modelFlag != null and modelFlag != ''">
-				AND a.model_flag = #{modelFlag}
-			</if>
 
-			<if test="category != null and category != '' and category.id != null and category.id != ''">
-				AND a.category_id = #{category.id}
-			</if>
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
+    <select id="get" resultType="Product">
+        SELECT
+        <include refid="productColumns"/>
+        FROM os_product a
+        <include refid="productJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="Product">
+        SELECT
+        <include refid="productColumns"/>
+        FROM os_product a
+        <include refid="productJoins"/>
+        <where>
+
+            <if test="number != null and number != ''">
+                AND a.product_number = #{number}
+            </if>
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+                <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+            </if>
+            <if test="createBy != null and createBy.id != null and createBy.id != ''">
+                AND a.create_by = #{createBy.id}
+            </if>
+            <if test="designBy != null and designBy.id != null and designBy.id != ''">
+                AND a.design_by = #{designBy.id}
+            </if>
+            <if test="searchKey != null and searchKey != ''">
+                AND a.search_key = #{searchKey}
+            </if>
+            <if test="modelFlag != null and modelFlag != ''">
+                AND a.model_flag = #{modelFlag}
+            </if>
+
+            <if test="category != null and category != '' and category.id != null and category.id != ''">
+                AND a.category_id = #{category.id}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+    <select id="findBySpecCode" resultType="Product">
+select
+	a.id AS "id",
+	a.product_number AS "number",
+	a.label_id AS "labelId",
+	a.name AS "name",
+	a.show_score AS "showScore",
+	a.show_price AS "showPrice",
+	a.introduce AS "introduce",
+	a.pic_img AS "picImg",
+	a.show_in_top AS "showInTop",
+	a.show_in_nav AS "showInNav",
+	a.show_in_hot AS "showInHot",
+	a.show_in_shelve AS "showInShelve",
+	a.create_date AS "createDate",
+	a.create_by AS "createBy.id",
+	a.shelve_time AS "shelveTime",
+	a.shelve_by AS "shelveBy.id",
+	a.update_date AS "updateDate",
+	a.update_by AS "updateBy.id",
+	a.search_key AS "searchKey",
+	a.page_title AS "pageTitle",
+	a.page_description AS "pageDescription",
+	a.page_keyword AS "pageKeyword",
+	a.remarks AS "remarks",
+	a.design_price As "designPrice",
+		a.praise_count As "praiseCount",
+		a.favourite_count AS "favouriteCount",
+		a.model_flag AS "modelFlag",
+		a.hot_num as "hotNum",
+		a.del_flag as "delFlag",
+		a.design_by As "designBy.id"
+	FROM os_product a
+	left join os_product_specification b on a.id=b.product_id
+	where b.product_spec_number=#{code}
 	</select>
-	
-	<select id="findAllList" resultType="Product">
-		SELECT 
-			<include refid="productColumns"/>
-		FROM os_product a
-		<include refid="productJoins"/>
-		<where>
-			
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<insert id="insert">
+    <select id="findAllList" resultType="Product">
+        SELECT
+        <include refid="productColumns"/>
+        FROM os_product a
+        <include refid="productJoins"/>
+        <where>
+
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
 		INSERT INTO os_product(
 			id,
 			product_number,
@@ -184,8 +219,8 @@
 			#{delFlag}
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE os_product SET 	
 			product_number = #{number},
 			label_id = #{labelId},
@@ -213,21 +248,21 @@
 			praise_count=#{praiseCount}
 		WHERE id = #{id}
 	</update>
-	
-	<update id="delete">
+
+    <update id="delete">
 		update  os_product
 		set del_flag=#{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	<update id="upShelve">
+    <update id="upShelve">
 		update os_product set show_in_shelve="1"
 		WHERE id = #{id}
 	</update>
-	<update id="downShelve">
+    <update id="downShelve">
 		update os_product set show_in_shelve="2"
 		WHERE id = #{id}
 	</update>
-	<update id="addHot">
+    <update id="addHot">
 		update os_product set hot_num=hot_num+1
 		WHERE id = #{id}
 	</update>
