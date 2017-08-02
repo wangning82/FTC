@@ -23,6 +23,7 @@ import com.thinkgem.jeesite.modules.ftc.entity.order.OrderProduct;
 import com.thinkgem.jeesite.modules.ftc.entity.order.OrderShipment;
 import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
 import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
+import com.thinkgem.jeesite.modules.ftc.entity.product.ProductImage;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import com.thinkgem.jeesite.modules.ftc.service.customer.AddressService;
 import com.thinkgem.jeesite.modules.ftc.service.customer.CustomerBillService;
@@ -152,6 +153,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
         order.setCustomer(customer);
         order.setOrderStatus(OrderStatusEnum.ORDER_STATUS_FORPAID.getValue());
 
+
         BigDecimal orderAmount = BigDecimal.ZERO; // 商品总价
         BigDecimal buyNumber = BigDecimal.ZERO; // 购买数量
         User user = null; // 生产厂家
@@ -167,6 +169,7 @@ public class OrderService extends CrudService<OrderDao, Order> {
             }
             OrderProduct orderProduct = cart2OrderProduct(order, shoppingCart);
             orderProduct.preInsert();
+            orderProduct.setOrder(order);
             orderProductDao.insert(orderProduct);
             orderProductList.add(orderProduct);
 

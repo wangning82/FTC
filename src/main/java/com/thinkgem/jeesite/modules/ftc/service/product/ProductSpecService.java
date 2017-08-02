@@ -12,7 +12,9 @@ import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,6 +47,19 @@ public class ProductSpecService extends CrudService<ProductSpecDao, ProductSpec>
 
     public List<ProductSpec> findList(ProductSpec productSpec) {
         return super.findList(productSpec);
+    }
+    public List<ProductSpec> findListWithImage(ProductSpec productSpec) {
+        List<ProductSpec> specs=findList(productSpec);
+        if(!CollectionUtils.isEmpty(specs)){
+            for(int i=0;i<specs.size();i++){
+                ProductImage image=new ProductImage();
+                image.setProductSpec(specs.get(i));
+                List<ProductImage> productImages=productImageDao.findList(image);
+                specs.get(i).setImages(productImages);
+            }
+
+        }
+        return specs;
     }
 
     public Page<ProductSpec> findPage(Page<ProductSpec> page, ProductSpec productSpec) {

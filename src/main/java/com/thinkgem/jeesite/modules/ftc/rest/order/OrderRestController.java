@@ -14,19 +14,16 @@ import com.thinkgem.jeesite.modules.ftc.convert.order.OrderConverter;
 import com.thinkgem.jeesite.modules.ftc.convert.order.ShoppingCartConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.order.OrderConfirmDto;
 import com.thinkgem.jeesite.modules.ftc.dto.order.OrderDto;
+import com.thinkgem.jeesite.modules.ftc.entity.customer.Address;
 import com.thinkgem.jeesite.modules.ftc.entity.customer.Customer;
-import com.thinkgem.jeesite.modules.ftc.entity.order.Order;
-import com.thinkgem.jeesite.modules.ftc.entity.order.OrderProduct;
-import com.thinkgem.jeesite.modules.ftc.entity.order.OrderWaybill;
-import com.thinkgem.jeesite.modules.ftc.entity.order.ShoppingCart;
+import com.thinkgem.jeesite.modules.ftc.entity.order.*;
+import com.thinkgem.jeesite.modules.ftc.entity.product.Product;
 import com.thinkgem.jeesite.modules.ftc.entity.product.ProductSpec;
-import com.thinkgem.jeesite.modules.ftc.service.order.OrderProductService;
-import com.thinkgem.jeesite.modules.ftc.service.order.OrderService;
-import com.thinkgem.jeesite.modules.ftc.service.order.OrderWaybillService;
-import com.thinkgem.jeesite.modules.ftc.service.order.ShoppingCartService;
+import com.thinkgem.jeesite.modules.ftc.service.order.*;
 import com.thinkgem.jeesite.modules.ftc.service.product.ProductSpecService;
 import com.thinkgem.jeesite.modules.pay.service.ApyAccountService;
 import com.thinkgem.jeesite.modules.pay.service.PayResponse;
+import com.thinkgem.jeesite.modules.sys.entity.Area;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
@@ -74,6 +71,8 @@ public class OrderRestController extends BaseRestController {
     private ProductSpecService productSpecService;
     @Autowired
     private OrderProductService orderProductService;
+    @Autowired
+    private OrderShipmentService orderShipmentService;
 
     /**
      * 添加购物车
@@ -204,6 +203,17 @@ public class OrderRestController extends BaseRestController {
                     orderProduct.setOrder(order);
                     List<OrderProduct> orderProducts = orderProductService.findList(orderProduct);
                     order.setOrderProductList(orderProducts);
+                    OrderShipment shipment=new OrderShipment();
+                    shipment.setOrder(order);
+                    List<OrderShipment> orderShipment=orderShipmentService.findList(shipment);
+                    if (CollectionUtils.isNotEmpty(orderShipment)) {
+
+                        Address address=new Address();
+                        address.setCustomer(customer);
+                        address.setUserAdress(orderShipment.get(0).getUserAdress());
+                        address.setDistrict(new Area(null,orderShipment.get(0).getDistrictName()));
+                        order.setAddress(address);
+                    }
                 }
             }
 

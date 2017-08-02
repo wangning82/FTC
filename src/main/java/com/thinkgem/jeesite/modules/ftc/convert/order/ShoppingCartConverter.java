@@ -49,7 +49,6 @@ public class ShoppingCartConverter extends BaseConverter<ShoppingCart, ShoppingC
         }
         ProductDto productDto = productConverter.convertModelToDto(model.getProduct());
         productDto.setShowAttributeGroup(productSpecConverter.convertModelToDto(model.getProductSpec()));
-
         shoppingCartDto.setGood(productDto);
         return shoppingCartDto;
     }

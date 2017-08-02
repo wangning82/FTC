@@ -45,6 +45,9 @@
 			<if test="product != null and product.id != ''">
 				AND a.product_id = #{product.id}
 			</if>
+			<if test="productSpecNumber != null and productSpecNumber != ''">
+				AND a.product_spec_number = #{productSpecNumber}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

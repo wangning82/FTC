@@ -23,6 +23,7 @@ public class OrderProduct extends DataEntity<OrderProduct> {
 	private String name;		// 商品名称
 	private String picImg;		// 展示图片
 	private String productSpecNumber;		// 商品规格编号
+	
 	private String productSpecName;		// 商品规格名称
 	private BigDecimal productPrice;		// 生产成本
 	private BigDecimal productScore;		// 商品总积分
