@@ -136,8 +136,8 @@
 
 							</td>
 							<td>
-							  <sys:treeselect id="images{{idx}}_position" name="images[{{idx}}].position.id" value="${row.position.id}" labelName="images[{{idx}}].position.name"
-                            labelValue="${row.position.name}"
+							  <sys:treeselect id="images{{idx}}_position" name="images[{{idx}}].position.id" value="{{row.position.id}}" labelName="{{row.positon.name}}"
+                            labelValue="{{row.position.name}}"
                             title="位置" url="/ftc/product/position/treeData" extId="${productSpec.product.id}" cssClass="input-medium"
                             allowClear="true"/>
 </td>

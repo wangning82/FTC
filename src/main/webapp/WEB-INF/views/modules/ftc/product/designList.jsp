@@ -43,10 +43,9 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
-				<th>名称</th>
-				<th>编号</th>
+
 				<th>模型</th>
-				<th>设计费</th>
+
 				<th>设计者</th>
 				<th>创建时间</th>
 				<th>状态</th>
@@ -56,18 +55,11 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="design">
 			<tr>
-				<td><a href="${ctx}/ftc/product/design/form?id=${design.id}">
-					${design.name}
-				</a></td>
-				<td>
-					${design.code}
-				</td>
+
 				<td>
 					${design.model.name}
 				</td>
-				<td>
-					${design.price}
-				</td>
+
 				<td>
 					${design.customer.userName}
 				</td>
