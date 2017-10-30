@@ -131,7 +131,7 @@
            class="form-horizontal">
     <form:hidden path="id"/>
     <sys:message content="${message}"/>
-    <form:hidden path="modelFlag"/>
+
     <div class="control-group">
         <label class="control-label">分类：</label>
         <div class="controls">
@@ -165,12 +165,12 @@
             <form:input path="name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label">显示积分：</label>
-        <div class="controls">
-            <form:input path="showScore" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-        </div>
-    </div>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">显示积分：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="showScore" htmlEscape="false" maxlength="11" class="input-xlarge "/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
     <div class="control-group">
         <label class="control-label">显示价格：</label>
         <div class="controls">
@@ -198,6 +198,7 @@
     <div class="control-group">
         <label class="control-label">商品规格：</label>
 
+        <label>xu</label>
         <div class="controls">
             <table id="specTable">
             </table>
@@ -217,8 +218,7 @@
                     <th>规格</th>
                     <th>库存</th>
                     <th>价格</th>
-                    <th>积分</th>
-                    <th>是否默认</th>
+
                     <shiro:hasPermission name="ftc:product:product:edit">
                         <th width="10">&nbsp;</th>
                     </shiro:hasPermission>
@@ -239,6 +239,7 @@
             <script type="text/template" id="specTpl">//<!--
 						<tr id="specs{{idx}}">
 							<td class="hide">
+							<input id="specs{{idx}}_id" name="specs[{{idx}}].product.id" type="hidden" value="{{row.product.id}}"/>
 								<input id="specs{{idx}}_id" name="specs[{{idx}}].id" type="hidden" value="{{row.id}}"/>
 								<input id="specs{{idx}}_delFlag" name="specs[{{idx}}].delFlag" type="hidden" value="0"/>
 								<input id="specs{{idx}}_spec_id" name="specs[{{idx}}].spec.id" type="text" value="{{row.spec.id}}" maxlength="100" class="input-small "/>
@@ -257,12 +258,12 @@
 							<td>
 								<input id="specs{{idx}}_price" name="specs[{{idx}}].price" type="text" value="{{row.price}}" maxlength="255" class="input-small "/>
 							</td>
-							<td>
-								<input id="specs{{idx}}_store" name="specs[{{idx}}].store" type="text" value="{{row.store}}" maxlength="255" class="input-small "/>
-							</td>
-							<td>
-								<input id="specs{{idx}}_default" name="specs[{{idx}}].defaultStatus" type="text" value="{{row.defaultStatus}}" maxlength="255" class="input-small "/>
-							</td>
+							<%--<td>--%>
+								<%--<input id="specs{{idx}}_store" name="specs[{{idx}}].score" type="text" value="{{row.score}}" maxlength="255" class="input-small "/>--%>
+							<%--</td>--%>
+							<%--<td>--%>
+								<%--<input id="specs{{idx}}_default" name="specs[{{idx}}].defaultStatus" type="text" value="{{row.defaultStatus}}" maxlength="255" class="input-small "/>--%>
+							<%--</td>--%>
 							<%--<td>--%>
 							    <%--<sys:ckfinder input="specs{{idx}}_picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"--%>
                           <%--maxHeight="100" />--%>
@@ -286,16 +287,16 @@
         </div>
     </div>
 
-    <div class="control-group">
-        <label class="control-label">是否置顶：</label>
-        <div class="controls">
-            <form:select path="showInTop" class="input-xlarge ">
-                <form:option value="" label=""/>
-                <form:options items="${fns:getDictList('ftc_product_product_showInTop')}" itemLabel="label"
-                              itemValue="value" htmlEscape="false"/>
-            </form:select>
-        </div>
-    </div>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">是否置顶：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:select path="showInTop" class="input-xlarge ">--%>
+                <%--<form:option value="" label=""/>--%>
+                <%--<form:options items="${fns:getDictList('ftc_product_product_showInTop')}" itemLabel="label"--%>
+                              <%--itemValue="value" htmlEscape="false"/>--%>
+            <%--</form:select>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 
     <%--<div class="control-group">--%>
     <%--<label class="control-label">是否导航栏 1=显示/0=隐藏：</label>--%>
@@ -303,11 +304,11 @@
     <%--<form:input path="showInNav" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
     <%--</div>--%>
     <%--</div>--%>
-    <div class="control-group">
-    <label class="control-label">是否热门</label>
-    <div class="controls">
-    <form:input path="showInHot" htmlEscape="false" maxlength="2" class="input-xlarge "/>
-    </div>
+    <%--<div class="control-group">--%>
+    <%--<label class="control-label">是否热门</label>--%>
+    <%--<div class="controls">--%>
+    <%--<form:input path="showInHot" htmlEscape="false" maxlength="2" class="input-xlarge "/>--%>
+    <%--</div>--%>
     </div>
     <div class="control-group">
         <label class="control-label">是否上架：</label>
@@ -327,34 +328,34 @@
 
 
 
-    <div class="control-group">
-        <label class="control-label">创建人：</label>
-        <div class="controls">
-            <form:input path="createBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">创建时间：</label>
-        <div class="controls">
-            <input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-                   value="<fmt:formatDate value="${product.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                   />
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">上架人：</label>
-        <div class="controls">
-            <form:input path="shelveBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">上架时间：</label>
-        <div class="controls">
-            <input name="shelveTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-                   value="<fmt:formatDate value="${product.shelveTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                   />
-        </div>
-    </div>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">创建人：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="createBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">创建时间：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<input name="createDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "--%>
+                   <%--value="<fmt:formatDate value="${product.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"--%>
+                   <%--/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">上架人：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="shelveBy.name" htmlEscape="false" maxlength="64" class="input-xlarge " readonly="readonly"/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">上架时间：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<input name="shelveTime" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "--%>
+                   <%--value="<fmt:formatDate value="${product.shelveTime}" pattern="yyyy-MM-dd HH:mm:ss"/>"--%>
+                   <%--/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
 
     <%----%>
     <%--<div class="control-group">--%>

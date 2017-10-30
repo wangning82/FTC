@@ -34,9 +34,9 @@
 			<li><label>商品名称：</label>
 				<form:input path="name" htmlEscape="false" maxlength="64" class="input-medium"/>
 			</li>
-			<li><label>创建者：</label>
-				<form:input path="createBy.id" htmlEscape="false" maxlength="64" class="input-medium"/>
-			</li>
+			<%--<li><label>创建者：</label>--%>
+				<%--<form:input path="createBy.id" htmlEscape="false" maxlength="64" class="input-medium"/>--%>
+			<%--</li>--%>
 			<li><label>搜索关键词：</label>
 				<form:input path="searchKey" htmlEscape="false" maxlength="255" class="input-medium"/>
 			</li>
@@ -53,7 +53,7 @@
 				<th>商品名称</th>
 				<th>标签</th>
 
-				<th>显示积分</th>
+				<%--<th>显示积分</th>--%>
 				<th>显示价格</th>
 				<th>商品简介</th>
 				<th>是否模型</th>
@@ -61,14 +61,14 @@
 
 				<%--<th>是否置顶 1=置顶/0=默认</th>--%>
 				<%--<th>是否导航栏 1=显示/0=隐藏</th>--%>
-				<%--<th>是否热门 1=热门/0=默认</th>--%>
+				<th>是否上架</th>
 
 
 				<th>创建者</th>
 				<th>创建时间</th>
 
-				<th>上架人</th>
-				<th>上架时间</th>
+				<%--<th>上架人</th>--%>
+				<%--<th>上架时间</th>--%>
 
 				<%--<th>更新时间</th>--%>
 
@@ -94,9 +94,9 @@
 					${product.labelId}
 				</td>
 
-				<td>
-					${product.showScore}
-				</td>
+				<%--<td>--%>
+					<%--${product.showScore}--%>
+				<%--</td>--%>
 				<td>
 						${product.showPrice}
 				</td>
@@ -107,7 +107,9 @@
 				<td>
 						${fns:getDictLabel(product.modelFlag, 'yes_no', '否')}
 				</td>
-
+				<td>
+						${fns:getDictLabel(product.showInShelve, 'yes_no', '否')}
+				</td>
 				<%--<td>--%>
 					<%--${product.showInTop}--%>
 				<%--</td>--%>
@@ -126,12 +128,12 @@
 					<fmt:formatDate value="${product.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
 
-				<td>
-					${product.shelveBy.name}
-				</td>
-				<td>
-					<fmt:formatDate value="${product.shelveTime}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
+				<%--<td>--%>
+					<%--${product.shelveBy.name}--%>
+				<%--</td>--%>
+				<%--<td>--%>
+					<%--<fmt:formatDate value="${product.shelveTime}" pattern="yyyy-MM-dd HH:mm:ss"/>--%>
+				<%--</td>--%>
 
 
 				<td>

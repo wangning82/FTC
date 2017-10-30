@@ -50,7 +50,9 @@
 			<label class="control-label">编号：</label>
 			<div class="controls">
 				<form:input path="code" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<label >提示：使用1、2、3、4</label>
 			</div>
+
 		</div>
 		<div class="control-group">
 			<label class="control-label">宽度：</label>
