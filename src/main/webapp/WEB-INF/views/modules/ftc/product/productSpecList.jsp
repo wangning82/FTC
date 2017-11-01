@@ -39,10 +39,10 @@
 				<th>商品规格编号</th>
 				<th>商品</th>
 				<th>规格</th>
-				<th>库存</th>
-				<th>销售量</th>
+				<%--<th>库存</th>--%>
+				<%--<th>销售量</th>--%>
 				<th>价格</th>
-				<th>积分</th>
+				<%--<th>积分</th>--%>
 				<th>是否默认</th>
 				<shiro:hasPermission name="ftc:product:productSpec:edit"><th>操作</th></shiro:hasPermission>
 			</tr>
@@ -59,18 +59,18 @@
 				<td>
 					${productSpec.spec.name}
 				</td>
-				<td>
-					${productSpec.stock}
-				</td>
-				<td>
-					${productSpec.salesVolume}
-				</td>
+				<%--<td>--%>
+					<%--${productSpec.stock}--%>
+				<%--</td>--%>
+				<%--<td>--%>
+					<%--${productSpec.salesVolume}--%>
+				<%--</td>--%>
 				<td>
 					${productSpec.price}
 				</td>
-				<td>
-					${productSpec.score}
-				</td>
+				<%--<td>--%>
+					<%--${productSpec.score}--%>
+				<%--</td>--%>
 				<td>
 					${fns:getDictLabel(productSpec.defaultStatus, 'ftc_product_productspec_isdefault', '')}
 				</td>

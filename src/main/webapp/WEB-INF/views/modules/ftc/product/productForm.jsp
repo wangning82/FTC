@@ -190,8 +190,11 @@
                 <form:option value="" label=""/>
                 <form:options items="${fns:getDictList('yes_no')}" itemLabel="label"
                               itemValue="value" htmlEscape="false"/>
+
             </form:select>
+            <label>如果是模型就选中这个值</label>
         </div>
+
     </div>
 
 
@@ -218,7 +221,7 @@
                     <th>规格</th>
                     <th>库存</th>
                     <th>价格</th>
-
+                    <th>默认</th>
                     <shiro:hasPermission name="ftc:product:product:edit">
                         <th width="10">&nbsp;</th>
                     </shiro:hasPermission>
@@ -232,6 +235,7 @@
                         <td colspan="4"><a href="javascript:"
                                            onclick="addSpecRow()"
                                            class="btn">新增</a></td>
+
                     </tr>
                     </tfoot>
                 </shiro:hasPermission>
@@ -261,9 +265,16 @@
 							<%--<td>--%>
 								<%--<input id="specs{{idx}}_store" name="specs[{{idx}}].score" type="text" value="{{row.score}}" maxlength="255" class="input-small "/>--%>
 							<%--</td>--%>
-							<%--<td>--%>
-								<%--<input id="specs{{idx}}_default" name="specs[{{idx}}].defaultStatus" type="text" value="{{row.defaultStatus}}" maxlength="255" class="input-small "/>--%>
-							<%--</td>--%>
+							<td>
+
+
+							 <%--<select id="specs{{idx}}_default" name="specs[{{idx}}].defaultStatus">--%>
+                            <%--<option value="1" selected="{{(row.defaultStatus eq '1')?'selected':''}}" >是</option>--%>
+                            <%--<option value="0" selected="{{!(row.defaultStatus eq '1')?'selected':''}}">否</option>--%>
+                        <%--</select>--%>
+                        <label>默认填1，不默认填0<label>
+								<input id="specs{{idx}}_default" name="specs[{{idx}}].defaultStatus" type="text" value="{{row.defaultStatus}}" maxlength="255" class="input-small "/>
+							</td>
 							<%--<td>--%>
 							    <%--<sys:ckfinder input="specs{{idx}}_picImg" type="images" uploadPath="/photo" selectMultiple="false" maxWidth="200"--%>
                           <%--maxHeight="100" />--%>

@@ -62,30 +62,30 @@
             <form:input path="spec.name" htmlEscape="false" maxlength="64" class="input-xlarge "/>
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label">库存：</label>
-        <div class="controls">
-            <form:input path="stock" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">销售量：</label>
-        <div class="controls">
-            <form:input path="salesVolume" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-        </div>
-    </div>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">库存：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="stock" htmlEscape="false" maxlength="11" class="input-xlarge "/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">销售量：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="salesVolume" htmlEscape="false" maxlength="11" class="input-xlarge "/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
     <div class="control-group">
         <label class="control-label">价格：</label>
         <div class="controls">
             <form:input path="price" htmlEscape="false" class="input-xlarge "/>
         </div>
     </div>
-    <div class="control-group">
-        <label class="control-label">积分：</label>
-        <div class="controls">
-            <form:input path="score" htmlEscape="false" maxlength="11" class="input-xlarge "/>
-        </div>
-    </div>
+    <%--<div class="control-group">--%>
+        <%--<label class="control-label">积分：</label>--%>
+        <%--<div class="controls">--%>
+            <%--<form:input path="score" htmlEscape="false" maxlength="11" class="input-xlarge "/>--%>
+        <%--</div>--%>
+    <%--</div>--%>
     <div class="control-group">
         <label class="control-label">是否默认：</label>
         <div class="controls">
@@ -99,6 +99,7 @@
 
     <div class="control-group">
         <label class="control-label">商品图片：</label>
+        <label >图片和位置必须得有</label>
         <div class="controls">
             <table id="imageTable" class="table table-striped table-bordered table-condensed">
                 <thead>

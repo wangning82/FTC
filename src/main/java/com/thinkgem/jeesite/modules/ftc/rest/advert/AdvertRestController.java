@@ -1,11 +1,10 @@
 package com.thinkgem.jeesite.modules.ftc.rest.advert;
 
 import com.thinkgem.jeesite.common.rest.BaseRestController;
+import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.convert.advert.AdvertConverter;
 import com.thinkgem.jeesite.modules.ftc.dto.advert.AdvertDetailDto;
 import com.thinkgem.jeesite.modules.ftc.entity.advert.Advert;
-import com.thinkgem.jeesite.modules.ftc.entity.advert.AdvertDetail;
-import com.thinkgem.jeesite.common.rest.RestResult;
 import com.thinkgem.jeesite.modules.ftc.service.advert.AdvertService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +31,7 @@ public class AdvertRestController extends BaseRestController{
     private AdvertService advertService;
     @Autowired
     private AdvertConverter advertConverter;
+
     /**
      * 取广告位明细
      * @param
