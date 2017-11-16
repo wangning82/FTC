@@ -96,7 +96,7 @@ public class CommentService extends CrudService<CommentDao, Comment> {
 	public int zan(Comment comment){
 		this.save(comment);
 		Product product=productDao.get(comment.getProduct().getId());
-		product.setPraiseCount(product.getPraiseCount()+1);
+		product.setPraiseCount(1+(product.getPraiseCount()==null?0:product.getPraiseCount()));
 		productDao.update(product);
 		return product.getPraiseCount();
 	}

@@ -193,7 +193,11 @@ public class OrderRestController extends BaseRestController {
         if (customer != null) {
             Order param = new Order();
             param.setCustomer(customer);
-            param.setOrderStatus(type);
+            if(type!=null&&!type.equals("0")){
+                param.setOrderStatus(type);
+            }
+
+            param.setCustomer(customer);
             Page<Order> orderPage = orderService.findPage(new Page<Order>(request, response), param);
 
             List<Order> orderList = orderPage.getList();

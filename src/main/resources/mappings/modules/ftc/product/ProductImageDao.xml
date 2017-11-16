@@ -97,7 +97,7 @@
     <update id="update">
 		UPDATE os_product_image SET 	
 
-			position_id = #{position.id}
+			position_id = #{position.id},img_url =#{imgUrl},img_nail_url=#{imgNailUrl}
 		WHERE id = #{id}
 	</update>
 
