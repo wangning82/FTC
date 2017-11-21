@@ -42,6 +42,7 @@ public class ShopConverter extends BaseConverter<Customer, ShopDto> {
     @Override
     public ShopDto convertModelToDto(Customer model) {
         ShopDto shopDto = new ShopDto();
+
         shopDto.setId(model.getId());
         shopDto.setName(model.getShopName());
         shopDto.setDesc(model.getSignature());
